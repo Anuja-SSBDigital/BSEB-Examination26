@@ -114,7 +114,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             rptElectiveSubjects.DataSource = electiveReshaped;
                             rptElectiveSubjects.DataBind();
                             ViewState["ElectiveSubjects"] = electiveReshaped;
-
+                            VocElectiveSection.Visible = false;
                             // ========== Additional Subjects (3-column layout)
                             var additionalRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "4").ToList();
                             if (additionalRows.Any())
@@ -269,6 +269,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 {
                                     reshaped.Columns.Add("Name" + i);
                                     reshaped.Columns.Add("Code" + i);
+                                    reshaped.Columns.Add("PaperId" + i);
                                 }
 
                                 for (int i = 0; i < additional.Rows.Count; i += 3)
@@ -280,6 +281,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                         {
                                             newRow["Name" + (j + 1)] = additional.Rows[i + j]["SubjectPaperName"];
                                             newRow["Code" + (j + 1)] = additional.Rows[i + j]["SubjectPaperCode"];
+                                            newRow["PaperId" + (j + 1)] = additional.Rows[i + j]["Pk_SubjectPaperId"];
                                         }
                                     }
                                     reshaped.Rows.Add(newRow);
@@ -787,28 +789,29 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         {
             string chkId = "chkAdditional" + i;
             string hfId = "hfCode" + i;
+            string hfPaperIdId = "hfPaperId" + i;
 
             CheckBox chk = item.FindControl(chkId) as CheckBox;
             HiddenField hfCode = item.FindControl(hfId) as HiddenField;
-
+            HiddenField hfPaperId = item.FindControl(hfPaperIdId) as HiddenField;
             if (chk != null && hfCode != null)
             {
                 string code = hfCode.Value;
                 bool isChecked = chk.Checked;
-
+                string paperId = hfPaperId.Value;
                 if (string.IsNullOrEmpty(code))
                     continue;
 
-                DataTable subjectInfo = dl.GetSubjectDetailsByCode(code);
-                if (subjectInfo.Rows.Count == 0)
+                //DataTable subjectInfo = dl.GetSubjectDetailsByCode(code);
+                if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(paperId))
                     continue;
 
-                string subjectPaperId = subjectInfo.Rows[0]["SubjectPaperId"].ToString();
-                string subjectGroupId = subjectInfo.Rows[0]["SubjectGroupId"].ToString();
+                //string subjectPaperId = subjectInfo.Rows[0]["SubjectPaperId"].ToString();
+                //string subjectGroupId = subjectInfo.Rows[0]["SubjectGroupId"].ToString();
 
                 DataRow existingRow = existingSubjects.AsEnumerable()
                     .FirstOrDefault(r => r["SubjectPaperCode"].ToString() == code);
-
+                string subjectGroupId = "3";
                 if (examTypeId == 4)
                 {
                     // ✅ IMPROVEMENT Exam Logic
@@ -818,7 +821,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                         if (isChecked)
                         {
-                            dl.ExamImprovemnetUpdateStudentSubjectByPkId(pkId.ToString(), subjectPaperId, subjectGroupId, modifiedBy);
+                            dl.ExamImprovemnetUpdateStudentSubjectByPkId(pkId.ToString(), paperId, subjectGroupId, modifiedBy);
                         }
                         else
                         {
@@ -828,8 +831,8 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                     else if (isChecked)
                     {
                         // ✅ If not saved yet, and selected, insert as new
-                        subjectGroupId = "3";
-                        dl.InsertStudentSubjectUsingSP(studentId, subjectPaperId, subjectGroupId, modifiedBy, comgrp);
+                        //subjectGroupId = "3";
+                        dl.InsertStudentSubjectUsingSP(studentId, paperId, subjectGroupId, modifiedBy, comgrp);
                     }
                 }
                 else if (examTypeId == 1 || examTypeId == 3 || examTypeId == 5)
@@ -838,13 +841,13 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                     {
                         if (existingRow == null)
                         {
-                            subjectGroupId = "3"; // default group for new inserts
-                            dl.InsertStudentSubjectUsingSP(studentId, subjectPaperId, subjectGroupId, modifiedBy, comgrp);
+                            //subjectGroupId = "3"; // default group for new inserts
+                            dl.InsertStudentSubjectUsingSP(studentId, paperId, subjectGroupId, modifiedBy, comgrp);
                         }
                         else
                         {
                             int pkId = Convert.ToInt32(existingRow["Pk_StudentPaperAppliedId"]);
-                            dl.ExamUpdateStudentSubjectByPkId(pkId.ToString(), subjectPaperId, subjectGroupId, modifiedBy);
+                            dl.ExamUpdateStudentSubjectByPkId(pkId.ToString(), paperId, subjectGroupId, modifiedBy);
                         }
                     }
                     else
