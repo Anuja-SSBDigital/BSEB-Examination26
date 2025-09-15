@@ -96,21 +96,25 @@ public partial class DwnldExamForm : System.Web.UI.Page
         string CollegeNameAndCode = txt_CollegeName.Text.Trim();
         string CollegeCode = "";
         string CollegeId = "";
-        if (Session["CollegeName"].ToString() == "Admin")
+        if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
         {
-            CollegeCode = txt_CollegeName.Text;
-            CollegeId = Session["CollegeId"].ToString();
+            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
+
+            if (dt.Rows.Count > 0)
+            {
+                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+            }
         }
-        else
+        else if (Session["CollegeId"] != null)
         {
-            CollegeCode = "";
             CollegeId = Session["CollegeId"].ToString();
         }
 
         string StudentName = txtStudentName.Text.Trim();
 
        // DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId, 3, "");
-        DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId,0, CategoryName, "");
+        DataTable result = dl.getExamDwnldStudentData(CollegeId,StudentName, facultyId,0, CategoryName, "");
+        //DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId,0, CategoryName, "");
         if (result != null && result.Rows.Count > 0)
         {
             rptStudents.DataSource = result;
