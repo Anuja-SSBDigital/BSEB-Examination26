@@ -90,7 +90,7 @@
                         <!-- Row 1 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="collegeName" class="form-label required">+2 School/College Name:</label>
                                     <asp:HiddenField runat="server" ID="hnd_extype" ClientIDMode="Static" />
                                     <asp:TextBox ID="txtcollegeName" runat="server" Placeholder="College Name" class="form-control" ReadOnly="true" />
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="collegeCode" class="form-label required">+2 School/College Code:</label>
                                     <asp:TextBox ID="txtcollegeCode" runat="server" Placeholder="College Code" class="form-control" />
                                     <span id="txtcollegeCodeErr" style="display: none; color: red;">Please Enter College Code</span>
@@ -109,14 +109,14 @@
                         <!-- Row 2 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="studentName" class="form-label required">Student's Name:</label>
                                     <asp:TextBox ID="txtStudentName" runat="server" Placeholder="Student Name" class="form-control" />
                                     <span id="txtStudentNameErr" style="display: none; color: red;">Please Enter Student Name</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="motherName" class="form-label required">Mother's Name:</label>
 
                                     <asp:TextBox ID="txtmotherName" runat="server" Placeholder="Mother Name" class="form-control" />
@@ -128,7 +128,7 @@
                         <!-- Row 3 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="fatherName" class="form-label required">Father's Name:</label>
 
                                     <asp:TextBox ID="txtfatherName" runat="server" Placeholder="Father Name" class="form-control" />
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6" runat="server" id="div_faculty">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="Faculty" class="form-label required">Faculty:</label>
 
                                     <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2" Enabled="False">
@@ -146,14 +146,14 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="dob" class="form-label required">Date of Birth:</label>
                                     <asp:TextBox ID="txtDOB" runat="server" class="form-control datepicker" TextMode="Date" max="2015-12-31" />
                                     <span id="txtDOBErr" style="display: none; color: red;">Please Enter DOB</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="dob" class="form-label">ApaarId :</label>
                                     <asp:TextBox ID="txtApaarId" runat="server" class="form-control" oninput="enforceMaxLength(this, 10)" />
                                 </div>
@@ -165,7 +165,7 @@
                         <!-- Row 4 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="subDivision" class="form-label required">Sub Division Name:</label>
 
                                     <asp:TextBox ID="txtsubDivision" runat="server" Placeholder="Enter sub division name" class="form-control" />
@@ -173,7 +173,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="district" class="form-label required">District Name:</label>
 
                                     <asp:TextBox ID="txtdistrict" runat="server" Placeholder="Enter District" class="form-control" />
@@ -185,7 +185,7 @@
                         <!-- Row 5 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="boardName" class="form-label required">Matric/Class X Passing Board's Name:</label>
 
                                     <asp:DropDownList ID="ddlMatrixBoard" runat="server" CssClass="form-control select2">
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="boardRollCode" class="form-label required">Matric/Class X Board's Roll Code:</label>
 
                                     <asp:TextBox ID="txtboardRollCode" runat="server" Placeholder="Enter  roll code" class="form-control" TextMode="Number" oninput="enforceMaxLength(this, 5)" />
@@ -206,7 +206,7 @@
                         <!-- Row 6 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="rollNumber" class="form-label required">Roll Number:</label>
 
                                     <asp:TextBox ID="txtrollNumber" runat="server" class="form-control" TextMode="Number" />
@@ -214,7 +214,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="passingYear" class="form-label required">Passing Year:</label>
 
                                     <asp:TextBox ID="txtpassingYear" runat="server" class="form-control" />
@@ -226,7 +226,7 @@
                         <!-- Row 7 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="gender" class="form-label required">Gender:</label>
                                     <asp:DropDownList ID="ddlGender" runat="server" CssClass="form-control select2">
                                     </asp:DropDownList>
@@ -235,7 +235,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="caste" class="form-label required">Caste Category:</label>
                                     <asp:DropDownList ID="ddlCasteCategory" runat="server" CssClass="form-control select2">
                                     </asp:DropDownList>
@@ -247,7 +247,7 @@
                         <!-- Row 8 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Differently Abled</label><br>
                                     <div class="form-check form-check-inline">
                                         <asp:RadioButton ID="rdoAbledYes" runat="server" GroupName="differentlyAbled" />
@@ -262,7 +262,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Nationality:</label>
                                     <asp:DropDownList ID="ddlNationality" runat="server" CssClass="form-control select2">
                                     </asp:DropDownList>
@@ -274,7 +274,7 @@
                         <!-- Row 9 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Religion:</label>
                                     <asp:DropDownList ID="ddlReligion" runat="server" CssClass="form-control select2">
                                     </asp:DropDownList>
@@ -282,7 +282,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Area:</label>
                                     <asp:DropDownList ID="ddlArea" runat="server" CssClass="form-control select2">
                                     </asp:DropDownList>
@@ -294,20 +294,20 @@
                         <!-- Row 10 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Mobile No of Student:</label>
                                     <asp:TextBox ID="txtMobile" runat="server" class="form-control" TextMode="Number" oninput="enforceMaxLength(this, 10)" />
                                     <span id="txtMobileError" class="text-danger" style="display: none;"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Parent/Guardian No:</label>
                                     <asp:TextBox ID="txtparentno" runat="server" class="form-control" oninput="enforceMaxLength(this, 10)" />
                                     <span id="txtparentnoError" class="text-danger" style="display: none;"></span>
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12 mb-3 form-group">
                                 <div class="text-danger">
                                     अपना वैध मोबाइल नंबर ही प्रविष्ट करें। भविष्य में सभी संबंधित सूचनाएं इसी मोबाइल नंबर पर प्रदान की जाएँगी। गलत मोबाइल नंबर प्रविष्ट करने की स्थिति में जिम्मेदारी आपकी होगी।
                                 </div>
@@ -317,13 +317,13 @@
                         <!-- Row 11 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Address:</label>
                                     <asp:TextBox ID="txtAdress" runat="server" TextMode="MultiLine" CssClass="form-control" Rows="5" Columns="50"></asp:TextBox>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">E-Mail ID:</label>
                                     <asp:TextBox ID="txtEmail" runat="server" class="form-control" />
                                     <span id="txtEmailError" class="text-danger" style="display: none;"></span>
@@ -334,7 +334,7 @@
                         <!-- Row 12 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Marital Status:</label>
 
                                     <asp:DropDownList ID="ddlMaritalStatus" runat="server" CssClass="form-control select2">
@@ -343,7 +343,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Pin Code:</label>
 
                                     <asp:TextBox ID="txtpincode" runat="server" class="form-control" />
@@ -354,21 +354,21 @@
                         <!-- Row 13 -->
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Bank & Branch Name:</label>
 
                                     <asp:TextBox ID="txtBranchName" runat="server" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">IFSC Code:</label>
 
                                     <asp:TextBox ID="txtIFSCCode" runat="server" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label">Student's Bank A/C No.:</label>
 
                                     <asp:TextBox ID="txtBankACNo" runat="server" class="form-control" />
@@ -380,7 +380,7 @@
                         <!-- Row 14 -->
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Two Identification (i):</label>
                                     <asp:TextBox ID="txtIdentification1" runat="server" CssClass="form-control" />
                                     <label class="form-label required">Two Identification (ii):</label>
@@ -395,7 +395,7 @@
                         <!-- Row 15 -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label class="form-label required">Medium:</label>
 
                                     <asp:DropDownList ID="ddlMedium" runat="server" CssClass="form-control select2">
@@ -406,7 +406,7 @@
                         </div>
                         <div id="showaadhardiv">
 
-                            <div class="mb-3">
+                            <div class="mb-3 form-group">
                                 <label class="form-label"><strong>Do you have Aadhar?</strong></label><br>
                                 <div class="form-check form-check-inline">
                                     <asp:HiddenField ID="hfAadharOption" runat="server" ClientIDMode="Static" />
