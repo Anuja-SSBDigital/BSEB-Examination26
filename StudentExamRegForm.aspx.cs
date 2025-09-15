@@ -120,7 +120,7 @@ public partial class StudentExamRegForm : System.Web.UI.Page
             if (dtCasteCategory.Rows.Count > 0)
             {
                 ddlCasteCategory.DataSource = dtCasteCategory;
-                ddlCasteCategory.DataTextField = "CasteCategoryName";
+                ddlCasteCategory.DataTextField = "CasteCategoryCode";
                 ddlCasteCategory.DataValueField = "PK_CasteCategoryId";
                 ddlCasteCategory.DataBind();
                 ddlCasteCategory.Items.Insert(0, new ListItem("Select Caste Category", "0"));
@@ -337,6 +337,10 @@ public partial class StudentExamRegForm : System.Web.UI.Page
                 {
                     ddlMedium.SelectedValue = row["Fk_ExamMediumId"].ToString();
                 }
+                if (ddlFaculty.Items.FindByValue(row["FacultyId"].ToString()) != null)
+                {
+                    ddlFaculty.SelectedValue = row["FacultyId"].ToString();
+                }
 
                 string studentPhotoPath = row["StudentPhotoPath"].ToString();
                 string studentSignaturePath = row["StudentSignaturePath"].ToString();
@@ -443,7 +447,8 @@ public partial class StudentExamRegForm : System.Web.UI.Page
     {
         try
         {
-            DataTable dtfaculty = dl.getPrivateRegFacultyfordropdown();
+             DataTable dtfaculty = dl.getFacultyfordropdown();
+             //DataTable dtfaculty = dl.getPrivateRegFacultyfordropdown();
             if (dtfaculty.Rows.Count > 0)
             {
                 ddlFaculty.DataSource = dtfaculty;
