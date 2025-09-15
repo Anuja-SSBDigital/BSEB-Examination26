@@ -215,6 +215,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code1").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                         <asp:HiddenField ID="hfCode1" runat="server" Value='<%# Eval("Code1") %>' />
+                                                    <asp:HiddenField ID="hfPaperId1" runat="server" Value='<%# Eval("PaperId1") %>' />
                                                 </td>
                                           
                                                 <td>
@@ -226,6 +227,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code2").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                       <asp:HiddenField ID="hfCode2" runat="server" Value='<%# Eval("Code2") %>' />
+                                                      <asp:HiddenField ID="hfPaperId2" runat="server" Value='<%# Eval("PaperId2") %>' />
                                                 </td>
                                             
                                                 <td>
@@ -237,6 +239,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code3").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                     <asp:HiddenField ID="hfCode3" runat="server" Value='<%# Eval("Code3") %>' />
+                                                     <asp:HiddenField ID="hfPaperId3" runat="server" Value='<%# Eval("PaperId3") %>' />
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
