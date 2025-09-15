@@ -91,7 +91,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="collegeName" class="form-label required">College/+2 Name:</label>
+                                    <label for="collegeName" class="form-label required">+2 School/College Name:</label>
                                     <asp:HiddenField runat="server" ID="hnd_extype" ClientIDMode="Static" />
                                     <asp:TextBox ID="txtcollegeName" runat="server" Placeholder="College Name" class="form-control" ReadOnly="true" />
                                     <span id="txtcollegeNameErr" style="display: none; color: red;">Please Enter College</span>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="collegeCode" class="form-label required">College/+2 Code:</label>
+                                    <label for="collegeCode" class="form-label required">+2 School/College Code:</label>
                                     <asp:TextBox ID="txtcollegeCode" runat="server" Placeholder="College Code" class="form-control" />
                                     <span id="txtcollegeCodeErr" style="display: none; color: red;">Please Enter College Code</span>
                                 </div>
