@@ -179,9 +179,9 @@ public partial class ExamForm : System.Web.UI.Page
         int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
         int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
         string StudentName = txtStudentName.Text.Trim();
-        string CategoryName = ddl_category.SelectedValue;
+        //string CategoryName = ddl_category.SelectedValue;
 
-        DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, CategoryName, StudentName);
+        DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, StudentName);
         //DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, RegistrationType, StudentName);
         bool hasRecords = result != null && result.Rows.Count > 0;
         pnlNoRecords.Visible = !hasRecords;

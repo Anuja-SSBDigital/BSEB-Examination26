@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="col-md-6 mt-3">
-                            <div class="form-group">
+                            <%--<div class="form-group">
                                 <label for="category">Student Category<span class="text-danger">*</span></label>
                                 <asp:DropDownList runat="server" ID="ddl_category" CssClass="form-control select2">
                                     <asp:ListItem Value="0">Select Category</asp:ListItem>
@@ -78,23 +78,32 @@
                                     <asp:ListItem Value="Private">Private</asp:ListItem>
                                 </asp:DropDownList>
                                 <span id="CatError" class="text-danger" style="display: none;">Please select Category.</span>
-                            </div>
-
+                            </div>--%>
+                             <div class="form-group">
+                                 <label>Exam Category <span class="text-danger">*</span></label>
+                                 <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control select2">
+                                 </asp:DropDownList>
+                                 <span id="ExamCatError" class="text-danger" style="display: none;">Please select a Exam Category.</span>
+                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
-                            <div class="form-group">
+                          <%--  <div class="form-group">
                                 <label>Exam Category <span class="text-danger">*</span></label>
                                 <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control select2">
                                 </asp:DropDownList>
                                 <span id="ExamCatError" class="text-danger" style="display: none;">Please select a Exam Category.</span>
-                            </div>
-                        </div>
+                            </div>--%>
+                             <div class="form-group mb-3">
+                                 <label class="form-label">Search Student by Name</label>
+                            
+                                 <asp:TextBox ID="txtStudentName" runat="server" Placeholder="Student Name" class="form-control" />
+                             </div>
+                                                    </div>
                         <div class="col-md-6 mt-3">
-                            <div class="form-group mb-3">
+                           <%-- <div class="form-group mb-3">
                                 <label class="form-label">Search Student by Name</label>
-                                <%-- <input type="text" class="form-control" placeholder="Enter Name">--%>
                                 <asp:TextBox ID="txtStudentName" runat="server" Placeholder="Student Name" class="form-control" />
-                            </div>
+                            </div>--%>
                         </div>
                     </div>
                     <div class="form-group mt-4 text-center">
@@ -127,7 +136,7 @@
                         <thead>
                             <tr>
                                 <th>S. No.</th>
-                                <th>College Code</th>
+                                <th>+2 School/College Code</th>
                                 <th>Registration Number</th>
                                 <th>Student Name</th>
                                 <th>Father Name</th>
@@ -179,12 +188,13 @@
 
     <script type="text/javascript">
         function validateFaculty() {
+            debugger
             var facultyDropdown = document.getElementById('<%= ddlFaculty.ClientID %>');
             var errorSpan = document.getElementById('facultyError');
             var examDropdown = document.getElementById('<%= ddlExamcat.ClientID %>');
             var examerror = document.getElementById('ExamCatError');
-            var CatDropdown = document.getElementById('<%= ddl_category.ClientID %>');
-            var CatError = document.getElementById('CatError');
+           <%-- var CatDropdown = document.getElementById('<%= ddl_category.ClientID %>');
+            var CatError = document.getElementById('CatError');--%>
             var collegeNameInput = document.getElementById('<%= txt_CollegeName.ClientID %>');
             var collegeNameErrorSpan = document.getElementById('CollegeNameError');
 
@@ -192,7 +202,7 @@
             collegeNameErrorSpan.style.display = "none";
             errorSpan.style.display = "none";
             examerror.style.display = "none";
-            CatError.style.display = "none";
+            //CatError.style.display = "none";
 
 
             if (collegeNameInput.value.trim() === "") {
@@ -225,17 +235,17 @@
             }
 
 
-            if (CatDropdown.value === "0" || CatDropdown.value === "") {
-                CatError.style.display = "inline";
-                CatDropdown.classList.add("is-invalid");
-                CatDropdown.focus();
-                return false;
-            } else {
-                CatDropdown.classList.remove("is-invalid");
-            }
+            //if (CatDropdown.value === "0" || CatDropdown.value === "") {
+            //    CatError.style.display = "inline";
+            //    CatDropdown.classList.add("is-invalid");
+            //    CatDropdown.focus();
+            //    return false;
+            //} else {
+            //    CatDropdown.classList.remove("is-invalid");
+            //}
 
 
-            return true;
+            //return true;
         }
 
 
