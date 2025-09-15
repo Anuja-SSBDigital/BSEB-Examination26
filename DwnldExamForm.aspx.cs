@@ -169,6 +169,12 @@ public partial class DwnldExamForm : System.Web.UI.Page
         }
 
         string[] ids = selectedIds.Split(',');
+        if (ids.Length > 25)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                "swal({ title: 'Limit Exceeded', text: 'You can select a maximum of 25 students at a time.', icon: 'warning', button: 'OK' });", true);
+            return;
+        }
         List<string> selectedStudentData = new List<string>();
 
         foreach (RepeaterItem item in rptStudents.Items)
