@@ -358,7 +358,7 @@
 
         .boxinside {
             border: 1px solid #000;
-            
+            margin-bottom:2px;
         }
 
         .subject-group {
@@ -1112,9 +1112,9 @@
                                 </div>
                                 <table class="boxinside">
                                     <tr>
-                                        <th colspan="2">Compulsory Subject Group-1 (100 Marks)<br>
+                                        <th colspan="2" style="border-right:1px solid black;border-bottom: 1px solid;">Compulsory Subject Group-1 (100 Marks)<br>
                                             (Select any one subject)</th>
-                                        <th colspan="2">Compulsory Subject Group-2 (100 Marks)<br>
+                                        <th colspan="2" style="border-bottom: 1px solid;">Compulsory Subject Group-2 (100 Marks)<br>
                                             (Select any one subject, which is not selected under Compulsory Subject Group-1)</th>
                                     </tr>
                                     <asp:Repeater ID="rptCompulsorySubjectsCombined" runat="server">
@@ -1123,13 +1123,13 @@
                                                 <td>
                                                     <%# Eval("Group1SubjectName") %>
                                                 </td>
-                                                <td>
+                                                <td style="border-right:1px solid black">
                                                     <%# Eval("Group1CheckboxHtml") %>
                                                 </td>
                                                 <td>
                                                     <%# Eval("Group2SubjectName") %>
                                                 </td>
-                                                <td>
+                                                <td style="border-right:1px solid black">
                                                     <%# Eval("Group2CheckboxHtml") %>
                                                 </td>
                                             </tr>
