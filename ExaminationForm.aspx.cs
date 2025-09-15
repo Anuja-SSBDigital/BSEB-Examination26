@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -415,7 +416,56 @@ public partial class ExaminationForm : System.Web.UI.Page
         return subjectData;
     }
 
-   
+    protected string GetDobDigit(object dobValue, int index)
+    {
+        if (dobValue == null || dobValue == DBNull.Value)
+            return "";
+
+        DateTime dob;
+        string dobString = dobValue.ToString();
+
+        // Try parsing again with DateTime.TryParseExact, in case it's a different format
+        if (DateTime.TryParseExact(dobString, new string[] { "yyyy-MM-dd", "dd/MM/yyyy" },
+                                   CultureInfo.InvariantCulture, DateTimeStyles.None, out dob))
+        {
+            string dobStr = dob.ToString("ddMMyyyy");  // Convert to ddMMyyyy format
+            if (index >= 0 && index < dobStr.Length)
+            {
+                log.Info("DOB is here " + dobStr);
+                return dobStr[index].ToString();
+            }
+        }
+        else
+        {
+            log.Warn("Invalid DOB format: " + dobString);
+        }
+
+        return "";
+    }
+
+    private string ParseDateOfBirth(object dobValue)
+    {
+        string dobString = dobValue.ToString();
+        DateTime parsedDate;
+
+        // Try parsing with multiple formats (yyyy-MM-dd and dd/MM/yyyy)
+        if (DateTime.TryParseExact(dobString, new string[] { "yyyy-MM-dd", "dd/MM/yyyy" },
+                                   CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+        {
+            return parsedDate.ToString("dd/MM/yyyy");  // Use a standard format
+        }
+        else if (DateTime.TryParse(dobString, out parsedDate))  // Fallback if other formats work
+        {
+            return parsedDate.ToString("dd/MM/yyyy");
+        }
+        else
+        {
+            log.Warn("Invalid DOB format: " + dobString);  // Log warning if it's invalid
+            return "";  // Return empty if parsing fails
+        }
+    }
+
+
 
     protected void rptStudents_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
