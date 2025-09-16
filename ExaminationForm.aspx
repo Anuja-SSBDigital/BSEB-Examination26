@@ -358,7 +358,7 @@
 
         .boxinside {
             border: 1px solid #000;
-            margin-bottom:2px;
+            margin-bottom: 2px;
         }
 
         .subject-group {
@@ -592,16 +592,18 @@
             color: black;
         }
 
-        #pagewrap .signature-row{
+        #pagewrap .signature-row {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
+
         #pagewrap .principal-section {
             display: flex;
             justify-content: flex-end;
             margin-top: 30px;
         }
+
         #pagewrap .signature-box {
             width: 200px;
             height: 50px;
@@ -635,12 +637,21 @@
 
         }
     </style>
+    <style type="text/css" media="print">
+        #btnPrint {
+            display: none !important;
+        }
+
+        #btnback {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="print-btn-container" style="text-align: center !important; margin-bottom: 10px;">
             <%-- <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClientClick="window.print(); return false;" />--%>
-            <a href="DwnldExamForm.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
+            <a href="DwnldExamForm.aspx" class="btn btn-primary no-print" id="btnback" style="text-decoration: none !important;">Back</a>
             <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClick="btnPrint_Click" CssClass="btn" />
 
         </div>
@@ -1112,7 +1123,7 @@
                                 </div>
                                 <table class="boxinside">
                                     <tr>
-                                        <th colspan="2" style="border-right:1px solid black;border-bottom: 1px solid;">Compulsory Subject Group-1 (100 Marks)<br>
+                                        <th colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid;">Compulsory Subject Group-1 (100 Marks)<br>
                                             (Select any one subject)</th>
                                         <th colspan="2" style="border-bottom: 1px solid;">Compulsory Subject Group-2 (100 Marks)<br>
                                             (Select any one subject, which is not selected under Compulsory Subject Group-1)</th>
@@ -1123,13 +1134,13 @@
                                                 <td>
                                                     <%# Eval("Group1SubjectName") %>
                                                 </td>
-                                                <td style="border-right:1px solid black">
+                                                <td style="border-right: 1px solid black">
                                                     <%# Eval("Group1CheckboxHtml") %>
                                                 </td>
                                                 <td>
                                                     <%# Eval("Group2SubjectName") %>
                                                 </td>
-                                                <td style="border-right:1px solid black">
+                                                <td style="border-right: 1px solid black">
                                                     <%# Eval("Group2CheckboxHtml") %>
                                                 </td>
                                             </tr>
