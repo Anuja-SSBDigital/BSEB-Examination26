@@ -131,7 +131,7 @@
                                         <a href="DwnldExamForm.aspx" class="nav-link">Download Examination Form</a>
                                     </li>
                                     <li runat="server" id="li_PayExamFormFee">
-                                        <a href="PayExamFormFee.aspx" class="nav-link">Make Exam Fee Payment</a>
+                                        <a href="PayExamFormFee.aspx" class="nav-link">Exam Payment</a>
                                     </li>
                                     <li runat="server" id="li_ExaminationForm">
                                         <a href="ExamForm.aspx" class="nav-link">Exam Form</a>
