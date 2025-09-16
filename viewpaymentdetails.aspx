@@ -31,7 +31,7 @@
                 <!-- Table/data goes here -->
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="payregstudentfee.aspx" Class="btn btn-primary mb-2" > Back</a>
+                        <a href="PayExamFormFee.aspx" Class="btn btn-primary mb-2" > Back</a>
 
                     </div>
                     <div class="col-md-6 text-right">

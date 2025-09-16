@@ -155,7 +155,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
                                     <label for="dob" class="form-label">ApaarId :</label>
-                                    <asp:TextBox ID="txtApaarId" runat="server" class="form-control" oninput="enforceMaxLength(this, 10)" />
+                                    <asp:TextBox ID="txtApaarId" runat="server" class="form-control" oninput="enforceMaxLength(this, 12)" />
                                 </div>
                             </div>
 
@@ -309,7 +309,7 @@
                             </div>
                             <div class="col-md-12 mb-3 form-group">
                                 <div class="text-danger">
-                                    अपना वैध मोबाइल नंबर ही प्रविष्ट करें। भविष्य में सभी संबंधित सूचनाएं इसी मोबाइल नंबर पर प्रदान की जाएँगी। गलत मोबाइल नंबर प्रविष्ट करने की स्थिति में जिम्मेदारी आपकी होगी।
+                                   <strong> अपना वैध मोबाइल नंबर ही प्रविष्ट करें। भविष्य में सभी संबंधित सूचनाएं इसी मोबाइल नंबर पर प्रदान की जाएँगी। गलत मोबाइल नंबर प्रविष्ट करने की स्थिति में जिम्मेदारी आपकी होगी। 
                                 </div>
                             </div>
                         </div>
@@ -572,7 +572,8 @@
             casteCategoryId: document.getElementById('<%= ddlCasteCategory.ClientID %>').value,
             genderId: document.getElementById('<%= ddlGender.ClientID %>').value,
             ExamTypeId: document.getElementById('<%= hnd_extype.ClientID %>').value,
-                CollegeCode: document.getElementById('<%= txtcollegeCode.ClientID %>').value, ApaarId: document.getElementById('<%= txtApaarId.ClientID %>').value,
+                CollegeCode: document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+                ApaarId: document.getElementById('<%= txtApaarId.ClientID %>').value,
             };
             debugger
             PageMethods.UpdateStudent(
@@ -649,12 +650,15 @@
         '<%= txtmotherName.ClientID %>',
         '<%= txtMobile.ClientID %>',
         '<%= txtEmail.ClientID %>',
-        '<%= ddlCasteCategory.ClientID %>'
+                '<%= ddlCasteCategory.ClientID %>',
+         '<%= txtApaarId.ClientID %>'
             ];
 
             var mobileEmailFields = [
         '<%= txtMobile.ClientID %>',
-        '<%= txtEmail.ClientID %>'
+                '<%= txtEmail.ClientID %>',
+               
+
             ];
 
             // Decide which fields to enable
@@ -663,7 +667,7 @@
             if (examType === "1" || examType === "5") {
                 debugger
                 enableFieldIds = regularPrivateFields;
-            } else if (examType === "6" || examType === "4" || examType === "2") {
+            } else if (examType === "6" || examType === "4" || examType === "2" || examType === "3" ) {
                 enableFieldIds = mobileEmailFields;
             }
 

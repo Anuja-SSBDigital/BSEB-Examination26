@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Xml;
 
 public partial class PayExamFormFee : System.Web.UI.Page
 {
@@ -44,7 +47,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
         }
     }
 
-   
+
 
     public void Binddropdown()
     {
@@ -71,108 +74,228 @@ public partial class PayExamFormFee : System.Web.UI.Page
             ddlExamcat.DataTextField = "ExamTypeName";
             ddlExamcat.DataValueField = "Pk_ExamTypeId";
             ddlExamcat.DataBind();
+            ddlExamcat.Items.Insert(0, new System.Web.UI.WebControls.ListItem("Select Exam Category", "0"));
         }
         else
         {
             ddlExamcat.Items.Clear();
         }
 
-       // ddlExamcat.Items.Insert(0, new ListItem("Select Exam Category", "0"));
+        // ddlExamcat.Items.Insert(0, new ListItem("Select Exam Category", "0"));
 
     }
 
     protected void btn_getdetails_Click(object sender, EventArgs e)
     {
-      
-        string Collegename = Session["CollegeName"].ToString();
-     //   string CategoryName = ddl_category.SelectedValue;
-        int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
-        int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
-        if (rdo_payemntstatus.Checked == true)
+        try
         {
-            int collegeid = 0;
-            string collegecode = "";
-         
-          
-            if (Collegename != "Admin")
+
+            string Collegename = Session["CollegeName"].ToString();
+            int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
+            int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
+            if (rdo_payemntstatus.Checked == true)
             {
+                int collegeid = 0;
+                string collegecode = "";
+                if (Collegename != "Admin")
+                {
+                    collegeid = Convert.ToInt32(Session["CollegeId"]);
+                }
+                else
+                {
+                    collegecode = txt_collegename.Text;
+                }
+                // Force TLS 1.2 for secure API calls
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                DataTable result = db.GetExamPaymentDetails(collegeid, collegecode, ExamId);
+                if (result != null && result.Rows.Count > 0)
+                {
 
 
-                collegeid = Convert.ToInt32(Session["CollegeId"]);
+
+                    //               foreach (DataRow row in result.Rows)
+                    //               {
+                    //                   string clientTxnId = row["ClientTxnId"].ToString();
+                    //                   string rowStatus = row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : "";
+                    //                   //string clientCode1 = "BSBI781"; // or from config
+                    //                   // string clientTxnId1 = "REG6305020250910181442029188"; // sample txn id
+
+                    //                   // ✅ Only call API if status is NULL or FAILED
+                    //                   if (!string.IsNullOrEmpty(clientTxnId) &&
+                    //(string.IsNullOrEmpty(rowStatus) ||
+                    // rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
+                    // rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase)))
+                    //                   {
+                    //                       string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+                    //                       string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode="
+                    //                                    + clientCode + "&clientXtnId=" + clientTxnId;
+
+                    //                       // ✅ Correct: Use HttpClient to call API
+                    //                       string responseString = "";
+
+                    //                       // 🔹 Use WebRequest (same as your working btnCheckTxn_Click)
+                    //                       HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    //                       request.Method = "GET";
+
+                    //                       using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    //                       {
+                    //                           using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    //                           {
+                    //                               responseString = reader.ReadToEnd();
+                    //                           }
+                    //                       }
+
+                    //                       XmlDocument xmlDoc = new XmlDocument();
+                    //                       xmlDoc.LoadXml(responseString);
+                    //                       XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
+
+
+
+                    //                       if (txnNode != null)
+                    //                       {
+                    //                           string apiStatus = txnNode.Attributes["status"].Value ?? "";
+                    //                           string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"].Value ?? "";
+                    //                           string bankTxnId = txnNode.Attributes["txnId"].Value ?? "";
+                    //                           string paidAmount = txnNode.Attributes["payeeAmount"].Value ?? "";
+                    //                           string paymentUpdateddate = txnNode.Attributes["transCompleteDate"].Value ?? "";
+                    //                           string paymentmode = txnNode.Attributes["paymentMode"].Value ?? "";
+
+                    //                           db.UpdateChallanInquiry(
+                    //                               clientTxnId,
+                    //                               apiStatus,
+                    //                               paymentStatusCode,
+                    //                               bankTxnId,
+                    //                               paidAmount,
+                    //                               paymentmode,
+                    //                               paymentUpdateddate
+                    //                           );
+
+                    //                           if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
+                    //                           {
+                    //                               DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
+
+                    //                               if (dsStudents != null && dsStudents.Tables.Count > 0)
+                    //                               {
+                    //                                   DataTable dtStudents = dsStudents.Tables[1];
+
+                    //                                   foreach (DataRow rowst in dtStudents.Rows)
+                    //                                   {
+                    //                                       int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                    //                                       db.UpdateStudentExamFeeSubmit(studentId);
+                    //                                   }
+                    //                               }
+
+                    //                           }
+                    //                       }
+                    //                       else
+                    //                       {
+                    //                           System.Diagnostics.Debug.WriteLine("No transaction data found for " + clientTxnId);
+                    //                       }
+
+                    //                   }
+                    //               }
+
+
+
+                    // Rebind fresh data
+                    DataTable result1 = db.GetExamPaymentDetails(collegeid, collegecode, ExamId);
+                    if (result1 != null && result1.Rows.Count > 0)
+                    {
+                        rpt_getpayemnt.DataSource = result1;
+                        rpt_getpayemnt.DataBind();
+
+                        divpayment.Visible = true;
+                        divstudentdetails.Visible = false;
+                        divpnlNoRecords.Visible = false;
+                        pnlStudentTable.Visible = false;
+                    }
+                    else
+                    {
+                        rpt_getpayemnt.DataSource = null;
+                        rpt_getpayemnt.DataBind();
+                        divpnlNoRecords.Visible = true;
+                        pnlStudentTable.Visible = false;
+                    }
+                }
+
+                else
+                {
+                    rpt_getpayemnt.DataSource = null;
+                    rpt_getpayemnt.DataBind();
+                    divpnlNoRecords.Visible = true;
+                    divstudentdetails.Visible = false;
+                    //pnlStudentTable.Visible = false;
+                }
 
             }
             else
             {
-                collegecode = txt_collegename.Text;
+                //string faculty = "";
+                string CollegeName = "";
+                if (Collegename == "Admin")
+                {
+
+                    CollegeName = txt_collegename.Text;
+
+                }
+                else
+                {
+
+                    string CollegeNameAndCode = txt_collegename.Text.Trim();
+                    string[] CollegeNameSplit = CollegeNameAndCode.Split('|');
+                    CollegeName = CollegeNameSplit[0].Trim();
+                }
+
+
+                string CollegeId = "";
+                if (Session["CollegeName"].ToString() == "Admin")
+                {
+                    DataTable dt = db.getcollegeidbasedonCollegecode(txt_collegename.Text);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                    }
+                }
+                else if (Session["CollegeId"] != null)
+                {
+                    CollegeId = Session["CollegeId"].ToString();
+                }
+
+                DataTable result = db.getExamDwnldStudentData(CollegeId, "", facultyId, ExamId, "", "makepayment");
+                if (result != null && result.Rows.Count > 0)
+                {
+                    rptStudents.DataSource = result;
+                    rptStudents.DataBind();
+                    divpayment.Visible = false;
+                    divstudentdetails.Visible = true;
+                    pnlStudentTable.Visible = true;
+                    divpnlNoRecords.Visible = false;
+                    pnlPager.Visible = true;
+                    searchInputDIV.Visible = true;
+                    pnlPager.Visible = true;
+
+                }
+                else
+                {
+                    rptStudents.DataSource = null;
+                    rptStudents.DataBind();
+                    divpayment.Visible = false;
+                    divstudentdetails.Visible = false;
+                    pnlStudentTable.Visible = false;
+                    divpnlNoRecords.Visible = true;
+                    pnlPager.Visible = false;
+                    searchInputDIV.Visible = false;
+                }
             }
-            DataTable result = db.GetExamPaymentDetails(collegeid, collegecode,ExamId);
-            rpt_getpayemnt.DataSource = result;
-            rpt_getpayemnt.DataBind();
-            divpayment.Visible = true;
-            divstudentdetails.Visible = false;
         }
-        else
+        catch (Exception exOuter)
         {
-            //string faculty = "";
-            string CollegeName = "";
-            if (Collegename == "Admin")
-            {
-
-                CollegeName = txt_collegename.Text;
-
-            }
-            else
-            {
-
-                string CollegeNameAndCode = txt_collegename.Text.Trim();
-                string[] CollegeNameSplit = CollegeNameAndCode.Split('|');
-                CollegeName = CollegeNameSplit[0].Trim();
-            }
-
-            string CollegeCode = "";
-            string CollegeId = "";
-            if (Session["CollegeName"].ToString() == "Admin")
-            {
-                CollegeCode = txt_collegename.Text;
-                CollegeId = "";
-            }
-            else
-            {
-                CollegeCode = "";
-                CollegeId = Session["CollegeId"].ToString();
-            }
-
-            DataTable result = db.getExamDwnldStudentData(CollegeId, CollegeCode, "", facultyId, ExamId, "Private", "makepayment");
-          //  DataTable result = db.getExamDwnldStudentData(CollegeId, CollegeCode, "", facultyId, ExamId, "makepayment");
-
-            if (result != null && result.Rows.Count > 0)
-            {
-                rptStudents.DataSource = result;
-                rptStudents.DataBind();
-                divpayment.Visible = false;
-                divstudentdetails.Visible = true;
-                divpnlNoRecords.Visible = false;
-                pnlStudentTable.Visible = true;
-                pnlPager.Visible = true;
-                searchInputDIV.Visible = true;
-                pnlPager.Visible = true;
-            }
-            else
-            {
-                rptStudents.DataSource = null;
-                rptStudents.DataBind();
-                divpayment.Visible = false;
-                divstudentdetails.Visible = true;
-                pnlStudentTable.Visible = false;
-                pnlPager.Visible = false;
-                searchInputDIV.Visible = false;
-                divpnlNoRecords.Visible = true;
-            }
+            System.Diagnostics.Debug.WriteLine("General Error: " + exOuter.Message);
         }
-
     }
 
-     protected void btn_paynow_Click(object sender, EventArgs e)
+    protected void btn_paynow_Click(object sender, EventArgs e)
     {
 
         string collegeCode = "";
@@ -245,7 +368,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
         // ✅ Insert payment details into DB
         string message = db.InsertStudentPaymentDetails(
             collegeId,
-            2, 
+            2,
             ddl_paymode.SelectedValue,
             Convert.ToDecimal(hfTotalAmount.Value),
             selectedStudentIds
@@ -321,6 +444,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
         string respString = "<html>" +
             "<body onload='document.forms[\"sabPaisaForm\"].submit()'>" +
+            //  "<form name='sabPaisaForm' method='post' action='https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
             "<form name='sabPaisaForm' method='post' action='https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
             "<input type='hidden' name='encData' value='" + encryptedData + "' />" +
             "<input type='hidden' name='clientCode' value='" + clientCode + "' />" +
@@ -331,8 +455,6 @@ public partial class PayExamFormFee : System.Web.UI.Page
         Response.Clear();
         Response.Write(respString);
         Response.End();
-
-
 
     }
 
@@ -455,22 +577,13 @@ swal({
             string Collegename = Session["CollegeName"] as string;
             string status = hf_status.Value;
 
-            if (Collegename == "Admin")
+            if (status != "SUCCESS")
             {
-                // Admin sees delete button always
                 lnkDelete.Visible = true;
             }
             else
             {
-                // Colleges see delete only if status is Failure or Aborted
-                if (status == "FAILED" || status == "ABORTED")
-                {
-                    lnkDelete.Visible = true;
-                }
-                else
-                {
-                    lnkDelete.Visible = false;
-                }
+                lnkDelete.Visible = false;
             }
         }
     }

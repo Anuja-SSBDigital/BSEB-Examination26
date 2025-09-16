@@ -206,12 +206,12 @@
 
         <!-- Module Cards -->
         <div class="modules">
-            <asp:LinkButton ID="lnkStudentRegistration" runat="server" OnClick="lnkStudentRegistration_Click" CssClass="module-card green">
+          <%--  <asp:LinkButton ID="lnkStudentRegistration" runat="server" OnClick="lnkStudentRegistration_Click" CssClass="module-card green">
                 <div class="module-icon">
                     <img src="assets/img/registered.gif" alt="Student Registration Icon" />
                 </div>
                 <div class="module-title">Student Registration</div>
-            </asp:LinkButton>
+            </asp:LinkButton>--%>
 
             <asp:LinkButton ID="lnkPreExamination" runat="server" OnClick="lnkPreExamination_Click" CssClass="module-card blue">
                 <div class="module-icon">

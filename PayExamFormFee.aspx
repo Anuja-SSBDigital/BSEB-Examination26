@@ -83,8 +83,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Exam Category <span class="text-danger">*</span></label>
-                            <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control form-select"></asp:DropDownList>
-                            <span id="ExamCatError" class="text-danger" style="display:none;">Please select a Exam Category.</span>
+                            <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control form-select">
+                                
+                            </asp:DropDownList>
+                            <span id="ExamCatError" style="display: none; color: red;">Please select a Exam Category.</span>
                         </div>
                     </div>
 
@@ -113,11 +115,11 @@
                     <asp:Button runat="server" ID="btn_getdetails" CssClass="btn btn-primary mr-2" Text="GET DETAILS" OnClick="btn_getdetails_Click" OnClientClick="return validateFaculty();" />
                 </div>
 
-                <div id="divpnlNoRecords" runat="server" visible="false">
-                    <asp:Panel ID="pnlNoRecords" runat="server" CssClass="alert alert-danger text-center mt-3">
-                        No student records found matching your criteria.
-                    </asp:Panel>
-                </div>
+                 <div class="col-12" id="divpnlNoRecords" runat="server" visible="false">
+      <asp:Panel ID="pnlNoRecords" runat="server" CssClass="alert alert-danger text-center mt-3">
+          No student records found matching your criteria.
+      </asp:Panel>
+  </div>
 
                 <hr />
 
@@ -126,9 +128,9 @@
                     <div class="section-title">
                         <h6>Student Details</h6>
                     </div>
-                    <div class="text-danger mt-3">
+                  <%--  <div class="text-danger mt-3">
                         <strong>नोट: Student Registration में उन्ही छात्रों का नाम दिखेगा जिनका शुल्क Success होगा।</strong>
-                    </div>
+                    </div>--%>
 
                     <div class="h6 mt-3 text-center">
                         <asp:HiddenField ID="hfTotalAmount" runat="server" />
@@ -141,7 +143,7 @@
                     </div>
 
                     <!-- Student Table -->
-                    <div class="table-responsive">
+                    <div class="table-responsive" >
                         <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
                             <table class="table table-hover table-bordered dataTable" id="dataTable">
                                 <thead>
@@ -155,11 +157,11 @@
                                         <th>Name</th>
                                         <th>Father Name</th>
                                         <th>Mother Name</th>
-                                        <th>DOB</th>
-                                        <th>Cast Category</th>
+                                        <th style="width: 80px;">DOB</th>
+                                        <th >Cast Category</th>
                                         <th>Category</th>
                                         <th>Fee Amount</th>
-                                        <th>Delete</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
@@ -176,13 +178,13 @@
                                                 <td><%# Eval("FatherName") %></td>
                                                 <td><%# Eval("MotherName") %></td>
                                                 <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
-                                                <td><%# Eval("CasteCategoryCode") %></td>
+                                                <td style="text-align:center;"><%# Eval("CasteCategoryCode") %></td>
                                                 <td><%# Eval("CategoryName") %></td>
                                                 <td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
                                                     <asp:Label ID="lblFee" runat="server"
                                                         Text='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>' />
                                                 </td>
-                                                <td></td>
+                                                
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -213,7 +215,7 @@
                             <thead>
                                 <tr>
                                     <th>S. No.</th>
-                                    <th>College Code</th>
+                                    <th>+2 School/College Code</th>
                                     <th>Transaction ID</th>
                                     <th>Student No</th>
                                     <th>Paid Amount</th>
@@ -294,6 +296,9 @@
             var facultyDropdown = document.getElementById('<%= ddlFaculty.ClientID %>');
             var errorSpan = document.getElementById('facultyError');
 
+            var ExamCategoryDropdown = document.getElementById('<%= ddlExamcat.ClientID %>');
+            var errorSpanCat = document.getElementById('ExamCatError');
+
             var collegeNameInput = document.getElementById('<%= txt_collegename.ClientID %>');
             var collegeNameErrorSpan = document.getElementById('CollegeNameError');
             if (collegeNameInput.value.trim() === "") {
@@ -315,6 +320,16 @@
                 errorSpan.style.display = "none";
                 facultyDropdown.classList.remove("is-invalid");
                 return true;
+            }
+       
+            
+            if (ExamCategoryDropdown.value === "0" || ExamCategoryDropdown.value === "") {
+                errorSpanCat.style.display = "inline";
+                ExamCategoryDropdown.classList.add("is-invalid");
+                ExamCategoryDropdown.focus();
+                return false;
+            } else {
+                ExamCategoryDropdown.classList.remove("is-invalid");
             }
         }
 
