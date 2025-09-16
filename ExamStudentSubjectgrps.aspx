@@ -66,7 +66,7 @@
                                 <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2  no-arrow" Enabled="false">
                                 </asp:DropDownList>
                             </div>
-                            <div class="borderline col-md-6">
+                            <div class="borderline col-md-6" ID="comp1title" runat="server">
 
                                 <p><strong>Compulsory Subject Group-1 (100 Marks)</strong></p>
                                 <asp:Repeater ID="rptCompulsorySubjects" runat="server">
@@ -86,8 +86,8 @@
                                     </FooterTemplate>
                                 </asp:Repeater>
                             </div>
-                           <div class="col-md-6 borderline">
-                                <p><strong>Compulsory Subject Group-2 (100 Marks)</strong></p>
+                           <div class="col-md-6 borderline" ID="comp1title2" runat="server">
+                                <p ><strong>Compulsory Subject Group-2 (100 Marks)</strong></p>
                                 <asp:Repeater ID="rptCompulsorySubjects2" runat="server">
                                     <HeaderTemplate>
                                         <ul>
@@ -114,13 +114,13 @@
 
           <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card" id="ElectiveCard" runat="server">
             <div class="card-body">
 
                 <div id="ElectiveSection" runat="server">
-                    <div class="q33-box borderline">
+                    <div class="q33-box borderline"  ID="Elective1title" runat="server">
                         <div class="section-title">Elective Subject Group (Total 300 Marks)</div>
-                        <p>(Select (✓) any three subjects - each 100 Marks)</p>
+                        <p ID="Elective1title2" runat="server">(Select (✓) any three subjects - each 100 Marks)</p>
                         <table>
                             <asp:Repeater ID="rptElectiveSubjects" runat="server">
                                 <ItemTemplate>
@@ -141,9 +141,9 @@
                 </div>
 
                 <div id="VocElectiveSection" runat="server">
-                    <div class="q33-box borderline">
+                    <div class="q33-box borderline" ID="Elective1titleVoc" runat="server">
                         <div class="section-title">Elective Subject Group (Total 300 Marks)</div>
-                        <p>(Select (✓) any three subjects - each 100 Marks)</p>
+                        <p ID="Elective1titleVoc2" runat="server">(Select (✓) any three subjects - each 100 Marks)</p>
                         <table>
                         <asp:Repeater ID="rptVocElectiveSubjects" runat="server">
                             <ItemTemplate>
@@ -193,9 +193,9 @@
                 <div class="card">
                     <div class="card-header"></div>
                     <div class="card-body">
-                        <div class="q33-box borderline">
-                            <div class="section-title">Additional Subject Group (100 Marks)</div>
-                            <ol>
+                        <div class="q33-box borderline" ID="Addi1title" runat="server">
+                            <div class="section-title" >Additional Subject Group (100 Marks)</div>
+                            <ol ID="Add2title" runat="server">
                                 <li>The student who desires to keep additional subject must select (✓) any one subject from the following group that is NOT selected in compulsory or elective groups.</li>
                                 <li>The student who does not want to keep additional subject should not select any subject under this group.</li>
                             </ol>
@@ -215,7 +215,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code1").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                         <asp:HiddenField ID="hfCode1" runat="server" Value='<%# Eval("Code1") %>' />
-                                                    <asp:HiddenField ID="hfPaperId1" runat="server" Value='<%# Eval("PaperId1") %>' />
+                                                    <%--<asp:HiddenField ID="hfPaperId1" runat="server" Value='<%# Eval("PaperId1") %>' />--%>
                                                 </td>
                                           
                                                 <td>
@@ -227,7 +227,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code2").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                       <asp:HiddenField ID="hfCode2" runat="server" Value='<%# Eval("Code2") %>' />
-                                                      <asp:HiddenField ID="hfPaperId2" runat="server" Value='<%# Eval("PaperId2") %>' />
+                                                      <%--<asp:HiddenField ID="hfPaperId2" runat="server" Value='<%# Eval("PaperId2") %>' />--%>
                                                 </td>
                                             
                                                 <td>
@@ -239,7 +239,7 @@
                                                         Visible='<%# !string.IsNullOrEmpty(Eval("Code3").ToString()) %>'
                                                         onclick="validateCompulsoryGroups()" />
                                                     <asp:HiddenField ID="hfCode3" runat="server" Value='<%# Eval("Code3") %>' />
-                                                     <asp:HiddenField ID="hfPaperId3" runat="server" Value='<%# Eval("PaperId3") %>' />
+                                                     <%--<asp:HiddenField ID="hfPaperId3" runat="server" Value='<%# Eval("PaperId3") %>' />--%>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -595,6 +595,50 @@
                         }
                     });
                 });
+                //for (let subject of restrictedSubjects) {
+                //    let inGroup1 = group1Selected.find(s => s.name === subject);
+                //    let inGroup2 = group2Selected.find(s => s.name === subject);
+
+                //    if (ExamTypeId === 3) {
+                //        // Lock logic: on pageload mark which were initially checked
+                //        document.querySelectorAll('.compGroup1 input[type="checkbox"], .compGroup2 input[type="checkbox"]')
+                //            .forEach(cb => {
+                //                const subjName = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
+                //                if (restrictedSubjects.includes(subjName)) {
+                //                    // Store initial state (do this only once)
+                //                    //if (!cb.dataset.initialChecked) {
+                //                    //    cb.dataset.initialChecked = cb.checked ? "true" : "false";
+                //                    //}
+
+                //                    // Prevent user from toggling
+                //                    cb.addEventListener("change", function () {
+                //                        if (cb.dataset.initialChecked === "true") {
+                //                            // Was initially checked → keep it checked
+                //                            cb.checked = true;
+                //                        } else {
+                //                            // Was initially unchecked → keep it unchecked
+                //                            cb.checked = false;
+                //                        }
+                //                    });
+                //                }
+                //            });
+
+                //        // Skip duplicate restriction check (lock already enforces rule)
+                //        continue;
+                //    }
+
+                //    // For all other ExamTypeIds (not 3) → block duplicates
+                //    if (inGroup1 && inGroup2) {
+                //        swal({
+                //            title: "Invalid Selection",
+                //            text: "Subject '" + subject.charAt(0).toUpperCase() + subject.slice(1) + "' cannot be selected in both Compulsory Groups.",
+                //            icon: "error",
+                //            button: "OK"
+                //        });
+                //        inGroup2.checkbox.checked = false;
+                //        return false;
+                //    }
+                //}
 
                 for (let subject of restrictedSubjects) {
                     let inGroup1 = group1Selected.find(s => s.name === subject);
@@ -611,7 +655,7 @@
                         return false;
                     }
                 }
-
+            
                 //let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
                 //electiveCheckboxes.forEach(cb => {
                 //    cb.addEventListener('change', function () {
@@ -675,7 +719,7 @@
                         debugger
                         //const examTypeId = getExamTypeId();
 
-                        if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6)) {
+                        if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6 )) {
                             // Revert to checked if unchecking is blocked
                             cb.checked = true;
 
@@ -712,7 +756,7 @@
                        // const examTypeId = getExamTypeId();
                         const vocationalCountLimit = 2;
                         const currentVocationalStudentsCount = parseInt(document.getElementById('<%= hfVocationalSubjectCount.ClientID %>').value);
-
+                        //if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6 || ExamTypeId === 3))
                         if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6)) {
             cb.checked = true;
 
@@ -781,6 +825,7 @@
 
                 return true;
             }
+            
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -843,6 +888,111 @@
                 });
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            debugger
+            // Get ExamTypeId once
+            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+            const isLocked = '<%= ViewState["IsLocked"] %>' === 'True';
+          // Target all relevant checkboxes
+          const allCheckboxes = document.querySelectorAll(
+              '.compGroup1 input[type="checkbox"], ' +
+              '.compGroup2 input[type="checkbox"], ' +
+              'input.electiveSubject, ' +
+              '.additionalSubject input[type="checkbox"], ' +
+              '.VocationalSubjects input[type="checkbox"]'
+          );
+
+          // Store initial checked state
+          allCheckboxes.forEach(cb => {
+              cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
+          });
+
+          // Attach click event
+          allCheckboxes.forEach(cb => {
+              cb.addEventListener('click', function (e) {
+                  const wasChecked = cb.dataset.initialChecked === 'true';
+
+                  if ([1, 2, 5, 6].includes(ExamTypeId)) {
+                      // LOCK ALL — revert
+                      e.preventDefault();
+                      return false;
+                  }
+                  if (ExamTypeId === 3 && isLocked) {
+                      e.preventDefault();
+                      return false;
+                  }
+                  //if (isLocked && ExamTypeId === 3) {
+                  //    if ([3].includes(ExamTypeId)) {
+                  //        // LOCK ALL — revert
+                  //        e.preventDefault();
+                  //        return false;
+                  //    }
+                      //allCheckboxes.forEach(cb => {
+                      //    cb.disabled = true; // lock them
+                      //});
+                 // }
+
+                  // ExamTypeId === 4 → fully allowed
+              });
+          });
+      });
+
+
+        <%--document.addEventListener('DOMContentLoaded', function () {
+            debugger
+            // Get ExamTypeId once
+            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+
+             // Target all relevant checkboxes
+             const allCheckboxes = document.querySelectorAll(
+                 '.compGroup1 input[type="checkbox"], ' +
+                 '.compGroup2 input[type="checkbox"], ' +
+                 'input.electiveSubject, ' +
+                 '.additionalSubject input[type="checkbox"], ' +
+                 '.VocationalSubjects input[type="checkbox"]'
+             );
+
+             // Store initial checked state
+             allCheckboxes.forEach(cb => {
+                 cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
+             });
+
+             // Attach click event
+             allCheckboxes.forEach(cb => {
+                 cb.addEventListener('click', function (e) {
+                     const wasChecked = cb.dataset.initialChecked === 'true';
+
+                     if ([1, 2, 5, 6].includes(ExamTypeId)) {
+                         // LOCK ALL — revert
+                         e.preventDefault();
+                         return false;
+                     }
+
+                     if (ExamTypeId === 3) {
+                         debugger
+                         if (wasChecked) {
+                             e.preventDefault();
+                             return false;
+                         }
+                         // If initially unchecked, user can check it once
+                         //if (!wasChecked && cb.checked) {
+                         //    cb.dataset.initialChecked = 'true'; // now treat as locked
+                         //    cb.disabled = true; // lock immediately after checking
+                         //}
+
+                         //// If user somehow tries to uncheck a pre-checked one → block
+                         //if (wasChecked && !cb.checked) {
+                         //    e.preventDefault();
+                         //   // cb.checked = true;
+                         //    return false;
+                         //}
+                     }
+
+                     // ExamTypeId === 4 → fully allowed
+                 });
+             });
+         });--%>
     </script>
 
 
