@@ -77,44 +77,84 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                         {
                             AllSubjects = dl.GetSubjectsForComp_Imp_Qual(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId), Convert.ToInt32(studentId));
 
-                            // ========== Compulsory: Hindi & English (ComGrp = 1)
-                            dvCompulsoryHindiEng = new DataView(AllSubjects);
-                            dvCompulsoryHindiEng.RowFilter = "GroupName = 'Compulsory' AND ComGrp = '1'";
-                            rptCompulsorySubjects.DataSource = dvCompulsoryHindiEng;
-                            rptCompulsorySubjects.DataBind();
-
-                            // ========== Compulsory: Urdu or Other (ComGrp = 2)
-                            DataView dvCompulsoryUrdu = new DataView(AllSubjects);
-                            dvCompulsoryUrdu.RowFilter = "GroupName = 'Compulsory' AND ComGrp = '2'";
-                            rptCompulsorySubjects2.DataSource = dvCompulsoryUrdu;
-                            rptCompulsorySubjects2.DataBind();
-
-                            // ========== Elective (GroupName = 'Elective')
-                            var electiveRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "3").ToList();
-
-                            DataTable electiveReshaped = new DataTable();
-                            electiveReshaped.Columns.Add("Name1");
-                            electiveReshaped.Columns.Add("Code1");
-                            electiveReshaped.Columns.Add("Name2");
-                            electiveReshaped.Columns.Add("Code2");
-
-                            for (int i = 0; i < electiveRows.Count; i += 2)
+                            if (ExamTypeId == "2" || ExamTypeId == "4")
                             {
-                                DataRow newRow = electiveReshaped.NewRow();
-                                newRow["Name1"] = electiveRows[i]["SubjectPaperName"];
-                                newRow["Code1"] = electiveRows[i]["SubjectPaperCode"];
-                                if (i + 1 < electiveRows.Count)
+                                // ========== Compulsory: Hindi & English (ComGrp = 1)
+                                dvCompulsoryHindiEng = new DataView(AllSubjects);
+                                dvCompulsoryHindiEng.RowFilter = "GroupName = 'Compulsory' AND ComGrp = '1'";
+                                rptCompulsorySubjects.DataSource = dvCompulsoryHindiEng;
+                                rptCompulsorySubjects.DataBind();
+
+                                if (ExamTypeId == "2")
                                 {
-                                    newRow["Name2"] = electiveRows[i + 1]["SubjectPaperName"];
-                                    newRow["Code2"] = electiveRows[i + 1]["SubjectPaperCode"];
+                                    comp1title.Visible = rptCompulsorySubjects.Items.Count > 0;
+                                    rptCompulsorySubjects.Visible = rptCompulsorySubjects.Items.Count > 0;
                                 }
-                                electiveReshaped.Rows.Add(newRow);
+                               
+
+                                // ========== Compulsory: Urdu or Other (ComGrp = 2)
+                                DataView dvCompulsoryUrdu = new DataView(AllSubjects);
+                                dvCompulsoryUrdu.RowFilter = "GroupName = 'Compulsory' AND ComGrp = '2'";
+                                rptCompulsorySubjects2.DataSource = dvCompulsoryUrdu;
+                                rptCompulsorySubjects2.DataBind();
+                                if (ExamTypeId == "2")
+                                {
+                                    comp1title2.Visible = rptCompulsorySubjects2.Items.Count > 0;
+                                    rptCompulsorySubjects2.Visible = rptCompulsorySubjects2.Items.Count > 0;
+                                }
+
+                                // ========== Elective (GroupName = 'Elective')
+                                var electiveRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "3").ToList();
+
+                                DataTable electiveReshaped = new DataTable();
+                                electiveReshaped.Columns.Add("Name1");
+                                electiveReshaped.Columns.Add("Code1");
+                                electiveReshaped.Columns.Add("Name2");
+                                electiveReshaped.Columns.Add("Code2");
+
+                                for (int i = 0; i < electiveRows.Count; i += 2)
+                                {
+                                    DataRow newRow = electiveReshaped.NewRow();
+                                    newRow["Name1"] = electiveRows[i]["SubjectPaperName"];
+                                    newRow["Code1"] = electiveRows[i]["SubjectPaperCode"];
+                                    if (i + 1 < electiveRows.Count)
+                                    {
+                                        newRow["Name2"] = electiveRows[i + 1]["SubjectPaperName"];
+                                        newRow["Code2"] = electiveRows[i + 1]["SubjectPaperCode"];
+                                    }
+                                    electiveReshaped.Rows.Add(newRow);
+                                }
+
+                                rptElectiveSubjects.DataSource = electiveReshaped;
+                                rptElectiveSubjects.DataBind();
+                                ViewState["ElectiveSubjects"] = electiveReshaped;
+                                VocElectiveSection.Visible = false;
+                                if (ExamTypeId == "2")
+                                {
+                                    ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    //Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    //Elective1title2.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    //rptElectiveSubjects.Visible = rptElectiveSubjects.Items.Count > 0;
+                                }
+
+                            }
+                            else
+                            {
+                                // ExamTypeId == "6" → hide Compulsory + Elective sections
+                                rptCompulsorySubjects.Visible = false;
+                                rptCompulsorySubjects2.Visible = false;
+                                comp1title.Visible = false;
+                                comp1title2.Visible = false;
+                               
+
+                               // rptElectiveSubjects.Visible = false;
+                                //Elective1title.Visible = false;
+                                //Elective1title2.Visible = false;
+                                ElectiveCard.Visible = false;
+                                divVocationalSubjects.Visible = false;
+                                VocElectiveSection.Visible = false;
                             }
 
-                            rptElectiveSubjects.DataSource = electiveReshaped;
-                            rptElectiveSubjects.DataBind();
-                            ViewState["ElectiveSubjects"] = electiveReshaped;
-                            VocElectiveSection.Visible = false;
                             // ========== Additional Subjects (3-column layout)
                             var additionalRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "4").ToList();
                             if (additionalRows.Any())
@@ -144,6 +184,9 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 rptAdditionalSubjects.DataSource = reshaped;
                                 rptAdditionalSubjects.DataBind();
                                 divAdditionalSubjects.Visible = true;
+                                Addi1title.Visible = rptAdditionalSubjects.Items.Count > 0;
+                                Add2title.Visible = rptAdditionalSubjects.Items.Count > 0;
+                                divAdditionalSubjects.Visible = rptAdditionalSubjects.Items.Count > 0;
                             }
                             else
                             {
@@ -151,7 +194,11 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             }
 
                             // ========== Vocational Additional
-                            BindRepeater(AllSubjects, "Vocational Additional", rptVocationalAdditionalSubjects);
+                            if (ExamTypeId == "4")
+                            {
+                                BindRepeater(AllSubjects, "Vocational Additional", rptVocationalAdditionalSubjects);
+                            }
+                         
                             bool hasImproved = AllSubjects.AsEnumerable().Any(row => row.Field<bool?>("Improved") == true);
 
                             if (ExamTypeId != "4")
@@ -166,14 +213,16 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                         else if (ExamTypeId == "1" || ExamTypeId == "3" || ExamTypeId == "5")
                         {
-                            if (ExamTypeId == "1" || ExamTypeId == "5")
-                            {
-                                AllSubjects = dl.GetExamSubjectsByGroup(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId), 0, Convert.ToInt32(studentId));
-                            }
-                            else
-                            {
-                                AllSubjects = dl.GetExamSubjectsByGroup(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId), 3, Convert.ToInt32(studentId));
-                            }
+                            //if (ExamTypeId == "1" || ExamTypeId == "5")
+                            //{
+                                AllSubjects = dl.GetExamSubjectsByGroup(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId),Convert.ToInt32(studentId));
+                           
+                                //AllSubjects = dl.GetExamSubjectsByGroup(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId), 0, Convert.ToInt32(studentId));
+                            //}
+                            //else
+                            //{
+                            //    AllSubjects = dl.GetExamSubjectsByGroup(Convert.ToInt32(FacultyId), Convert.ToInt32(CollegeId), 3, Convert.ToInt32(studentId));
+                            //}
                             dvCompulsoryHindiEng = new DataView(AllSubjects);
                             dvCompulsoryHindiEng.RowFilter = "GroupName = 'Compulsory' AND (SubjectPaperName = 'Hindi' OR SubjectPaperName = 'English')";
                             rptCompulsorySubjects.DataSource = dvCompulsoryHindiEng;
@@ -269,7 +318,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 {
                                     reshaped.Columns.Add("Name" + i);
                                     reshaped.Columns.Add("Code" + i);
-                                    reshaped.Columns.Add("PaperId" + i);
+                                    //reshaped.Columns.Add("PaperId" + i);
                                 }
 
                                 for (int i = 0; i < additional.Rows.Count; i += 3)
@@ -281,7 +330,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                         {
                                             newRow["Name" + (j + 1)] = additional.Rows[i + j]["SubjectPaperName"];
                                             newRow["Code" + (j + 1)] = additional.Rows[i + j]["SubjectPaperCode"];
-                                            newRow["PaperId" + (j + 1)] = additional.Rows[i + j]["Pk_SubjectPaperId"];
+                                            //newRow["PaperId" + (j + 1)] = additional.Rows[i + j]["Pk_SubjectPaperId"];
                                         }
                                     }
                                     reshaped.Rows.Add(newRow);
@@ -306,18 +355,20 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             BindRepeater(AllSubjects, "Vocational Additional", rptVocationalAdditionalSubjects);
 
                            
-                            if (ExamTypeId != "3" || ExamTypeId != "4")
+                            //if (ExamTypeId != "3" || ExamTypeId != "4")
+                            if (ExamTypeId != "4")
                             {
                                 ApplyPreviouslySelectedSubjects(studentId, "0");
+                                //if (ExamTypeId == "3")
+                                //{
+
+                                //}
+                                //ViewState["IsLocked"] = true;
                             }
 
 
 
                         }
-
-
-
-
 
                     }
 
@@ -369,6 +420,8 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                 Borderline_vocational.Visible = true;
                 rptVocationalAdditionalSubjects.DataSource = dvVocational;
                 rptVocationalAdditionalSubjects.DataBind();
+                div_vocational.Visible = rptVocationalAdditionalSubjects.Items.Count > 0;
+                Borderline_vocational.Visible = rptVocationalAdditionalSubjects.Items.Count > 0;
             }
 
 
@@ -789,25 +842,25 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         {
             string chkId = "chkAdditional" + i;
             string hfId = "hfCode" + i;
-            string hfPaperIdId = "hfPaperId" + i;
+            //string hfPaperIdId = "hfPaperId" + i;
 
             CheckBox chk = item.FindControl(chkId) as CheckBox;
             HiddenField hfCode = item.FindControl(hfId) as HiddenField;
-            HiddenField hfPaperId = item.FindControl(hfPaperIdId) as HiddenField;
+            //HiddenField hfPaperId = item.FindControl(hfPaperIdId) as HiddenField;
             if (chk != null && hfCode != null)
             {
                 string code = hfCode.Value;
                 bool isChecked = chk.Checked;
-                string paperId = hfPaperId.Value;
+               // string paperId = hfPaperId.Value;
                 if (string.IsNullOrEmpty(code))
                     continue;
 
-                //DataTable subjectInfo = dl.GetSubjectDetailsByCode(code);
-                if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(paperId))
+                DataTable subjectInfo = dl.GetSubjectDetailsByCode(code);
+                if (string.IsNullOrEmpty(code))
                     continue;
 
-                //string subjectPaperId = subjectInfo.Rows[0]["SubjectPaperId"].ToString();
-                //string subjectGroupId = subjectInfo.Rows[0]["SubjectGroupId"].ToString();
+                string subjectPaperId = subjectInfo.Rows[0]["SubjectPaperId"].ToString();
+              //  string subjectGroupId = subjectInfo.Rows[0]["SubjectGroupId"].ToString();
 
                 DataRow existingRow = existingSubjects.AsEnumerable()
                     .FirstOrDefault(r => r["SubjectPaperCode"].ToString() == code);
@@ -821,7 +874,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                         if (isChecked)
                         {
-                            dl.ExamImprovemnetUpdateStudentSubjectByPkId(pkId.ToString(), paperId, subjectGroupId, modifiedBy);
+                            dl.ExamImprovemnetUpdateStudentSubjectByPkId(pkId.ToString(), subjectPaperId, subjectGroupId, modifiedBy);
                         }
                         else
                         {
@@ -832,7 +885,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                     {
                         // ✅ If not saved yet, and selected, insert as new
                         //subjectGroupId = "3";
-                        dl.InsertStudentSubjectUsingSP(studentId, paperId, subjectGroupId, modifiedBy, comgrp);
+                        dl.InsertStudentSubjectUsingSP(studentId, subjectPaperId, subjectGroupId, modifiedBy, comgrp);
                     }
                 }
                 else if (examTypeId == 1 || examTypeId == 3 || examTypeId == 5)
@@ -842,12 +895,12 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                         if (existingRow == null)
                         {
                             //subjectGroupId = "3"; // default group for new inserts
-                            dl.InsertStudentSubjectUsingSP(studentId, paperId, subjectGroupId, modifiedBy, comgrp);
+                            dl.InsertStudentSubjectUsingSP(studentId, subjectPaperId, subjectGroupId, modifiedBy, comgrp);
                         }
                         else
                         {
                             int pkId = Convert.ToInt32(existingRow["Pk_StudentPaperAppliedId"]);
-                            dl.ExamUpdateStudentSubjectByPkId(pkId.ToString(), paperId, subjectGroupId, modifiedBy);
+                            dl.ExamUpdateStudentSubjectByPkId(pkId.ToString(), subjectPaperId, subjectGroupId, modifiedBy);
                         }
                     }
                     else
@@ -924,6 +977,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         {
             DataTable appliedSubjects = new DataTable();
             string FacultyId = Request.QueryString["FacultyId"];
+            bool hasExistingSubjects = false;
             if (ExamTypeId !="4")
             {
                  appliedSubjects = dl.GetAppliedSubjects(studentId);
@@ -933,7 +987,13 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                 appliedSubjects = dl.GetExamImporovedAppliedSubjects(studentId);
             }
 
+            if (appliedSubjects != null && appliedSubjects.Rows.Count > 0)
+            {
+                hasExistingSubjects = true;
+            }
 
+            // Store the locked status in ViewState for the front-end
+            ViewState["IsLocked"] = hasExistingSubjects.ToString();
             Dictionary<string, string> comGrpToAppliedId = new Dictionary<string, string>();
             foreach (DataRow row in appliedSubjects.Rows)
             {
