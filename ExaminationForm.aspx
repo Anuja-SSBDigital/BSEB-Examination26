@@ -652,7 +652,7 @@
         <div class="print-btn-container" style="text-align: center !important; margin-bottom: 10px;">
             <%-- <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClientClick="window.print(); return false;" />--%>
             <a href="DwnldExamForm.aspx" class="btn btn-primary no-print" id="btnback" style="text-decoration: none !important;">Back</a>
-            <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClick="btnPrint_Click" CssClass="btn" />
+            <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClick="btnPrint_Click" OnClientClick="updateAndPrint(); return false;" CssClass="btn" />
 
         </div>
 
@@ -1297,7 +1297,12 @@
                 </div>
             </ItemTemplate>
         </asp:Repeater>
+          <%--<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>--%>
 
+        <script  type="text/javascript" src ="assets/js/customforexamform.js"></script>
     </form>
+  
+
+     
 </body>
 </html>

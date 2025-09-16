@@ -665,5 +665,34 @@ public partial class ExaminationForm : System.Web.UI.Page
     }
 
 
+    [System.Web.Services.WebMethod]
+    public static string UpdateDownloaded(string studentData)
+    {
+        try
+        {
+            string decodedStudentData = HttpContext.Current.Server.UrlDecode(studentData);
+            List<string> selectedStudents = decodedStudentData.Split(new string[] { ",|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            foreach (var StuIds in selectedStudents)
+            {
+                var Parts = StuIds.Split('|');
+                if (Parts.Length == 3)
+                {
+                    int studentId;
+                    if (int.TryParse(Parts[0], out studentId))
+                    {
+                        // Call your existing DL method
+                        DBHelper db = new DBHelper();
+                        db.UpdateStudentsDownloaded(studentId);
+                    }
+                }
+            }
+            return "success";
+        }
+        catch (Exception ex)
+        {
+            return "error: " + "Load Page Again";
+        }
+    }
 
 }
