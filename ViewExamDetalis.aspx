@@ -290,7 +290,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="label">College/+2 Name:</td>
+                                    <td class="label">+2 School/College Code:</td>
                                     <td>
                                         <asp:Label ID="lblCollege" runat="server" />
                                     </td>
