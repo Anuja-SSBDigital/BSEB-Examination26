@@ -181,9 +181,9 @@
                 </a>
             </span>
         </marquee>
-         <p class="mt-4" style="color:red;font-weight:bold;font-size: 20px;margin-left: 20px;">
+       <%--  <p class="mt-4" style="color:red;font-weight:bold;font-size: 20px;margin-left: 20px;">
      नोट - पंजीयन फॉर्म भरने के पश्चात्  घोषणा पत्र अनिवार्य रूप से अपलोड करे। जिनका घोषणा पत्र अपलोड नहीं किया जायेगा उनका पंजीयन फॉर्म सबमिट नहीं माना जायेगा।
- </p>
+ </p>--%>
         <!-- Secondary Header (Modules + College Name) -->
         <div class="header-container">
             <div class="module-heading">Assigned Module(s)</div>

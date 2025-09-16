@@ -214,7 +214,7 @@
                           <%--  <p class="mt-4" style="color:red; font-weight:bold;font-size: 30px">
                                The website will remain closed for maintenance today from 9:00 PM to 10:30 PM.
                             </p>--%>
-                            <a href="assets/Notifications/ArtsPrivate.pdf"
+                          <%--  <a href="assets/Notifications/ArtsPrivate.pdf"
                                 download="ArtsPrivate.pdf"
                                 style="color: #3059c4; display: block; font-size:20px;"
                                 class="mt-4">
@@ -242,7 +242,7 @@
   </a>
                             <p class="mt-4" style="color:red; font-weight:bold;font-size: 20px">
                                 नोट - पंजीयन फॉर्म भरने के पश्चात्  घोषणा पत्र अनिवार्य रूप से अपलोड करे। जिनका घोषणा पत्र अपलोड नहीं किया जायेगा उनका पंजीयन फॉर्म सबमिट नहीं माना जायेगा।
-                            </p>
+                            </p>--%>
                         </div>
                     </div>
                 </div>
