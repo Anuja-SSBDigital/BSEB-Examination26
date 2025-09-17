@@ -701,9 +701,6 @@
 
                                 <table>
 
-                                    <p style="font-weight: bold">
-                                        नोट :- खंड 'A' (क्रमांक–1 से 17) में अंकित विवरणों में विद्यार्थी द्वारा किसी भी प्रकार का कोई कोई छेड़-छाड़/परिवर्तन नहीं किया जाएगा। अर्थात् क्रमांक- 1 से 17 तक में विद्यार्थी द्वारा कुछ भी नहीं लिखा जाएगा।                               
-                                    </p>
                                     <tr>
                                         <td class="no-border">1. Registration no. & Year.</td>
                                         <td colspan="4"><%# Eval("OFSSCAFNo") %></td>
@@ -1074,7 +1071,7 @@
                                 <div class="input-row">
                                     <label>31. Bank & Branch Name*</label>
                                     <input type="text" class="form-input" value='<%--<%# Eval("BankBranchName") %>--%>' />
-                                    <label style="font-size: smaller;">(Sl.No. 20, 30 ,31 and 32 are not compulsory, all other fields are compulsory)</label>
+                                    <label style="font-size: smaller;">(Sl.No. 29, 30 ,31 are not compulsory, all other fields are compulsory)</label>
 
                                 </div>
 
