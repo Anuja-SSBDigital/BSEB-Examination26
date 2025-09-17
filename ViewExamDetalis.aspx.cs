@@ -28,7 +28,7 @@ public partial class ViewExamDetalis : System.Web.UI.Page
                         {
                             //hfCategoryType.Value = CategoryType;
                             LoadStudentExamData(Convert.ToInt32(StudentId), Convert.ToInt32(ExamTypeId));
-                            LoadSubjects(Convert.ToInt32(StudentId));
+                            LoadSubjects(Convert.ToInt32(StudentId),Convert.ToInt32(ExamTypeId));
                         }
                       
                     }
@@ -53,11 +53,12 @@ public partial class ViewExamDetalis : System.Web.UI.Page
         }
     }
 
-    private void LoadSubjects(int studentId)
+    private void LoadSubjects(int studentId,int ExamTypeId)
     {
         try
         {
-            DataTable dt = dl.GetStudentSubjectsListByStudentId(studentId);
+            DataTable dt = dl.ExamGetStudentSubjectsListByStudentId(studentId, ExamTypeId);
+            //DataTable dt = dl.GetStudentSubjectsListByStudentId(studentId);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -104,7 +105,7 @@ public partial class ViewExamDetalis : System.Web.UI.Page
                 lblRollNumber.Text = dr["MatricRollNumber"].ToString();
                 lblPassingYear.Text = dr["MatricPassingYear"].ToString();
                 lblGender.Text = dr["GenderName"].ToString();
-                lblCaste.Text = dr["CasteCategoryName"].ToString();
+                lblCaste.Text = dr["CasteCategoryCode"].ToString();
                 lblDifferentlyAbled.Text = dr["DifferentlyAbled"] != DBNull.Value && Convert.ToBoolean(dr["DifferentlyAbled"]) ? "yes" : "no";
 
                 //lblDisabledNote.Text = "";
@@ -144,7 +145,7 @@ public partial class ViewExamDetalis : System.Web.UI.Page
 
                 // Display the fee in currency format
                 lblStuFees.Text = feeToDisplay.ToString();
-                lbl_aparid.Text = dr["ApaarId"].ToString();
+                //lbl_aparid.Text = dr["ApaarId"].ToString();
                 //lblStuFees.Text = feeToDisplay.ToString("C");
             }
             else
@@ -188,7 +189,7 @@ public partial class ViewExamDetalis : System.Web.UI.Page
                 string script = @"
                     swal({
                         title: 'Success!',
-                        text: 'Student Details updated successfully.',
+                        text: 'Exam Form Submitted Successfully.',
                         icon: 'success',
                         button: 'OK'
                     }).then(function() {
