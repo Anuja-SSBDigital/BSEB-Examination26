@@ -102,36 +102,90 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                     comp1title2.Visible = rptCompulsorySubjects2.Items.Count > 0;
                                     rptCompulsorySubjects2.Visible = rptCompulsorySubjects2.Items.Count > 0;
                                 }
+                                //if (FacultyId == "4")
+                                //{
+                                //    var vocElective = AllSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Elective")
+                                //     .GroupBy(r =>
+                                //     {
+                                //         var paperType = r["PaperType"] == DBNull.Value ? "" : r["PaperType"].ToString();
+                                //         return string.IsNullOrWhiteSpace(paperType) ? "Paper-1" : paperType;
+                                //     }).ToDictionary(g => g.Key, g => g.ToList());
 
-                                // ========== Elective (GroupName = 'Elective')
-                                var electiveRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "3").ToList();
+                                //    DataTable vocElectiveTable = new DataTable();
+                                //    vocElectiveTable.Columns.Add("Name1"); // Paper-1 Name
+                                //    vocElectiveTable.Columns.Add("Code1"); // Paper-1 Code
+                                //    vocElectiveTable.Columns.Add("Name2"); // Paper-2 Name
+                                //    vocElectiveTable.Columns.Add("Code2"); // Paper-2 Code
 
-                                DataTable electiveReshaped = new DataTable();
-                                electiveReshaped.Columns.Add("Name1");
-                                electiveReshaped.Columns.Add("Code1");
-                                electiveReshaped.Columns.Add("Name2");
-                                electiveReshaped.Columns.Add("Code2");
+                                //    // Get lists for Paper-1 and Paper-2
+                                //    var paper1 = vocElective.ContainsKey("Paper-1") ? vocElective["Paper-1"] : new List<DataRow>();
+                                //    var paper2 = vocElective.ContainsKey("Paper-2") ? vocElective["Paper-2"] : new List<DataRow>();
 
-                                for (int i = 0; i < electiveRows.Count; i += 2)
-                                {
-                                    DataRow newRow = electiveReshaped.NewRow();
-                                    newRow["Name1"] = electiveRows[i]["SubjectPaperName"];
-                                    newRow["Code1"] = electiveRows[i]["SubjectPaperCode"];
-                                    if (i + 1 < electiveRows.Count)
+                                //    int maxCount = Math.Max(paper1.Count, paper2.Count);
+
+                                //    for (int i = 0; i < maxCount; i++)
+                                //    {
+                                //        DataRow newRow = vocElectiveTable.NewRow();
+
+                                //        if (i < paper1.Count)
+                                //        {
+                                //            newRow["Name1"] = paper1[i]["SubjectPaperName"];
+                                //            newRow["Code1"] = paper1[i]["SubjectPaperCode"];
+                                //        }
+
+                                //        if (i < paper2.Count)
+                                //        {
+                                //            newRow["Name2"] = paper2[i]["SubjectPaperName"];
+                                //            newRow["Code2"] = paper2[i]["SubjectPaperCode"];
+                                //        }
+
+                                //        vocElectiveTable.Rows.Add(newRow);
+                                //    }
+
+                                //    rptVocElectiveSubjects.DataSource = vocElectiveTable;
+                                //    rptVocElectiveSubjects.DataBind();
+
+                                //    ElectiveSection.Visible = false;
+                                //    VocElectiveSection.Visible = true;
+
+                                //}
+                                //else
+                                //{
+                                    var electiveRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "3").ToList();
+
+                                    DataTable electiveReshaped = new DataTable();
+                                    electiveReshaped.Columns.Add("Name1");
+                                    electiveReshaped.Columns.Add("Code1");
+                                    electiveReshaped.Columns.Add("Name2");
+                                    electiveReshaped.Columns.Add("Code2");
+
+                                    for (int i = 0; i < electiveRows.Count; i += 2)
                                     {
-                                        newRow["Name2"] = electiveRows[i + 1]["SubjectPaperName"];
-                                        newRow["Code2"] = electiveRows[i + 1]["SubjectPaperCode"];
+                                        DataRow newRow = electiveReshaped.NewRow();
+                                        newRow["Name1"] = electiveRows[i]["SubjectPaperName"];
+                                        newRow["Code1"] = electiveRows[i]["SubjectPaperCode"];
+                                        if (i + 1 < electiveRows.Count)
+                                        {
+                                            newRow["Name2"] = electiveRows[i + 1]["SubjectPaperName"];
+                                            newRow["Code2"] = electiveRows[i + 1]["SubjectPaperCode"];
+                                        }
+                                        electiveReshaped.Rows.Add(newRow);
                                     }
-                                    electiveReshaped.Rows.Add(newRow);
-                                }
 
-                                rptElectiveSubjects.DataSource = electiveReshaped;
-                                rptElectiveSubjects.DataBind();
-                                ViewState["ElectiveSubjects"] = electiveReshaped;
-                                VocElectiveSection.Visible = false;
+                                    rptElectiveSubjects.DataSource = electiveReshaped;
+                                    rptElectiveSubjects.DataBind();
+                                    ViewState["ElectiveSubjects"] = electiveReshaped;
+                                    VocElectiveSection.Visible = false;
+
+                                //}
+                                    // ========== Elective (GroupName = 'Elective')
+                                  
                                 if (ExamTypeId == "2")
                                 {
                                     ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    VocElectiveSection.Visible = false;
+                                    divAdditionalSubjects.Visible = false;
+
                                     //Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
                                     //Elective1title2.Visible = rptElectiveSubjects.Items.Count > 0;
                                     //rptElectiveSubjects.Visible = rptElectiveSubjects.Items.Count > 0;
@@ -154,9 +208,10 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 divVocationalSubjects.Visible = false;
                                 VocElectiveSection.Visible = false;
                             }
-
-                            // ========== Additional Subjects (3-column layout)
-                            var additionalRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "4").ToList();
+                            if (ExamTypeId == "4" || ExamTypeId =="6")
+                            {
+                                // ========== Additional Subjects (3-column layout)
+                                var additionalRows = AllSubjects.AsEnumerable().Where(row => row.Field<string>("ComGrp") == "4").ToList();
                             if (additionalRows.Any())
                             {
                                 DataTable additional = additionalRows.CopyToDataTable();
@@ -194,8 +249,8 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             }
 
                             // ========== Vocational Additional
-                            if (ExamTypeId == "4")
-                            {
+                            //if (ExamTypeId == "4")
+                            //{
                                 BindRepeater(AllSubjects, "Vocational Additional", rptVocationalAdditionalSubjects);
                             }
                          
@@ -685,7 +740,8 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         selectedCodes.AddRange(selected2);
 
         // ✅ 1. Validate only if examTypeId != 4
-        if (examTypeId != 4 && selectedCodes.Count != 3)
+        //if (examTypeId != 4 && selectedCodes.Count != 3)
+        if (examTypeId ==3 && selectedCodes.Count != 3)
         {
             throw new Exception("Exactly 3 elective subjects must be selected.");
         }
