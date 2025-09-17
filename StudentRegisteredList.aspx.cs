@@ -29,6 +29,23 @@ public partial class StudentRegisteredList : System.Web.UI.Page
                 ddlFaculty.Items.Clear();
                 ddlFaculty.Items.Insert(0, new ListItem("Select Faculty", "0"));
             }
+
+            DataTable dtExamcat = dl.getExamCatfordropdown();
+            var filtered = dtExamcat.AsEnumerable().Where(row => row.Field<int>("Pk_ExamTypeId") != 5);
+
+            if (filtered.Any())
+            {
+                ddlExamcat.DataSource = filtered.CopyToDataTable();
+                ddlExamcat.DataTextField = "ExamTypeName";
+                ddlExamcat.DataValueField = "Pk_ExamTypeId";
+                ddlExamcat.DataBind();
+                ddlExamcat.Items.Insert(0, new System.Web.UI.WebControls.ListItem("Select Exam Category", "0"));
+            }
+            else
+            {
+                ddlExamcat.Items.Clear();
+            }
+
         }
         catch (Exception ex)
         {
@@ -82,11 +99,11 @@ public partial class StudentRegisteredList : System.Web.UI.Page
                 CollegeId = Session["CollegeId"].ToString();
             }
             hfCollegeId.Value = CollegeId;
-            DataTable result = dl.GetStudentRegisteredListData(Convert.ToInt32(CollegeId), Convert.ToInt32(facultyId), ddl_category.SelectedValue);
+            DataTable result = dl.GetStudentExaminationListData(Convert.ToInt32(CollegeId), Convert.ToInt32(facultyId), ddlExamcat.SelectedValue);
             bool hasRecords = result != null && result.Rows.Count > 0;
             if (result != null && result.Rows.Count > 0)
             {
-               
+
                 pnlNoRecords.Visible = !hasRecords;
                 pnlStudentTable.Visible = hasRecords;
                 rptStudentList.DataSource = hasRecords ? result : null;
@@ -96,12 +113,12 @@ public partial class StudentRegisteredList : System.Web.UI.Page
             }
             else
             {
-              
+
                 pnlStudentTable.Visible = false;
                 pnlNoRecords.Visible = true;
-               
-               
-              
+
+
+
 
             }
 

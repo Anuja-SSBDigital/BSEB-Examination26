@@ -1,55 +1,54 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudentRegisteredList.aspx.cs" Inherits="StudentRegisteredList"  MasterPageFile="~/MasterPage.master"%>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudentRegisteredList.aspx.cs" Inherits="StudentRegisteredList" MasterPageFile="~/MasterPage.master" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
- <style>
-     .table-responsive {
-         margin-top: 20px;
-     }
+    <style>
+        .table-responsive {
+            margin-top: 20px;
+        }
 
-     .repeater-checkbox {
-         width: 30px;
-         text-align: center;
-     }
+        .repeater-checkbox {
+            width: 30px;
+            text-align: center;
+        }
 
-     .repeater-col {
-         padding: 8px;
-     }
+        .repeater-col {
+            padding: 8px;
+        }
 
-     table {
-         border-collapse: collapse !important; /* Ensures no double borders */
-         width: 100%;
-     }
+        table {
+            border-collapse: collapse !important; /* Ensures no double borders */
+            width: 100%;
+        }
 
-         table th,
-         table td {
-             border: 1px solid #333 !important; /* Darker and consistent grid border */
-             padding: 10px;
-             font-size: 14px;
-             vertical-align: middle;
-         }
+            table th,
+            table td {
+                border: 1px solid #333 !important; /* Darker and consistent grid border */
+                padding: 10px;
+                font-size: 14px;
+                vertical-align: middle;
+            }
 
-         table tr:nth-child(even) {
-             background-color: #f9f9f9;
-         }
+            table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
 
-     .repeater-checkbox {
-         text-align: center;
-         width: 40px;
-     }
+        .repeater-checkbox {
+            text-align: center;
+            width: 40px;
+        }
 
-     label.form-label.required-label {
-         font-weight: 600 !important;
-     }
+        label.form-label.required-label {
+            font-weight: 600 !important;
+        }
 
-     .boldfont {
-         font-weight: 700 !important;
-     }
+        .boldfont {
+            font-weight: 700 !important;
+        }
 
-      .custom-line {
-     margin: 3px 0;  /* reduce space between lines */
-
- }
- </style>
+        .custom-line {
+            margin: 3px 0; /* reduce space between lines */
+        }
+    </style>
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -81,13 +80,10 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Student Category<span class="text-danger">*</span></label>
-                                <asp:DropDownList runat="server" ID="ddl_category" CssClass="form-control select2">
-                                    <asp:ListItem Value="0">Select Category</asp:ListItem>
-                                    <asp:ListItem Value="Regular">Regular</asp:ListItem>
-                                    <asp:ListItem Value="Private">Private</asp:ListItem>
+                                <label>Exam Category <span class="text-danger">*</span></label>
+                                <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control form-select">
                                 </asp:DropDownList>
-                                <span id="CategoryError" class="text-danger" style="display: none;">Please select a Category.</span>
+                                <span id="ExamCatError" style="display: none; color: red;">Please select a Exam Category.</span>
                             </div>
                         </div>
                     </div>
@@ -95,7 +91,7 @@
                     <div class="form-group mt-4 text-center">
                         <asp:Button ID="btnviewrecord" runat="server" Text="VIEW RECORD" CssClass="btn btn-primary mr-2" OnClick="btnviewrecord_Click" OnClientClick="return validateFaculty();" />
                     </div>
- <hr />
+                    <hr />
 
                     <%-- <div class="text-center">
                                 <strong><span id="SpSearchresult" runat="server" Visible="false">Search Result For: </span><asp:Label runat="server" ID="lblCollege" ></asp:Label></strong>
@@ -103,45 +99,45 @@
 
                             <hr />--%>
 
-                     
-         <div class="table-responsive" id="studentlistdata">
-            <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
-                <%--<table class="table table-bordered table-striped table-sm" id="table-1">--%>
-                <table class="table table-hover table-bordered" id="table-1">
-                    <thead>
-                        <tr>
-                            <th>S. No.</th>
-                            <th>+2 School/College Code</th>
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Mother Name</th>
-                            <th>Year Of Passing</th>
-                           
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        <asp:Repeater ID="rptStudentList" runat="server">
-                            <ItemTemplate>
-                                <tr>
-                                    <td><%# Container.ItemIndex + 1 %></td>
-                                    <td><%# Eval("CollegeCode") %></td>
-                                    <td><%# Eval("StudentName") %></td>
-                                    <td><%# Eval("FatherName") %></td>
-                                    <td><%# Eval("MotherName") %></td>
-                                    <td><%# Eval("YearOfPassing") %></td>
-                                   
-                                </tr>
-                            </ItemTemplate>
-                        </asp:Repeater>
-                    </tbody>
-                </table>
-            </asp:Panel>
+                    <div class="table-responsive" id="studentlistdata">
+                        <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
+                            <%--<table class="table table-bordered table-striped table-sm" id="table-1">--%>
+                            <table class="table table-hover table-bordered" id="table-1">
+                                <thead>
+                                    <tr>
+                                        <th>S. No.</th>
+                                        <th>+2 School/College Code</th>
+                                        <th>Student Name</th>
+                                        <th>Father Name</th>
+                                        <th>Mother Name</th>
+                                        <th>Year Of Passing</th>
 
-            <asp:Panel ID="pnlNoRecords" runat="server" Visible="false" CssClass="alert alert-danger text-center mt-3">
-                No student records found matching your criteria.
-            </asp:Panel>
-        </div>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <asp:Repeater ID="rptStudentList" runat="server">
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td><%# Container.ItemIndex + 1 %></td>
+                                                <td><%# Eval("CollegeCode") %></td>
+                                                <td><%# Eval("StudentName") %></td>
+                                                <td><%# Eval("FatherName") %></td>
+                                                <td><%# Eval("MotherName") %></td>
+                                                <td><%# Eval("YearOfPassing") %></td>
+
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </tbody>
+                            </table>
+                        </asp:Panel>
+
+                        <asp:Panel ID="pnlNoRecords" runat="server" Visible="false" CssClass="alert alert-danger text-center mt-3">
+                            No student records found matching your criteria.
+                        </asp:Panel>
+                    </div>
 
 
                 </div>
@@ -149,7 +145,7 @@
         </div>
     </div>
 
-      
+
     <script type="text/javascript">
         function validateFaculty() {
             debugger
@@ -158,8 +154,8 @@
 
             var collegeNameInput = document.getElementById('<%= txt_CollegeName.ClientID %>');
             var collegeNameErrorSpan = document.getElementById('CollegeNameError');
-            var CategoryInput = document.getElementById('<%= ddl_category.ClientID %>');
-            var CategoryErrorSpan = document.getElementById('CategoryError');
+            var CategoryInput = document.getElementById('<%= ddlExamcat.ClientID %>');
+            var CategoryErrorSpan = document.getElementById('ExamCatError');
             if (collegeNameInput.value.trim() === "") {
                 collegeNameErrorSpan.style.display = "inline";
                 collegeNameInput.classList.add("is-invalid");
@@ -186,6 +182,6 @@
             }
         }
 
-      
+
     </script>
 </asp:Content>
