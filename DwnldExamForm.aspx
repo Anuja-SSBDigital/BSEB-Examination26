@@ -1,4 +1,4 @@
-﻿<%@ Page Title="BSEB - Admin Dashboard | Download Registration Form" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="DwnldExamForm.aspx.cs" Inherits="DwnldExamForm" %>
+﻿<%@ Page Title="BSEB" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="DwnldExamForm.aspx.cs" Inherits="DwnldExamForm" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
