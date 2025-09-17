@@ -306,645 +306,134 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
 
-    <script type="text/javascript">
-        function syncVocElectiveSelection(clickedCheckbox) {
-            // Force Code 402 to stay checked
-            if (clickedCheckbox.value === "402" && !clickedCheckbox.checked) {
-                clickedCheckbox.checked = true;
-                clickedCheckbox.setAttribute('checked', 'checked');
-                return;
-            }
-
-            const subjectName = clickedCheckbox.dataset.name.trim().toLowerCase();
-            if (!subjectName) return;
-
-            const isChecked = clickedCheckbox.checked;
-            clickedCheckbox.setAttribute('checked', isChecked ? 'checked' : '');
-            document.querySelectorAll('input[type="checkbox"][data-name="' + subjectName + '"]').forEach(cb => {
-                if (cb !== clickedCheckbox) {
-                    cb.checked = isChecked;
-                    cb.setAttribute('checked', isChecked ? 'checked' : '');
-                }
-            });
-        }
-        function getElectiveSubjectValues() {
-            const values = [];
-            document.querySelectorAll('.electiveSubject:checked').forEach(cb => {
-                values.push(cb.value.trim());
-            });
-            return values;
-        }
-
-        function storeElectiveSelections() {
-            const selectedElectives = getElectiveSubjectValues();
-            document.getElementById('<%= hfElectiveSubjects.ClientID %>').value = selectedElectives.join(',');
-        }
-
-        function restoreElectiveSelections() {
-            const stored = document.getElementById('<%= hfElectiveSubjects.ClientID %>').value;
-            if (!stored) return;
-
-            const selected = stored.split(',');
-            selected.forEach(code => {
-                const cb = document.querySelector('.electiveSubject[value="' + code.trim() + '"]');
-                if (cb) cb.checked = true;
-            });
-        }
-
-        function validateSubjectSelection() {
-            debugger
-            ////////var ExamTypeId: document.getElementById('<%= hnd_extype.ClientID %>').value; 
-            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-            if (ExamTypeId != "4") {
-
-
-                storeElectiveSelections();
-
-                let group1SubjectsDetails = getCheckedGroupDetails(".compGroup1", ".compGroup1Value");
-                let group2SubjectsDetails = getCheckedGroupDetails(".compGroup2", ".compGroup2Value");
-                let electiveSubjectsDetails = getElectiveSubjectDetails();
-                let additionalSubjects = getAdditionalSubjectValues();
-                let vocationalSubjects = getVocationalSubjectValues();
-
-                if (group1SubjectsDetails.length !== 1) {
-                    swal({
-                        title: "Selection Required",
-                        text: "Please select exactly one subject from Compulsory Group 1.",
-                        icon: "warning",
-                        button: "OK"
-                    });
-                    return false;
-                }
-
-                if (group2SubjectsDetails.length !== 1) {
-                    swal({
-                        title: "Selection Required",
-                        text: "Please select exactly one subject from Compulsory Group 2.",
-                        icon: "warning",
-                        button: "OK"
-                    });
-                    return false;
-                }
-
-                if (electiveSubjectsDetails.length !== 3) {
-                    swal({
-                        title: "Selection Required",
-                        text: "Please select exactly three subjects from Elective Subject Group.",
-                        icon: "warning",
-                        button: "OK"
-                    });
-                    return false;
-                }
-                if (additionalSubjects.length === 1) {
-
-                    const allMainSubjectsWithDetails = [
-                        ...group1SubjectsDetails,
-                        ...group2SubjectsDetails,
-                        ...electiveSubjectsDetails
-                    ];
-
-                    const selectedAdditional = additionalSubjects[0]; // { code, name }
-
-                    const isDuplicate = allMainSubjectsWithDetails.some(mainSubject => {
-                        return (
-                            mainSubject.name?.trim().toLowerCase() === selectedAdditional.name?.trim().toLowerCase() ||
-                            mainSubject.code?.trim().toLowerCase() === selectedAdditional.code?.trim().toLowerCase()
-                        );
-                    });
-
-
-                    if (isDuplicate) {
-                        swal({
-                            title: "Invalid Selection",
-                            text: "The subject '" + selectedAdditional.name.toUpperCase() + "' selected in the Additional Group must not be the same as any subject selected in the Compulsory or Elective Groups.",
-                            icon: "error",
-                            button: "OK"
-                        });
-
-                        document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-                            const parentSpan = cb.closest('.additionalSubject');
-                            const title = parentSpan?.title?.trim().toLowerCase();
-                            const codeMatch = parentSpan?.innerText?.match(/\(([^)]+)\)/);
-                            const code = codeMatch && codeMatch[1] ? codeMatch[1].trim().toLowerCase() : '';
-
-                            if (
-                                title === selectedAdditional.name?.trim().toLowerCase() ||
-                                code === selectedAdditional.code?.trim().toLowerCase()
-                            ) {
-                                cb.checked = false; // uncheck the checkbox
-                            }
-                        });
-
-                        return false;
-                    }
-                }
-               <%-- const vocationalCountLimit = 25;
-                const currentVocationalStudentsCount = parseInt(document.getElementById('<%= hfVocationalSubjectCount.ClientID %>').value);
-
-                if (vocationalSubjects.length > 0 && currentVocationalStudentsCount >= vocationalCountLimit) {
-                    swal({
-                        title: "Limit Reached",
-                        text: "Only " + vocationalCountLimit + " students can apply for vocational subjects in this faculty and college. You cannot select any vocational subjects.",
-                        icon: "error",
-                        button: "OK"
-                    });
-                    // Uncheck all vocational subjects
-                    document.querySelectorAll('.VocationalSubjects input[type="checkbox"]').forEach(cb => {
-                        cb.checked = false;
-                    });
-                    // Uncheck all additional subjects as well
-                    document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-                        debugger
-                        cb.checked = false;
-                    });
-                    return false; // Prevent form submission if the vocational limit is exceeded on client side with a new selection
-                }--%>
-
-                return true;
-            }
-          
-        }
-
-        function getCheckedGroupValues(checkboxClass, valueClass) {
-            const values = [];
-            document.querySelectorAll(checkboxClass + " input[type='checkbox']").forEach(cb => {
-                if (cb.checked) {
-                    const hidden = cb.closest("li").querySelector(valueClass);
-                    if (hidden) values.push(hidden.value.trim().toLowerCase());
-                }
-            });
-            return values;
-        }
-
-        function getCheckedGroupDetails(checkboxClass, valueClass) {
-            const details = [];
-            document.querySelectorAll(checkboxClass + " input[type='checkbox']").forEach(cb => {
-                if (cb.checked) {
-
-                    const label = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
-                    const hidden = cb.closest("li").querySelector(valueClass);
-                    if (hidden) {
-                        details.push({
-                            code: hidden.value.trim().toLowerCase(),
-                            name: label
-                        });
-                    }
-                }
-            });
-            return details;
-        }
-
-        function getElectiveSubjectDetails() {
-            const details = [];
-            document.querySelectorAll('.electiveSubject:checked').forEach(cb => {
-                const label = cb.dataset.name?.toLowerCase() ?? '';
-                details.push({
-                    code: cb.value.trim().toLowerCase(),
-                    name: label
-                });
-            });
-            return details;
-        }
-        function getAdditionalSubjectValues() {
-            debugger
-            const values = [];
-
-            document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-                if (cb.checked) {
-                  
-                    const parentSpan = cb.closest('.additionalSubject');
-                    const label = parentSpan.querySelector('label')?.textContent?.trim() || '';
-                    const title = parentSpan?.title?.trim() || '';
-
-                    let code = '', name = title;
-
-                    const parts = label.split(' - ');
-                    if (parts.length === 2) {
-                        name = parts[0].trim();
-                        code = parts[1].trim();
-                    }
-                    if (!code) {
-                        debugger
-                        const hidden = td.querySelector('input[type="hidden"]');
-                        if (hidden) code = hidden.value.trim();
-                    }
-                    if (name && code) {
-                        values.push({ code, name });
-                    }
-                }
-            });
-
-            return values;
-        }
-
-
-        function getVocationalSubjectValues() {
-            const values = [];
-            document.querySelectorAll(".VocationalSubjects input[type='checkbox']").forEach(cb => {
-                if (cb.checked) {
-                    const hidden = cb.closest("li").querySelector(".vocationalValue");
-                    if (hidden) {
-                        values.push(hidden.value.trim().toLowerCase());
-                    }
-                }
-            });
-            return values;
-        }
-
-        function validateCompulsoryGroups()
-        {
-
-            debugger
-            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-            if (ExamTypeId != "4") {
-
-                const restrictedSubjects = ['english', 'hindi'];
-                let group1Selected = [];
-                let group2Selected = [];
-
-                document.querySelectorAll('.compGroup1 input[type="checkbox"]').forEach(cb => {
-                    if (cb.checked) {
-                        const subjectName = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
-                        group1Selected.push({ name: subjectName, checkbox: cb });
-                    }
-                });
-
-                document.querySelectorAll('.compGroup2 input[type="checkbox"]').forEach(cb => {
-                    if (cb.checked) {
-                        const subjectName = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
-                        group2Selected.push({ name: subjectName, checkbox: cb });
-                    }
-                });
-
-                document.querySelectorAll('.compGroup1 input[type="checkbox"]').forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        if (this.checked) {
-                            document.querySelectorAll('.compGroup1 input[type="checkbox"]').forEach(otherCb => {
-                                if (otherCb !== this) otherCb.checked = false;
-                            });
-                        }
-                    });
-                });
-
-                document.querySelectorAll('.compGroup2 input[type="checkbox"]').forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        if (this.checked) {
-                            document.querySelectorAll('.compGroup2 input[type="checkbox"]').forEach(otherCb => {
-                                if (otherCb !== this) otherCb.checked = false;
-                            });
-                        }
-                    });
-                });
-                //for (let subject of restrictedSubjects) {
-                //    let inGroup1 = group1Selected.find(s => s.name === subject);
-                //    let inGroup2 = group2Selected.find(s => s.name === subject);
-
-                //    if (ExamTypeId === 3) {
-                //        // Lock logic: on pageload mark which were initially checked
-                //        document.querySelectorAll('.compGroup1 input[type="checkbox"], .compGroup2 input[type="checkbox"]')
-                //            .forEach(cb => {
-                //                const subjName = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
-                //                if (restrictedSubjects.includes(subjName)) {
-                //                    // Store initial state (do this only once)
-                //                    //if (!cb.dataset.initialChecked) {
-                //                    //    cb.dataset.initialChecked = cb.checked ? "true" : "false";
-                //                    //}
-
-                //                    // Prevent user from toggling
-                //                    cb.addEventListener("change", function () {
-                //                        if (cb.dataset.initialChecked === "true") {
-                //                            // Was initially checked → keep it checked
-                //                            cb.checked = true;
-                //                        } else {
-                //                            // Was initially unchecked → keep it unchecked
-                //                            cb.checked = false;
-                //                        }
-                //                    });
-                //                }
-                //            });
-
-                //        // Skip duplicate restriction check (lock already enforces rule)
-                //        continue;
-                //    }
-
-                //    // For all other ExamTypeIds (not 3) → block duplicates
-                //    if (inGroup1 && inGroup2) {
-                //        swal({
-                //            title: "Invalid Selection",
-                //            text: "Subject '" + subject.charAt(0).toUpperCase() + subject.slice(1) + "' cannot be selected in both Compulsory Groups.",
-                //            icon: "error",
-                //            button: "OK"
-                //        });
-                //        inGroup2.checkbox.checked = false;
-                //        return false;
-                //    }
-                //}
-
-                for (let subject of restrictedSubjects) {
-                    let inGroup1 = group1Selected.find(s => s.name === subject);
-                    let inGroup2 = group2Selected.find(s => s.name === subject);
-
-                    if (inGroup1 && inGroup2) {
-                        swal({
-                            title: "Invalid Selection",
-                            text: "Subject '" + subject.charAt(0).toUpperCase() + subject.slice(1) + "' cannot be selected in both Compulsory Groups.",
-                            icon: "error",
-                            button: "OK"
-                        });
-                        inGroup2.checkbox.checked = false;
-                        return false;
-                    }
-                }
-            
-                //let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
-                //electiveCheckboxes.forEach(cb => {
-                //    cb.addEventListener('change', function () {
-                //        let checkedCount = 0;
-                //        electiveCheckboxes.forEach(eCb => {
-                //            if (eCb.checked) checkedCount++;
-                //        });
-
-                //        if (checkedCount > 3) {
-                //            swal({
-                //                title: "Limit Exceeded",
-                //                text: "You can select a maximum of three elective subjects.",
-                //                icon: "warning",
-                //                button: "OK"
-                //            });
-                //            this.checked = false;
-                //        }
-                //    });
-                //});
-                let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
-                electiveCheckboxes.forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        let checkedBoxes = Array.from(document.querySelectorAll('input.electiveSubject:checked'));
-                        if (checkedBoxes.length > 3) {
-                            swal({
-                                title: "Limit Exceeded",
-                                text: "You can select a maximum of three elective subjects.",
-                                icon: "warning",
-                                button: "OK"
-                            });
-
-                            // Uncheck all beyond the first three
-                            checkedBoxes.slice(3).forEach(extra => {
-                                extra.checked = false;
-                                extra.removeAttribute('checked');
-                            });
-                        }
-                    });
-                });
-                //let additionalCheckboxes = document.querySelectorAll('.additionalSubject input[type="checkbox"]');
-                //additionalCheckboxes.forEach(cb => {
-                //    cb.addEventListener('change', function () {
-                //        if (this.checked) {
-                //            additionalCheckboxes.forEach(otherCb => {
-                //                if (otherCb !== this) otherCb.checked = false;
-                //            });
-                //        }
-                //    });
-                //});
-                let additionalCheckboxes = document.querySelectorAll('.additionalSubject input[type="checkbox"]');
-
-                additionalCheckboxes.forEach(cb => {
-                    debugger
-                    let wasChecked = cb.checked;
-
-                    cb.addEventListener('mousedown', function () {
-                        wasChecked = cb.checked;
-                    });
-
-                    cb.addEventListener('change', function (e) {
-                        debugger
-                        //const examTypeId = getExamTypeId();
-
-                        if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6 )) {
-                            // Revert to checked if unchecking is blocked
-                            cb.checked = true;
-
-                            //swal({
-                            //    title: "Action Not Allowed",
-                            //    text: "You cannot unselect this subject for the selected Exam Type.",
-                            //    icon: "warning",
-                            //    button: "OK"
-                            //});
-                            return;
-                        }
-
-                        // Allow only one selection
-                        if (cb.checked) {
-                            additionalCheckboxes.forEach(otherCb => {
-                                if (otherCb !== cb) otherCb.checked = false;
-                            });
-                        }
-                    });
-                });
-
-                let vocationalCheckboxes = document.querySelectorAll('.VocationalSubjects input[type="checkbox"]');
-
-                vocationalCheckboxes.forEach(cb => {
-                    debugger
-                    let wasChecked = cb.checked;
-
-                    cb.addEventListener('mousedown', function () {
-                        wasChecked = cb.checked;
-                    });
-
-                    cb.addEventListener('change', function (e) {
-                        debugger
-                       // const examTypeId = getExamTypeId();
-                        const vocationalCountLimit = 2;
-                        const currentVocationalStudentsCount = parseInt(document.getElementById('<%= hfVocationalSubjectCount.ClientID %>').value);
-                        //if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6 || ExamTypeId === 3))
-                        if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6)) {
-            cb.checked = true;
-
-            //swal({
-            //    title: "Action Not Allowed",
-            //    text: "You cannot unselect this vocational subject for the selected Exam Type.",
-            //    icon: "warning",
-            //    button: "OK"
-            //});
-            return;
-        }
-
-        if (currentVocationalStudentsCount >= vocationalCountLimit) {
-            if (cb.checked) {
-                swal({
-                    title: "Limit Reached",
-                    text: "Only " + vocationalCountLimit + " students can apply for vocational subjects in this faculty and college.",
-                    icon: "error",
-                    button: "OK"
-                });
-                cb.checked = false;
-            }
-
-            vocationalCheckboxes.forEach(otherCb => {
-                otherCb.checked = false;
-            });
-        } else {
-            if (cb.checked) {
-                vocationalCheckboxes.forEach(otherCb => {
-                    if (otherCb !== cb) otherCb.checked = false;
-                });
-            }
-        }
-    });
-});
-
-               <%-- let vocationalCheckboxes = document.querySelectorAll('.VocationalSubjects input[type="checkbox"]');
-                vocationalCheckboxes.forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        const vocationalCountLimit = 2;
-                        const currentVocationalStudentsCount = parseInt(document.getElementById('<%= hfVocationalSubjectCount.ClientID %>').value);
-
-                        if (currentVocationalStudentsCount >= vocationalCountLimit) {
-                            if (this.checked) {
-                                swal({
-                                    title: "Limit Reached",
-                                    text: "Only " + vocationalCountLimit + " students can apply for vocational subjects in this faculty and college. You cannot select any vocational subjects.",
-                                    icon: "error",
-                                    button: "OK"
-                                });
-                                this.checked = false;
-                            }
-
-                            vocationalCheckboxes.forEach(otherCb => {
-                                otherCb.checked = false;
-                            });
-                        } else {
-                            if (this.checked) {
-                                vocationalCheckboxes.forEach(otherCb => {
-                                    if (otherCb !== this) otherCb.checked = false;
-                                });
-                            }
-                        }
-                    });
-                });--%>
-
-                return true;
-            }
-            
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            validateCompulsoryGroups();
-            restoreElectiveSelections();
-
-            const form = document.forms[0];
-            if (form) {
-                form.addEventListener('submit', function () {
-                    storeElectiveSelections();
-                });
-            }
-        });
-       <%-- function storeAdditionalSelections() {
-            debugger
-            const selected = [];
-            document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-                if (cb.checked) {
-                    selected.push(cb.value.trim());
-                }
-            });
-            document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value = selected.join(',');
-    }--%>
-        function storeAdditionalSelections() {
-            const selected = [];
-            const checkboxes = document.querySelectorAll('input.additionalSubject[type="checkbox"]');
-
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selected.push(cb.value.trim());
-                }
-            });
-
-            console.log('Selected:', selected);
-
-            document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value = selected.join(',');
-        }
-
-
-    function restoreAdditionalSelections() {
-            const stored = document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value;
-            if (!stored) return;
-
-            const selectedCodes = stored.split(',').map(s => s.trim().toLowerCase());
-            document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-                const code = cb.value.trim().toLowerCase();
-                if (selectedCodes.includes(code)) {
-                    cb.checked = true;
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            restoreAdditionalSelections();
-
-            const form = document.forms[0];
-            if (form) {
-                form.addEventListener('submit', function () {
-                    storeAdditionalSelections();
-                });
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            debugger
-            // Get ExamTypeId once
-            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-            const isLocked = '<%= ViewState["IsLocked"] %>' === 'True';
-          // Target all relevant checkboxes
-          const allCheckboxes = document.querySelectorAll(
-              '.compGroup1 input[type="checkbox"], ' +
-              '.compGroup2 input[type="checkbox"], ' +
-              'input.electiveSubject, ' +
-              '.additionalSubject input[type="checkbox"], ' +
-              '.VocationalSubjects input[type="checkbox"]'
-          );
-
-          // Store initial checked state
-          allCheckboxes.forEach(cb => {
-              cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
-          });
-
-          // Attach click event
-          allCheckboxes.forEach(cb => {
-              cb.addEventListener('click', function (e) {
-                  const wasChecked = cb.dataset.initialChecked === 'true';
-
-                  if ([1, 2, 5, 6].includes(ExamTypeId)) {
-                      // LOCK ALL — revert
-                      e.preventDefault();
-                      return false;
-                  }
-                  if (ExamTypeId === 3 && isLocked) {
-                      e.preventDefault();
-                      return false;
-                  }
-                  //if (isLocked && ExamTypeId === 3) {
-                  //    if ([3].includes(ExamTypeId)) {
-                  //        // LOCK ALL — revert
-                  //        e.preventDefault();
-                  //        return false;
-                  //    }
-                      //allCheckboxes.forEach(cb => {
-                      //    cb.disabled = true; // lock them
-                      //});
-                 // }
-
-                  // ExamTypeId === 4 → fully allowed
-              });
-          });
-      });
-
-
-        <%--document.addEventListener('DOMContentLoaded', function () {
-            debugger
-            // Get ExamTypeId once
-            const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-
-             // Target all relevant checkboxes
+ <script type="text/javascript">
+     function syncVocElectiveSelection(clickedCheckbox) {
+         // Force Code 402 to stay checked
+         if (clickedCheckbox.value === "402" && !clickedCheckbox.checked) {
+             clickedCheckbox.checked = true;
+             clickedCheckbox.setAttribute('checked', 'checked');
+             return;
+         }
+
+         const subjectName = clickedCheckbox.dataset.name.trim().toLowerCase();
+         if (!subjectName) return;
+
+         const isChecked = clickedCheckbox.checked;
+         clickedCheckbox.setAttribute('checked', isChecked ? 'checked' : '');
+         document.querySelectorAll('input[type="checkbox"][data-name="' + subjectName + '"]').forEach(cb => {
+             if (cb !== clickedCheckbox) {
+                 cb.checked = isChecked;
+                 cb.setAttribute('checked', isChecked ? 'checked' : '');
+             }
+         });
+     }
+
+     function getElectiveSubjectValues() {
+         const values = [];
+         document.querySelectorAll('.electiveSubject:checked').forEach(cb => {
+             values.push(cb.value.trim());
+         });
+         return values;
+     }
+
+     function storeElectiveSelections() {
+         const selectedElectives = getElectiveSubjectValues();
+         document.getElementById('<%= hfElectiveSubjects.ClientID %>').value = selectedElectives.join(',');
+     }
+
+     function restoreElectiveSelections() {
+         const stored = document.getElementById('<%= hfElectiveSubjects.ClientID %>').value;
+         if (!stored) return;
+
+         const selected = stored.split(',');
+         selected.forEach(code => {
+             const cb = document.querySelector('.electiveSubject[value="' + code.trim() + '"]');
+             if (cb) cb.checked = true;
+         });
+     }
+
+     function validateSubjectSelection() {
+         const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+         if (ExamTypeId == 3) {
+             storeElectiveSelections();
+             let group1SubjectsDetails = getCheckedGroupDetails(".compGroup1", ".compGroup1Value");
+             let group2SubjectsDetails = getCheckedGroupDetails(".compGroup2", ".compGroup2Value");
+             let electiveSubjectsDetails = getElectiveSubjectDetails();
+             let additionalSubjects = getAdditionalSubjectValues();
+             let vocationalSubjects = getVocationalSubjectValues();
+
+             if (group1SubjectsDetails.length !== 1) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly one subject from Compulsory Group 1.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (group2SubjectsDetails.length !== 1) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly one subject from Compulsory Group 2.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (electiveSubjectsDetails.length !== 3) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly three subjects from Elective Subject Group.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (additionalSubjects.length === 1) {
+                 const allMainSubjectsWithDetails = [
+                     ...group1SubjectsDetails,
+                     ...group2SubjectsDetails,
+                     ...electiveSubjectsDetails
+                 ];
+                 const selectedAdditional = additionalSubjects[0];
+
+                 const isDuplicate = allMainSubjectsWithDetails.some(mainSubject => {
+                     return (
+                         mainSubject.name?.trim().toLowerCase() === selectedAdditional.name?.trim().toLowerCase() ||
+                         mainSubject.code?.trim().toLowerCase() === selectedAdditional.code?.trim().toLowerCase()
+                     );
+                 });
+
+                 if (isDuplicate) {
+                     swal({
+                         title: "Invalid Selection",
+                         text: "The subject '" + selectedAdditional.name.toUpperCase() + "' selected in the Additional Group must not be the same as any subject selected in the Compulsory or Elective Groups.",
+                         icon: "error",
+                         button: "OK"
+                     });
+
+                     document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+                         const parentSpan = cb.closest('.additionalSubject');
+                         const title = parentSpan?.title?.trim().toLowerCase();
+                         const codeMatch = parentSpan?.innerText?.match(/\(([^)]+)\)/);
+                         const code = codeMatch && codeMatch[1] ? codeMatch[1].trim().toLowerCase() : '';
+
+                         if (
+                             title === selectedAdditional.name?.trim().toLowerCase() ||
+                             code === selectedAdditional.code?.trim().toLowerCase()
+                         ) {
+                             cb.checked = false;
+                         }
+                     });
+                     return false;
+                 }
+             }
+             return true;
+         }
+         else if (ExamTypeId === 4) {
              const allCheckboxes = document.querySelectorAll(
                  '.compGroup1 input[type="checkbox"], ' +
                  '.compGroup2 input[type="checkbox"], ' +
@@ -953,47 +442,315 @@
                  '.VocationalSubjects input[type="checkbox"]'
              );
 
-             // Store initial checked state
-             allCheckboxes.forEach(cb => {
-                 cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
-             });
+             const anySelected = Array.from(allCheckboxes).some(cb => cb.checked);
 
-             // Attach click event
-             allCheckboxes.forEach(cb => {
-                 cb.addEventListener('click', function (e) {
-                     const wasChecked = cb.dataset.initialChecked === 'true';
-
-                     if ([1, 2, 5, 6].includes(ExamTypeId)) {
-                         // LOCK ALL — revert
-                         e.preventDefault();
-                         return false;
-                     }
-
-                     if (ExamTypeId === 3) {
-                         debugger
-                         if (wasChecked) {
-                             e.preventDefault();
-                             return false;
-                         }
-                         // If initially unchecked, user can check it once
-                         //if (!wasChecked && cb.checked) {
-                         //    cb.dataset.initialChecked = 'true'; // now treat as locked
-                         //    cb.disabled = true; // lock immediately after checking
-                         //}
-
-                         //// If user somehow tries to uncheck a pre-checked one → block
-                         //if (wasChecked && !cb.checked) {
-                         //    e.preventDefault();
-                         //   // cb.checked = true;
-                         //    return false;
-                         //}
-                     }
-
-                     // ExamTypeId === 4 → fully allowed
+             if (!anySelected) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select at least one subject from any of the groups.",
+                     icon: "warning",
+                     button: "OK"
                  });
+                 return false;
+             }
+             return true;
+         }
+     }
+
+     function getCheckedGroupValues(checkboxClass, valueClass) {
+         const values = [];
+         document.querySelectorAll(checkboxClass + " input[type='checkbox']").forEach(cb => {
+             if (cb.checked) {
+                 const hidden = cb.closest("li").querySelector(valueClass);
+                 if (hidden) values.push(hidden.value.trim().toLowerCase());
+             }
+         });
+         return values;
+     }
+
+     function getCheckedGroupDetails(checkboxClass, valueClass) {
+         const details = [];
+         document.querySelectorAll(checkboxClass + " input[type='checkbox']").forEach(cb => {
+             if (cb.checked) {
+                 const label = cb.parentElement.innerText.split('-')[0].trim().toLowerCase();
+                 const hidden = cb.closest("li").querySelector(valueClass);
+                 if (hidden) {
+                     details.push({
+                         code: hidden.value.trim().toLowerCase(),
+                         name: label
+                     });
+                 }
+             }
+         });
+         return details;
+     }
+
+     function getElectiveSubjectDetails() {
+         const details = [];
+         document.querySelectorAll('.electiveSubject:checked').forEach(cb => {
+             const label = cb.dataset.name?.toLowerCase() ?? '';
+             details.push({
+                 code: cb.value.trim().toLowerCase(),
+                 name: label
              });
-         });--%>
-    </script>
+         });
+         return details;
+     }
+
+     function getAdditionalSubjectValues() {
+         const values = [];
+         document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+             if (cb.checked) {
+                 const parentSpan = cb.closest('.additionalSubject');
+                 const label = parentSpan.querySelector('label')?.textContent?.trim() || '';
+                 const title = parentSpan?.title?.trim() || '';
+                 let code = '', name = title;
+
+                 const parts = label.split(' - ');
+                 if (parts.length === 2) {
+                     name = parts[0].trim();
+                     code = parts[1].trim();
+                 }
+
+                 if (!code) {
+                     const hidden = td.querySelector('input[type="hidden"]');
+                     if (hidden) code = hidden.value.trim();
+                 }
+                 if (name && code) {
+                     values.push({ code, name });
+                 }
+             }
+         });
+         return values;
+     }
+
+     function getVocationalSubjectValues() {
+         const values = [];
+         document.querySelectorAll(".VocationalSubjects input[type='checkbox']").forEach(cb => {
+             if (cb.checked) {
+                 const hidden = cb.closest("li").querySelector(".vocationalValue");
+                 if (hidden) {
+                     values.push(hidden.value.trim().toLowerCase());
+                 }
+             }
+         });
+         return values;
+     }
+
+     function validateCompulsoryGroups() {
+         const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+        if (ExamTypeId != 4) {
+            const restrictedSubjects = ['english', 'hindi'];
+
+            // Attach change event listeners to handle the single-selection logic and duplicate check
+            document.querySelectorAll('.compGroup1 input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    if (this.checked) {
+                        const selectedSubjectName = this.parentElement.innerText.split('-')[0].trim().toLowerCase();
+
+                        // Check for duplicate in Group 2
+                        let group2CheckedSubject = document.querySelector('.compGroup2 input[type="checkbox"]:checked');
+                        let group2SubjectName = group2CheckedSubject ? group2CheckedSubject.parentElement.innerText.split('-')[0].trim().toLowerCase() : '';
+
+                        if (restrictedSubjects.includes(selectedSubjectName) && selectedSubjectName === group2SubjectName) {
+                            swal({
+                                title: "Invalid Selection",
+                                text: `Subject '${selectedSubjectName.charAt(0).toUpperCase() + selectedSubjectName.slice(1)}' cannot be selected in both Compulsory Groups.`,
+                                icon: "error",
+                                button: "OK"
+                            });
+                            this.checked = false; // Uncheck the newly selected subject
+                            return;
+                        }
+
+                        // Uncheck other subjects in Group 1
+                        document.querySelectorAll('.compGroup1 input[type="checkbox"]').forEach(otherCb => {
+                            if (otherCb !== this) otherCb.checked = false;
+                        });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.compGroup2 input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    if (this.checked) {
+                        const selectedSubjectName = this.parentElement.innerText.split('-')[0].trim().toLowerCase();
+
+                        // Check for duplicate in Group 1
+                        let group1CheckedSubject = document.querySelector('.compGroup1 input[type="checkbox"]:checked');
+                        let group1SubjectName = group1CheckedSubject ? group1CheckedSubject.parentElement.innerText.split('-')[0].trim().toLowerCase() : '';
+
+                        if (restrictedSubjects.includes(selectedSubjectName) && selectedSubjectName === group1SubjectName) {
+                            swal({
+                                title: "Invalid Selection",
+                                text: `Subject '${selectedSubjectName.charAt(0).toUpperCase() + selectedSubjectName.slice(1)}' cannot be selected in both Compulsory Groups.`,
+                                icon: "error",
+                                button: "OK"
+                            });
+                            this.checked = false; // Uncheck the newly selected subject
+                            return;
+                        }
+
+                        // Uncheck other subjects in Group 2
+                        document.querySelectorAll('.compGroup2 input[type="checkbox"]').forEach(otherCb => {
+                            if (otherCb !== this) otherCb.checked = false;
+                        });
+                    }
+                });
+            });
+
+            let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
+            electiveCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function () {
+                    let checkedBoxes = Array.from(document.querySelectorAll('input.electiveSubject:checked'));
+                    if (checkedBoxes.length > 3) {
+                        swal({
+                            title: "Limit Exceeded",
+                            text: "You can select a maximum of three elective subjects.",
+                            icon: "warning",
+                            button: "OK"
+                        });
+                        this.checked = false; // Uncheck the one that exceeded the limit
+                        this.removeAttribute('checked');
+                    }
+                });
+            });
+
+            let additionalCheckboxes = document.querySelectorAll('.additionalSubject input[type="checkbox"]');
+            additionalCheckboxes.forEach(cb => {
+                let wasChecked = cb.checked;
+                cb.addEventListener('mousedown', function () {
+                    wasChecked = cb.checked;
+                });
+                cb.addEventListener('change', function (e) {
+                    if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6)) {
+                        cb.checked = true;
+                        return;
+                    }
+                    if (cb.checked) {
+                        additionalCheckboxes.forEach(otherCb => {
+                            if (otherCb !== cb) otherCb.checked = false;
+                        });
+                    }
+                });
+            });
+
+            let vocationalCheckboxes = document.querySelectorAll('.VocationalSubjects input[type="checkbox"]');
+            vocationalCheckboxes.forEach(cb => {
+                let wasChecked = cb.checked;
+                cb.addEventListener('mousedown', function () {
+                    wasChecked = cb.checked;
+                });
+                cb.addEventListener('change', function (e) {
+                    const vocationalCountLimit = 2;
+                    const currentVocationalStudentsCount = parseInt(document.getElementById('<%= hfVocationalSubjectCount.ClientID %>').value);
+
+                    if (wasChecked && !cb.checked && (ExamTypeId === 2 || ExamTypeId === 6)) {
+                        cb.checked = true;
+                        return;
+                    }
+
+                    if (currentVocationalStudentsCount >= vocationalCountLimit) {
+                        if (cb.checked) {
+                            swal({
+                                title: "Limit Reached",
+                                text: "Only " + vocationalCountLimit + " students can apply for vocational subjects in this faculty and college.",
+                                icon: "error",
+                                button: "OK"
+                            });
+                            cb.checked = false;
+                        }
+                    } else {
+                        if (cb.checked) {
+                            vocationalCheckboxes.forEach(otherCb => {
+                                if (otherCb !== cb) otherCb.checked = false;
+                            });
+                        }
+                    }
+                });
+            });
+            return true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        validateCompulsoryGroups();
+        restoreElectiveSelections();
+
+        const form = document.forms[0];
+        if (form) {
+            form.addEventListener('submit', function () {
+                storeElectiveSelections();
+            });
+        }
+    });
+
+    function storeAdditionalSelections() {
+        const selected = [];
+        const checkboxes = document.querySelectorAll('input.additionalSubject[type="checkbox"]');
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                selected.push(cb.value.trim());
+            }
+        });
+        document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value = selected.join(',');
+    }
+
+    function restoreAdditionalSelections() {
+        const stored = document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value;
+        if (!stored) return;
+
+        const selectedCodes = stored.split(',').map(s => s.trim().toLowerCase());
+        document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+            const code = cb.value.trim().toLowerCase();
+            if (selectedCodes.includes(code)) {
+                cb.checked = true;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        restoreAdditionalSelections();
+        const form = document.forms[0];
+        if (form) {
+            form.addEventListener('submit', function () {
+                storeAdditionalSelections();
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+        const isLocked = '<%= ViewState["IsLocked"] %>' === 'True';
+        const allCheckboxes = document.querySelectorAll(
+            '.compGroup1 input[type="checkbox"], ' +
+            '.compGroup2 input[type="checkbox"], ' +
+            'input.electiveSubject, ' +
+            '.additionalSubject input[type="checkbox"], ' +
+            '.VocationalSubjects input[type="checkbox"]'
+        );
+
+        allCheckboxes.forEach(cb => {
+            cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
+        });
+
+        allCheckboxes.forEach(cb => {
+            cb.addEventListener('click', function (e) {
+                const wasChecked = cb.dataset.initialChecked === 'true';
+
+                if ([1, 2, 5, 6].includes(ExamTypeId)) {
+                    e.preventDefault();
+                    return false;
+                }
+                if (ExamTypeId === 3 && isLocked) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    });
+ </script>
 
 
 </asp:Content>
