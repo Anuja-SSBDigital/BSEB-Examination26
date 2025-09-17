@@ -165,12 +165,12 @@
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">2</div>
-                    <small style="font-size: 12px;">Download Registration form </small>
+                    <small style="font-size: 12px;">Download Examination form </small>
                 </div>
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">3</div>
-                    <small style="font-size: 12px;">Registration payment </small>
+                    <small style="font-size: 12px;">Examination payment </small>
                 </div>
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
@@ -180,17 +180,17 @@
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">5</div>
-                    <small style="font-size: 12px;">Fill Registration Form</small>
+                    <small style="font-size: 12px;">Fill Examination Form</small>
                 </div>
-                <div class="step-line flex-grow-1"></div>
-                <div class="step-item text-center">
+               <%-- <div class="step-line flex-grow-1"></div>--%>
+              <%--  <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">6</div>
                     <small style="font-size: 12px;">Declaration Upload</small>
-                </div>
+                </div>--%>
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">7</div>
-                    <small style="font-size: 12px;">View Registration Details</small>
+                    <small style="font-size: 12px;">View Examination Details</small>
                 </div>
             </div>
         </div>

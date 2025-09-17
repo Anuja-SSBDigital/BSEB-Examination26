@@ -26,11 +26,11 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 li_ExaminationForm.Visible = true;
                 li_ExamDwnld.Visible = true;
                 li_PayExamFormFee.Visible = true;
-                liExmchallanrecall.Visible = true;
-                li_Downloadadmitcard.Visible = true;
-                li_DownloadPracticaladmitcard.Visible = true;
-                li_Theoryadmitcard.Visible = true;
-                liExmchallanrecall.Visible = true;
+                //liExmchallanrecall.Visible = true;
+                //li_Downloadadmitcard.Visible = true;
+                //li_DownloadPracticaladmitcard.Visible = true;
+                //li_Theoryadmitcard.Visible = true;
+                //liExmchallanrecall.Visible = true;
 
             }
             else
@@ -40,10 +40,10 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 li_ExaminationForm.Visible = true;
                 li_ExamDwnld.Visible = true;
                 li_PayExamFormFee.Visible = true;
-                liExmchallanrecall.Visible = true;
-                li_Downloadadmitcard.Visible = true;
-                li_DownloadPracticaladmitcard.Visible = true;
-                li_Theoryadmitcard.Visible = true;
+                //liExmchallanrecall.Visible = true;
+                //li_Downloadadmitcard.Visible = true;
+                //li_DownloadPracticaladmitcard.Visible = true;
+                //li_Theoryadmitcard.Visible = true;
                 // Hide admin menus for college
                 //li_seatmatrix.Visible = false;
                 //li_collegemster.Visible = false;

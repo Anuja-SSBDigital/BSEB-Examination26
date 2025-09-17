@@ -136,7 +136,7 @@
                                     <li runat="server" id="li_ExaminationForm">
                                         <a href="ExamForm.aspx" class="nav-link">Exam Form</a>
                                     </li>
-                                    <li runat="server" id="li_Downloadadmitcard">
+                                   <%-- <li runat="server" id="li_Downloadadmitcard">
                                         <a href="Downloadadmitcard.aspx" class="nav-link">Download Admit Card</a>
                                     </li>
                                     <li runat="server" id="li_DownloadPracticaladmitcard">
@@ -147,7 +147,7 @@
                                     </li>
                                     <li runat="server" id="liExmchallanrecall" visible="false">
                                         <a href="ExmChallanRecall.aspx" class="nav-link">Exam Challan Recall</a>
-                                    </li>
+                                    </li>--%>
                                 </ul>
                             </li>
 
