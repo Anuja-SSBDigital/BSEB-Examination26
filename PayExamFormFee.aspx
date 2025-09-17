@@ -158,7 +158,7 @@
                                         <th>Father Name</th>
                                         <th>Mother Name</th>
                                         <th style="width: 80px;">DOB</th>
-                                        <th >Cast Category</th>
+                                        <th >Caste Category</th>
                                         <th>Category</th>
                                         <th>Fee Amount</th>
                                        
