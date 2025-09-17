@@ -152,18 +152,26 @@
                                     <span id="txtDOBErr" style="display: none; color: red;">Please Enter DOB</span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <%--<div class="col-md-6">
                                 <div class="mb-3 form-group">
                                     <label for="dob" class="form-label">ApaarId :</label>
                                     <asp:TextBox ID="txtApaarId" runat="server" class="form-control" oninput="enforceMaxLength(this, 12)" />
                                 </div>
-                            </div>
+                            </div>--%>
 
 
                         </div>
                         <%--  --%>
                         <!-- Row 4 -->
                         <div class="row">
+                             <div class="col-md-6">
+                             <div class="mb-3 form-group">
+                                 <label for="district" class="form-label required">District Name:</label>
+
+                                 <asp:TextBox ID="txtdistrict" runat="server" Placeholder="Enter District" class="form-control" />
+                                 <span id="txtdistrictErr" style="display: none; color: red;">Please Enter District Name</span>
+                             </div>
+                         </div>
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
                                     <label for="subDivision" class="form-label required">Sub Division Name:</label>
@@ -172,14 +180,7 @@
                                     <span id="txtsubDivisionErr" style="display: none; color: red;">Please Enter Sub Division</span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3 form-group">
-                                    <label for="district" class="form-label required">District Name:</label>
-
-                                    <asp:TextBox ID="txtdistrict" runat="server" Placeholder="Enter District" class="form-control" />
-                                    <span id="txtdistrictErr" style="display: none; color: red;">Please Enter District Name</span>
-                                </div>
-                            </div>
+                           
                         </div>
 
                         <!-- Row 5 -->
@@ -300,13 +301,13 @@
                                     <span id="txtMobileError" class="text-danger" style="display: none;"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <%--<div class="col-md-6">
                                 <div class="mb-3 form-group">
                                     <label class="form-label">Parent/Guardian No:</label>
                                     <asp:TextBox ID="txtparentno" runat="server" class="form-control" oninput="enforceMaxLength(this, 10)" />
                                     <span id="txtparentnoError" class="text-danger" style="display: none;"></span>
                                 </div>
-                            </div>
+                            </div>--%>
                             <div class="col-md-12 mb-3 form-group">
                                 <div class="text-danger">
                                    <strong> अपना वैध मोबाइल नंबर ही प्रविष्ट करें। भविष्य में सभी संबंधित सूचनाएं इसी मोबाइल नंबर पर प्रदान की जाएँगी। गलत मोबाइल नंबर प्रविष्ट करने की स्थिति में जिम्मेदारी आपकी होगी। 
@@ -404,7 +405,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="showaadhardiv">
+                        <div id="showaadhardiv" runat="server">
 
                             <div class="mb-3 form-group">
                                 <label class="form-label"><strong>Do you have Aadhar?</strong></label><br>
@@ -462,12 +463,17 @@
 
                                     <strong>घोषणा:</strong> मैं, एतद्द्वारा घोषित करता हूँ कि मैंने “आधार नंबर” आवंटित कराने के लिए आवेदन नहीं किया है तथा मुझे “आधार नंबर” आवंटित नहीं हुआ है। मैं यह भी समझता हूँ कि मेरे द्वारा की गई इस मिथ्या / गलत घोषणा के आधार पर मेरा अभ्यर्थित्व रद्द किया जा सकता है।
                                 </div>
+                                                              <div class="mt-3">
+            <label for="fuAadharFile"><strong>Upload Supporting Document</strong></label>
+            <asp:FileUpload ID="fuAadharFile" runat="server" CssClass="form-control" />
+            <small class="text-muted">Upload JPG/JPEG up to 100KB</small>
+        </div>
                             </div>
                             <!-- Aadhar Instruction Block -->
 
 
                             <!-- Signature Section -->
-                            <div class="row justify-content-end mb-3 d-none">
+                           <%-- <div class="row justify-content-end mb-3 d-none">
                                 <div class="col-auto">
                                     <div class="signature-box">
 
@@ -478,7 +484,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--%>
 
                         </div>
                         <div class="col-12 text-center">
@@ -486,7 +492,7 @@
                             <asp:HiddenField ID="hfFaculty" runat="server" />
 
 
-                            <asp:Button ID="btnUpdate" runat="server" Text="UPDATE" CssClass="btn btn-primary" OnClientClick="return validateStudentDetails();" />
+                            <asp:Button ID="btnUpdate" runat="server" Text="Update" CssClass="btn btn-primary" OnClientClick="return validateStudentDetails();" />
                             <asp:Button ID="btnAddStudentReg" runat="server" CssClass="btn btn-success" Text="Next" OnClientClick="return goToNextStep();" UseSubmitBehavior="false" Style="display: none;" />
                         </div>
 
@@ -496,7 +502,8 @@
             </div>
         </div>
     </div>
-    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
+   <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
+
     <script>
 
         function validateStudentDetails() {
@@ -525,7 +532,7 @@
                 mobileField.classList.remove("is-invalid");
             }
 
-            var parentnoField = document.getElementById('<%= txtparentno.ClientID %>');
+          <%--  var parentnoField = document.getElementById('<%= txtparentno.ClientID %>');
             var parentno = parentnoField.value.trim();
             var parentnoErrorSpan = document.getElementById('txtparentnoError');
 
@@ -539,7 +546,7 @@
             } else {
                 parentnoErrorSpan.style.display = "none";
                 parentnoField.classList.remove("is-invalid");
-            }
+            }--%>
 
             var email = document.getElementById('<%= txtEmail.ClientID %>').value;
             var emailErrorSpan = document.getElementById('txtEmailError');
@@ -559,37 +566,84 @@
                 document.getElementById('<%= txtEmail.ClientID %>').classList.remove("is-invalid");
             }
             //if (!isValid) return false;
+          <%--  var aadharYes = document.getElementById('aadharYes');
+            var aadharNo = document.getElementById('aadharNo');
+            var aadharPattern = /^[0-9]{12}$/;
+            var AadharNumber = document.getElementById('<%= txtAadharNumber.ClientID %>');
+            var txtAadharNumberError = document.getElementById('txtAadharNumberError');
 
+            if (!aadharYes.checked && !aadharNo.checked) {
+                alert("Please select whether you have Aadhar.");
+                aadharYes.focus();
+                return false;
+            }--%>
+
+            //if (aadharYes.checked) {
+            //    var aadharValue = AadharNumber.value.trim();
+
+            //    if (aadharValue === "") {
+            //        txtAadharNumberError.style.display = "inline";
+            //        txtAadharNumberError.textContent = "Aadhar number is required.";
+            //        AadharNumber.classList.add("is-invalid");
+            //        AadharNumber.focus();
+            //        return false;
+            //    } else if (!aadharPattern.test(aadharValue)) {
+            //        txtAadharNumberError.style.display = "inline";
+            //        txtAadharNumberError.textContent = "Please enter a valid 12-digit Aadhar Number.";
+            //        AadharNumber.classList.add("is-invalid");
+            //        AadharNumber.focus();
+            //        return false;
+            //    } else {
+            //        txtAadharNumberError.style.display = "none";
+            //        txtAadharNumberError.textContent = "";
+            //        AadharNumber.classList.remove("is-invalid");
+            //    }
+            //}
+            //else if (noRadio.checked) {
+            //    // We’ll upload file on server-side with fuAadharFile
+            //    hasAadharFile = true;
+            //}
             var payload = {
                 studentId: document.getElementById('<%= hfStudentId.ClientID %>').value,
-            facultyId: document.getElementById('<%= hfFaculty.ClientID %>').value,
-            name: document.getElementById('<%= txtStudentName.ClientID %>').value,
-            father: document.getElementById('<%= txtfatherName.ClientID %>').value,
-            mother: document.getElementById('<%= txtmotherName.ClientID %>').value,
-            dob: document.getElementById('<%= txtDOB.ClientID %>').value,
-            mobile: mobile,
-            email: email,
-            casteCategoryId: document.getElementById('<%= ddlCasteCategory.ClientID %>').value,
-            genderId: document.getElementById('<%= ddlGender.ClientID %>').value,
-            ExamTypeId: document.getElementById('<%= hnd_extype.ClientID %>').value,
+                facultyId: document.getElementById('<%= hfFaculty.ClientID %>').value,
+                mobile: mobile,
+                email: email,
+                Adress: document.getElementById('<%= txtAdress.ClientID %>').value,
+                ddlMaritalStatus: document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
+                pincode: document.getElementById('<%= txtpincode.ClientID %>').value,
+                BranchName: document.getElementById('<%= txtBranchName.ClientID %>').value,
+          
+                IFSCCode: document.getElementById('<%= txtIFSCCode.ClientID %>').value,
+                BankACNo: document.getElementById('<%= txtBankACNo.ClientID %>').value,
+                Identification1: document.getElementById('<%= txtIdentification1.ClientID %>').value,
+                Identification2: document.getElementById('<%= txtIdentification2.ClientID %>').value,
+                ddlMedium: document.getElementById('<%= ddlMedium.ClientID %>').value,
+                ExamTypeId: document.getElementById('<%= hnd_extype.ClientID %>').value,
                 CollegeCode: document.getElementById('<%= txtcollegeCode.ClientID %>').value,
-                ApaarId: document.getElementById('<%= txtApaarId.ClientID %>').value,
+                //AadharNumber: aadharValue,
+                //HasAadharFile: hasAadharFile
+               
             };
-            debugger
+            
             PageMethods.UpdateStudent(
                 payload.studentId,
                 payload.facultyId,
-                payload.name,
-                payload.father,
-                payload.mother,
-                payload.dob,
                 payload.mobile,
                 payload.email,
-                payload.casteCategoryId,
-                payload.genderId,
+                payload.Adress,
+                payload.ddlMaritalStatus,
+                payload.pincode,
+                payload.BranchName,
+                payload.IFSCCode,
+                payload.BankACNo,
+                payload.Identification1,
+                payload.Identification2,
+                payload.ddlMedium,
                 payload.ExamTypeId,
+                //payload.AadharNumber,
+                //payload.HasAadharFile,
                 payload.CollegeCode,
-                payload.ApaarId,
+                //payload.ApaarId,
 
                 function (response) {
                     if (response.status === "success") {
@@ -644,32 +698,35 @@
 
             // Define which IDs to enable for each examType
             var regularPrivateFields = [
-        '<%= ddlGender.ClientID %>',
-        '<%= txtStudentName.ClientID %>',
-        '<%= txtfatherName.ClientID %>',
-        '<%= txtmotherName.ClientID %>',
         '<%= txtMobile.ClientID %>',
+        '<%= txtAdress.ClientID %>',
         '<%= txtEmail.ClientID %>',
-                '<%= ddlCasteCategory.ClientID %>',
-         '<%= txtApaarId.ClientID %>'
+        '<%= ddlMaritalStatus.ClientID %>',
+        '<%= txtpincode.ClientID %>',
+        '<%= txtBranchName.ClientID %>',
+        '<%= txtIFSCCode.ClientID %>',
+                '<%= txtBankACNo.ClientID %>',
+                '<%= txtIdentification1.ClientID %>',
+                '<%= txtIdentification2.ClientID %>',
+                '<%= ddlMedium.ClientID %>',
+             <%--   '<%= showaadhardiv.ClientID %>',--%>
             ];
 
-            var mobileEmailFields = [
+           <%-- var mobileEmailFields = [
         '<%= txtMobile.ClientID %>',
-                '<%= txtEmail.ClientID %>',
-               
-
-            ];
+                '<%= txtEmail.ClientID %>'
+            ];--%>
 
             // Decide which fields to enable
             var enableFieldIds = [];
 
-            if (examType === "1" || examType === "5") {
+            if (examType === "1" || examType === "5" || examType === "6" || examType === "4" || examType === "2" || examType === "3") {
                 debugger
                 enableFieldIds = regularPrivateFields;
-            } else if (examType === "6" || examType === "4" || examType === "2" || examType === "3" ) {
-                enableFieldIds = mobileEmailFields;
             }
+            // else if (examType === "6" || examType === "4" || examType === "2" || examType === "3" ) {
+            //    enableFieldIds = mobileEmailFields;
+            //}
 
             var enableSet = new Set(enableFieldIds);
 

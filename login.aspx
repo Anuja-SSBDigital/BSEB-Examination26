@@ -189,8 +189,8 @@
                 </div>--%>
                 <div class="step-line flex-grow-1"></div>
                 <div class="step-item text-center">
-                    <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">7</div>
-                    <small style="font-size: 12px;">View Examination Details</small>
+                    <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">6</div>
+                    <small style="font-size: 12px;">View Submitted Form</small>
                 </div>
             </div>
         </div>
