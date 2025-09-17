@@ -274,7 +274,7 @@
                                      <td>
                                          <asp:Label ID="Label1" runat="server" />
                                      </td>--%>
-                                    <td class="label">ExamTypeName:</td>
+                                    <td class="label">Exam Type:</td>
                                     <td>
                                         <asp:Label ID="lblExamTypeName" runat="server" />
                                     </td>
@@ -290,7 +290,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="label">+2 School/College Code:</td>
+                                    <td class="label">+2 School/College Code&Name:</td>
                                     <td>
                                         <asp:Label ID="lblCollege" runat="server" />
                                     </td>
@@ -419,12 +419,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="label">Medium:</td>
+                                    <td class="label">Exam Medium:</td>
                                     <td>
                                         <asp:Label ID="lblMedium" runat="server" />
                                     </td>
-                                    <td class="label">Aapar Id:</td>
-                                    <td><asp:Label ID="lbl_aparid" runat="server" /></td>
+                                    <%--<td class="label">Aapar Id:</td>
+                                    <td><asp:Label ID="lbl_aparid" runat="server" /></td>--%>
                                 </tr>
                             </table>
 
@@ -495,7 +495,7 @@
 
                                 <div class="col-md-12">
                                     <asp:HiddenField ID="hfCategoryType" runat="server" />
-                                    <asp:Button ID="btnUpdate" runat="server" Text="SUBMIT" CssClass="btn btn-primary px-4 mt-2" OnClick="btnUpdate_Click" OnClientClick="return validateRegViewDetails();" />
+                                    <asp:Button ID="btnUpdate" runat="server" Text="Submit" CssClass="btn btn-primary px-4 mt-2" OnClick="btnUpdate_Click" OnClientClick="return validateRegViewDetails();" />
                                 </div>
 
                             </div>
