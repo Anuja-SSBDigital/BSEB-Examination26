@@ -319,8 +319,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
-                                    <label class="form-label">Address:</label>
+                                    <label class="form-label  required">Address:</label>
                                     <asp:TextBox ID="txtAdress" runat="server" TextMode="MultiLine" CssClass="form-control" Rows="5" Columns="50"></asp:TextBox>
+                                      <span id="txtAdressError" class="text-danger" style="display: none;">Please select a Marital.</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -345,9 +346,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
-                                    <label class="form-label">Pin Code:</label>
+                                    <label class="form-label required">Pin Code:</label>
 
-                                    <asp:TextBox ID="txtpincode" runat="server" class="form-control" />
+                                    <asp:TextBox ID="txtpincode" runat="server" class="form-control" TextMode="Number" oninput="enforceMaxLength(this, 6)"/>
+                                      <span id="txtpincodeError" class="text-danger" style="display: none;">Please Enter Pincode.</span>
                                 </div>
                             </div>
                         </div>
@@ -407,23 +409,31 @@
                         </div>
                         <div id="showaadhardiv" runat="server">
 
-                            <div class="mb-3 form-group">
-                                <label class="form-label"><strong>Do you have Aadhar?</strong></label><br>
-                                <div class="form-check form-check-inline">
-                                    <asp:HiddenField ID="hfAadharOption" runat="server" ClientIDMode="Static" />
-                                    <%--<input type="radio" name="aadhar_option" id="aadharYes" class="form-check-input" value="Yes">--%>
-                                    <asp:RadioButton ID="aadharYes" runat="server" GroupName="aadhar_option" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="aadharYes">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <%--<input type="radio" name="aadhar_option" id="aadharNo" class="form-check-input" value="No">--%>
-                                    <asp:RadioButton ID="aadharNo" runat="server" GroupName="aadhar_option" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="aadharNo">No</label>
-                                </div>
+                          <div class="mb-3 form-group">
+                            <label class="form-label"><strong>Do you have Aadhar?</strong></label><br>
+                            <div class="form-check form-check-inline">
+                                <asp:HiddenField ID="hfAadharOption" runat="server" ClientIDMode="Static" />
+                                <asp:RadioButton 
+                                    ID="aadharYes" 
+                                    runat="server" 
+                                    GroupName="aadhar_option" 
+                                    CssClass="form-check-input" 
+                                    onclick="toggleAadharDivs()" />
+                                <label class="form-check-label" for="<%= aadharYes.ClientID %>">Yes</label>
                             </div>
+                            <div class="form-check form-check-inline">
+                                <asp:RadioButton 
+                                    ID="aadharNo" 
+                                    runat="server" 
+                                    GroupName="aadhar_option" 
+                                    CssClass="form-check-input" 
+                                    onclick="toggleAadharDivs()" />
+                                <label class="form-check-label" for="<%= aadharNo.ClientID %>">No</label>
+                            </div>
+                        </div>
 
                             <!-- Div shown if Aadhar = Yes -->
-                            <div id="aadharYesDiv">
+                           <div id="aadharYesDiv" runat="server" style="display:none;">
                                 <div class="border p-2 text-center mb-3">
                                     <strong>PLEASE MENTION "AADHAR NUMBER"</strong><br>
                                     (कृपया "आधार नंबर" अंकित करें):<br>
@@ -444,7 +454,7 @@
                             </div>
 
                             <!-- Div shown if Aadhar = No -->
-                            <div id="aadharNoDiv">
+                          <div id="aadharNoDiv" runat="server" style="display:none;">
                                 <div class="declaration-box declaration-text">
                                     <strong>If candidate has not given Aadhar number in column 12 above, then following declaration should be given by candidate:</strong><br>
                                     <br>
@@ -463,28 +473,14 @@
 
                                     <strong>घोषणा:</strong> मैं, एतद्द्वारा घोषित करता हूँ कि मैंने “आधार नंबर” आवंटित कराने के लिए आवेदन नहीं किया है तथा मुझे “आधार नंबर” आवंटित नहीं हुआ है। मैं यह भी समझता हूँ कि मेरे द्वारा की गई इस मिथ्या / गलत घोषणा के आधार पर मेरा अभ्यर्थित्व रद्द किया जा सकता है।
                                 </div>
-                                                              <div class="mt-3">
-            <label for="fuAadharFile"><strong>Upload Supporting Document</strong></label>
-            <asp:FileUpload ID="fuAadharFile" runat="server" CssClass="form-control" />
-            <small class="text-muted">Upload JPG/JPEG up to 100KB</small>
-        </div>
+                               <div class="mt-3">
+                                    <label for="fuAadharFile"><strong>Upload Supporting Document</strong></label>
+                                    <asp:FileUpload ID="fuAadharFile" runat="server" CssClass="form-control" />
+                                     <span id="txtAadharFileError" class="text-danger" style="display: none;">Upload JPG/JPEG up to 20KB</span>
+                                 <%--   <small class="text-muted">Upload JPG/JPEG up to 100KB</small>--%>
+                                </div>
                             </div>
                             <!-- Aadhar Instruction Block -->
-
-
-                            <!-- Signature Section -->
-                           <%-- <div class="row justify-content-end mb-3 d-none">
-                                <div class="col-auto">
-                                    <div class="signature-box">
-
-                                        <asp:Image ID="signaturePreview" runat="server" CssClass="signature-img" AlternateText="Signature Preview" />
-                                        <div class="mt-1">
-                                            <small>Signature of Candidate</small><br>
-                                            <small>अभ्यर्थी का हस्ताक्षर</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>--%>
 
                         </div>
                         <div class="col-12 text-center">
@@ -493,7 +489,7 @@
 
 
                             <asp:Button ID="btnUpdate" runat="server" Text="Update" CssClass="btn btn-primary" OnClientClick="return validateStudentDetails();" />
-                            <asp:Button ID="btnAddStudentReg" runat="server" CssClass="btn btn-success" Text="Next" OnClientClick="return goToNextStep();" UseSubmitBehavior="false" Style="display: none;" />
+                            <%--<asp:Button ID="btnAddStudentReg" runat="server" CssClass="btn btn-success" Text="Next" OnClientClick="return goToNextStep();" UseSubmitBehavior="false" Style="display: none;" />--%>
                         </div>
 
                     </div>
@@ -504,304 +500,390 @@
     </div>
    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
 
-    <script>
+ <script type="text/javascript">
 
-        function validateStudentDetails() {
-            debugger
-            var mobileField = document.getElementById('<%= txtMobile.ClientID %>');
-            var mobile = mobileField.value.trim();
-            var mobileErrorSpan = document.getElementById('txtMobileError');
+     function validateStudentDetails() {
+         debugger;
+         // Mobile validation (as is)
+         var mobileField = document.getElementById('<%= txtMobile.ClientID %>');
+        var mobile = mobileField.value.trim();
+        var mobileErrorSpan = document.getElementById('txtMobileError');
+        var mobilePattern = /^[6-9]\d{9}$/;
 
-            // ✅ Regex: Starts with 6-9 and has exactly 10 digits
-            var mobilePattern = /^[6-9]\d{9}$/;
+        if (mobile === "") {
+            mobileErrorSpan.style.display = "inline";
+            mobileErrorSpan.textContent = "Please enter Mobile Number.";
+            mobileField.classList.add("is-invalid");
+            mobileField.focus();
+            return false;
+        } else if (!mobilePattern.test(mobile)) {
+            mobileErrorSpan.style.display = "inline";
+            mobileErrorSpan.textContent = "Please enter a valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
+            mobileField.classList.add("is-invalid");
+            mobileField.focus();
+            return false;
+        } else {
+            mobileErrorSpan.style.display = "none";
+            mobileField.classList.remove("is-invalid");
+        }
 
-            if (mobile === "") {
-                mobileErrorSpan.style.display = "inline";
-                mobileErrorSpan.textContent = "Please enter Mobile Number.";
-                mobileField.classList.add("is-invalid");
-                mobileField.focus();
-                return false;
-            } else if (!mobilePattern.test(mobile)) {
-                mobileErrorSpan.style.display = "inline";
-                mobileErrorSpan.textContent = "Please enter a valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
-                mobileField.classList.add("is-invalid");
-                mobileField.focus();
-                return false;
-            } else {
-                mobileErrorSpan.style.display = "none";
-                mobileField.classList.remove("is-invalid");
-            }
+         // Address validation
+         var addressField = document.getElementById('<%= txtAdress.ClientID %>');
+         var address = addressField.value.trim();
+         var addressErrorSpan = document.getElementById('txtAdressError');
 
-          <%--  var parentnoField = document.getElementById('<%= txtparentno.ClientID %>');
-            var parentno = parentnoField.value.trim();
-            var parentnoErrorSpan = document.getElementById('txtparentnoError');
+         if (address === "") {
+             addressErrorSpan.style.display = "inline";
+             addressErrorSpan.textContent = "Please enter Address.";
+             addressField.classList.add("is-invalid");
+             addressField.focus();
+             return false;
+         } else {
+             addressErrorSpan.style.display = "none";
+             addressField.classList.remove("is-invalid");
+         }
+        // Email validation (as is)
+        var email = document.getElementById('<%= txtEmail.ClientID %>').value;
+        var emailErrorSpan = document.getElementById('txtEmailError');
+        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-            var parentnoPattern = /^[6-9]\d{9}$/;
-            if (!parentnoPattern.test(parentno) && parentno != "") {
-                parentnoErrorSpan.style.display = "inline";
-                parentnoErrorSpan.textContent = "Please enter a valid 10-digit Parent Number starting with 6, 7, 8, or 9.";
-                parentnoField.classList.add("is-invalid");
-                parentnoField.focus();
-                return false;
-            } else {
-                parentnoErrorSpan.style.display = "none";
-                parentnoField.classList.remove("is-invalid");
-            }--%>
+        if (email === "") {
+            emailErrorSpan.style.display = "inline";
+            emailErrorSpan.textContent = "Please enter Email.";
+            document.getElementById('<%= txtEmail.ClientID %>').classList.add("is-invalid");
+        return false;
+    } else if (!emailPattern.test(email)) {
+        emailErrorSpan.style.display = "inline";
+        emailErrorSpan.textContent = "Please enter a valid Email.";
+        document.getElementById('<%= txtEmail.ClientID %>').classList.add("is-invalid");
+        return false;
+    } else {
+        emailErrorSpan.style.display = "none";
+        document.getElementById('<%= txtEmail.ClientID %>').classList.remove("is-invalid");
+        }
 
-            var email = document.getElementById('<%= txtEmail.ClientID %>').value;
-            var emailErrorSpan = document.getElementById('txtEmailError');
-            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            if (email === "") {
-                emailErrorSpan.style.display = "inline";
-                emailErrorSpan.textContent = "Please enter Email.";
-                document.getElementById('<%= txtEmail.ClientID %>').classList.add("is-invalid");
-                return false;
-            } else if (!emailPattern.test(email)) {
-                emailErrorSpan.style.display = "inline";
-                emailErrorSpan.textContent = "Please enter a valid Email.";
-                document.getElementById('<%= txtEmail.ClientID %>').classList.add("is-invalid");
-                return false;
-            } else {
-                emailErrorSpan.style.display = "none";
-                document.getElementById('<%= txtEmail.ClientID %>').classList.remove("is-invalid");
-            }
-            //if (!isValid) return false;
-          <%--  var aadharYes = document.getElementById('aadharYes');
-            var aadharNo = document.getElementById('aadharNo');
-            var aadharPattern = /^[0-9]{12}$/;
-            var AadharNumber = document.getElementById('<%= txtAadharNumber.ClientID %>');
-            var txtAadharNumberError = document.getElementById('txtAadharNumberError');
+         // Marital Status validation
+         var ddlMaritalStatus = document.getElementById('<%= ddlMaritalStatus.ClientID %>');
+         var maritalErrorSpan = document.getElementById('MaritalError');
+         if (ddlMaritalStatus.value === "" || ddlMaritalStatus.value === "0") {
+             maritalErrorSpan.style.display = "inline";
+             ddlMaritalStatus.classList.add("is-invalid");
+             ddlMaritalStatus.focus();
+             return false;
+         } else {
+             maritalErrorSpan.style.display = "none";
+             ddlMaritalStatus.classList.remove("is-invalid");
+         }
 
-            if (!aadharYes.checked && !aadharNo.checked) {
-                alert("Please select whether you have Aadhar.");
-                aadharYes.focus();
-                return false;
-            }--%>
+         // Pin Code validation
+         var pincodeField = document.getElementById('<%= txtpincode.ClientID %>');
+         var pincode = pincodeField.value.trim();
+         var pincodeErrorSpan = document.getElementById('txtpincodeError'); // Assuming you add this span in your HTML
+         var pincodePattern = /^\d{6}$/;
 
-            //if (aadharYes.checked) {
-            //    var aadharValue = AadharNumber.value.trim();
+         if (pincode === "") {
+             pincodeErrorSpan.style.display = "inline";
+             pincodeErrorSpan.textContent = "Please enter Pin Code.";
+             pincodeField.classList.add("is-invalid");
+             pincodeField.focus();
+             return false;
+         } else if (!pincodePattern.test(pincode)) {
+             pincodeErrorSpan.style.display = "inline";
+             pincodeErrorSpan.textContent = "Please enter a valid 6-digit Pin Code.";
+             pincodeField.classList.add("is-invalid");
+             pincodeField.focus();
+             return false;
+         } else {
+             pincodeErrorSpan.style.display = "none";
+             pincodeField.classList.remove("is-invalid");
+         }
 
-            //    if (aadharValue === "") {
-            //        txtAadharNumberError.style.display = "inline";
-            //        txtAadharNumberError.textContent = "Aadhar number is required.";
-            //        AadharNumber.classList.add("is-invalid");
-            //        AadharNumber.focus();
-            //        return false;
-            //    } else if (!aadharPattern.test(aadharValue)) {
-            //        txtAadharNumberError.style.display = "inline";
-            //        txtAadharNumberError.textContent = "Please enter a valid 12-digit Aadhar Number.";
-            //        AadharNumber.classList.add("is-invalid");
-            //        AadharNumber.focus();
-            //        return false;
-            //    } else {
-            //        txtAadharNumberError.style.display = "none";
-            //        txtAadharNumberError.textContent = "";
-            //        AadharNumber.classList.remove("is-invalid");
-            //    }
-            //}
-            //else if (noRadio.checked) {
-            //    // We’ll upload file on server-side with fuAadharFile
-            //    hasAadharFile = true;
-            //}
-            var payload = {
-                studentId: document.getElementById('<%= hfStudentId.ClientID %>').value,
-                facultyId: document.getElementById('<%= hfFaculty.ClientID %>').value,
-                mobile: mobile,
-                email: email,
-                Adress: document.getElementById('<%= txtAdress.ClientID %>').value,
-                ddlMaritalStatus: document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
-                pincode: document.getElementById('<%= txtpincode.ClientID %>').value,
-                BranchName: document.getElementById('<%= txtBranchName.ClientID %>').value,
-          
-                IFSCCode: document.getElementById('<%= txtIFSCCode.ClientID %>').value,
-                BankACNo: document.getElementById('<%= txtBankACNo.ClientID %>').value,
-                Identification1: document.getElementById('<%= txtIdentification1.ClientID %>').value,
-                Identification2: document.getElementById('<%= txtIdentification2.ClientID %>').value,
-                ddlMedium: document.getElementById('<%= ddlMedium.ClientID %>').value,
-                ExamTypeId: document.getElementById('<%= hnd_extype.ClientID %>').value,
-                CollegeCode: document.getElementById('<%= txtcollegeCode.ClientID %>').value,
-                //AadharNumber: aadharValue,
-                //HasAadharFile: hasAadharFile
-               
-            };
-            
-            PageMethods.UpdateStudent(
-                payload.studentId,
-                payload.facultyId,
-                payload.mobile,
-                payload.email,
-                payload.Adress,
-                payload.ddlMaritalStatus,
-                payload.pincode,
-                payload.BranchName,
-                payload.IFSCCode,
-                payload.BankACNo,
-                payload.Identification1,
-                payload.Identification2,
-                payload.ddlMedium,
-                payload.ExamTypeId,
-                //payload.AadharNumber,
-                //payload.HasAadharFile,
-                payload.CollegeCode,
-                //payload.ApaarId,
+       
 
-                function (response) {
-                    if (response.status === "success") {
-                        swal("Success", response.message, "success").then(() => {
-                            var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(payload.studentId) +
-                                "&FacultyId=" + encodeURIComponent(payload.facultyId) + "&ExamTypeId=" + encodeURIComponent(payload.ExamTypeId) + "&collegeCode=" + encodeURIComponent(payload.CollegeCode);
-                            window.location.href = url;
-                        });
-                    } else {
-                        swal("Error", response.message, "error");
-                    }
-                },
-                function (err) {
-                    swal("Error", "Server error: " + err.get_message(), "error");
-                }
-            );
+    // Identification validation
+    var identification1Field = document.getElementById('<%= txtIdentification1.ClientID %>');
+         var identification2Field = document.getElementById('<%= txtIdentification2.ClientID %>');
+         var identificationErrorSpan = document.getElementById('IdentificationError');
 
+         if (identification1Field.value.trim() === "" && identification2Field.value.trim() === "") {
+             identificationErrorSpan.style.display = "inline";
+             identification1Field.classList.add("is-invalid");
+             identification2Field.classList.add("is-invalid");
+             identification1Field.focus();
+             return false;
+         } else {
+             identificationErrorSpan.style.display = "none";
+             identification1Field.classList.remove("is-invalid");
+             identification2Field.classList.remove("is-invalid");
+         }
+         // Medium validation
+         var ddlMedium = document.getElementById('<%= ddlMedium.ClientID %>');
+         var mediumErrorSpan = document.getElementById('MediumError');
+         if (ddlMedium.value === "" || ddlMedium.value === "0") {
+             mediumErrorSpan.style.display = "inline";
+             ddlMedium.classList.add("is-invalid");
+             ddlMedium.focus();
+             return false;
+         } else {
+             mediumErrorSpan.style.display = "none";
+             ddlMedium.classList.remove("is-invalid");
+         }
+        // Aadhar validation (as is)
+        const aadharYes = document.getElementById('<%= aadharYes.ClientID %>');
+        const aadharNo = document.getElementById('<%= aadharNo.ClientID %>');
+        const AadharNumber = document.getElementById('<%= txtAadharNumber.ClientID %>');
+        const txtAadharNumberError = document.getElementById('txtAadharNumberError');
+        const txtAadharFileError = document.getElementById('txtAadharFileError');
+        const fileUpload = document.getElementById('<%= fuAadharFile.ClientID %>');
+        const aadharPattern = /^\d{12}$/;
+
+        // clear previous errors
+        txtAadharNumberError.style.display = "none";
+        txtAadharFileError.style.display = "none";
+        AadharNumber.classList.remove("is-invalid");
+
+        if (!aadharYes.checked && !aadharNo.checked) {
+            swal("Error", "Please select whether you have Aadhar.", "error");
             return false;
         }
 
-        function goToNextStep() {
-            var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
-            var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
-            var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
-            var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+        let aadharValue = "";
+        let aadharFileName = "";
+        let aadharFileExtension = "";
 
-            PageMethods.GoToNextStep(studentId, facultyId, collegeCode, examTypeId,
-                function (response) {
-                    if (response.status === "success") {
-                        // window.location.href = response.redirectUrl;
-                        swal("Success", response.message, "success").then(() => {
-                            var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
-                                "&FacultyId=" + encodeURIComponent(facultyId) + "&ExamTypeId=" + encodeURIComponent(examTypeId) + "&collegeCode=" + encodeURIComponent(collegeCode);
-                            window.location.href = url;
-                        });
-                    } else {
-                        swal("Error", response.message, "error");
-                    }
-                },
-                function (error) {
-                    swal("Error", "Server error: " + error.get_message(), "error");
-                }
-            );
-
-            return false; // Prevent form submission
+        // ✅ YES case
+        if (aadharYes.checked) {
+            aadharValue = AadharNumber.value.trim();
+            if (aadharValue === "") {
+                txtAadharNumberError.style.display = "inline";
+                txtAadharNumberError.textContent = "Aadhar number is required.";
+                AadharNumber.classList.add("is-invalid");
+                AadharNumber.focus();
+                return false;
+            } else if (!aadharPattern.test(aadharValue)) {
+                txtAadharNumberError.style.display = "inline";
+                txtAadharNumberError.textContent = "Please enter a valid 12-digit Aadhar Number.";
+                AadharNumber.classList.add("is-invalid");
+                AadharNumber.focus();
+                return false;
+            } else {
+                txtAadharNumberError.style.display = "none";
+                AadharNumber.classList.remove("is-invalid");
+            }
         }
 
-        window.onload = function () {
-            debugger
-
-            var examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
-
-            // Define which IDs to enable for each examType
-            var regularPrivateFields = [
-        '<%= txtMobile.ClientID %>',
-        '<%= txtAdress.ClientID %>',
-        '<%= txtEmail.ClientID %>',
-        '<%= ddlMaritalStatus.ClientID %>',
-        '<%= txtpincode.ClientID %>',
-        '<%= txtBranchName.ClientID %>',
-        '<%= txtIFSCCode.ClientID %>',
-                '<%= txtBankACNo.ClientID %>',
-                '<%= txtIdentification1.ClientID %>',
-                '<%= txtIdentification2.ClientID %>',
-                '<%= ddlMedium.ClientID %>',
-             <%--   '<%= showaadhardiv.ClientID %>',--%>
-            ];
-
-           <%-- var mobileEmailFields = [
-        '<%= txtMobile.ClientID %>',
-                '<%= txtEmail.ClientID %>'
-            ];--%>
-
-            // Decide which fields to enable
-            var enableFieldIds = [];
-
-            if (examType === "1" || examType === "5" || examType === "6" || examType === "4" || examType === "2" || examType === "3") {
-                debugger
-                enableFieldIds = regularPrivateFields;
+        // ✅ NO case
+        if (aadharNo.checked) {
+            if (!fileUpload || fileUpload.files.length === 0) {
+                txtAadharFileError.style.display = "inline";
+                txtAadharFileError.textContent = "Please upload supporting Aadhar document.";
+                fileUpload.focus();
+                return false;
             }
-            // else if (examType === "6" || examType === "4" || examType === "2" || examType === "3" ) {
-            //    enableFieldIds = mobileEmailFields;
-            //}
+            const file = fileUpload.files[0];
+            if (file.size > 20480) { // 20 KB
+                txtAadharFileError.style.display = "inline";
+                txtAadharFileError.textContent = "File size must be ≤ 20 KB.";
+                return false;
+            }
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (ext !== 'jpg' && ext !== 'jpeg' &&  ext !== 'png') {
+                txtAadharFileError.style.display = "inline";
+                txtAadharFileError.textContent = "Only JPG/JPEG/PNG files allowed.";
+                return false;
+            }
+            aadharFileName = fileUpload.files[0].name;
+            aadharFileExtension = fileUpload.files[0].name.split('.').pop().toLowerCase();
+        }
 
-            var enableSet = new Set(enableFieldIds);
-
-            var allFields = document.querySelectorAll('input, select, textarea, button');
-
-            allFields.forEach(function (field) {
-                if (field.id === 'btnUpdate') {
-                    return; // Skip this field, it will be handled separately
-                }
-                if (enableSet.has(field.id)) {
+        // Call the server method with individual arguments
+        PageMethods.UpdateStudent(
+            document.getElementById('<%= hfStudentId.ClientID %>').value,
+        document.getElementById('<%= hfFaculty.ClientID %>').value,
+        mobile,
+        email,
+        document.getElementById('<%= txtAdress.ClientID %>').value,
+        document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
+        document.getElementById('<%= txtpincode.ClientID %>').value,
+        document.getElementById('<%= txtBranchName.ClientID %>').value,
+        document.getElementById('<%= txtIFSCCode.ClientID %>').value,
+        document.getElementById('<%= txtBankACNo.ClientID %>').value,
+        document.getElementById('<%= txtIdentification1.ClientID %>').value,
+        document.getElementById('<%= txtIdentification2.ClientID %>').value,
+        document.getElementById('<%= ddlMedium.ClientID %>').value,
+        document.getElementById('<%= hnd_extype.ClientID %>').value,
+        document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+        aadharValue,
+        aadharFileName,
+        aadharFileExtension,
+            function (response) {
+                if (response.status === "success") {
                     debugger
-                    field.disabled = false;
-                } else {
-                    field.disabled = true;
-                }
+                    swal("Success", response.message, "success").then(() => {
+                        // Get the values from the form fields directly
+                        var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+                var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
+                var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+                var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+
+                var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
+                    "&FacultyId=" + encodeURIComponent(facultyId) +
+                    "&ExamTypeId=" + encodeURIComponent(examTypeId) +
+                    "&collegeCode=" + encodeURIComponent(collegeCode);
+                window.location.href = url;
             });
-            var updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
-            if (updateBtn) {
-                updateBtn.disabled = false;
-            }
-
-            if (examType == "3") {
-                var NextBtn = document.getElementById('<%= btnAddStudentReg.ClientID %>');
-                if (NextBtn) {
-                    NextBtn.style.display = "inline-block"; // show the button
-                    NextBtn.disabled = false;
-                }
-            }
-            const yesRadio = document.getElementById('<%= aadharYes.ClientID %>');
-            const noRadio = document.getElementById('<%= aadharNo.ClientID %>');
-            const aadharNumberField = document.getElementById('<%= txtAadharNumber.ClientID %>');
-            const hfAadharOption = document.getElementById('<%= hfAadharOption.ClientID %>');
-
-            if (yesRadio && noRadio && hfAadharOption) {
-                if (aadharNumberField && aadharNumberField.value.trim() !== "") {
-                    yesRadio.checked = true;
-                    hfAadharOption.value = "Yes";
                 } else {
-                    noRadio.checked = true;
-                    hfAadharOption.value = "No";
+                    swal("Error", response.message, "error");
                 }
-
-                toggleAadharDivs();
-
-                yesRadio.addEventListener('change', function () {
-                    hfAadharOption.value = "Yes";
-                    toggleAadharDivs();
-                });
-
-                noRadio.addEventListener('change', function () {
-                    hfAadharOption.value = "No";
-                    toggleAadharDivs();
-                });
+            },
+            function (err) {
+                swal("Error", "Server error: " + err.get_message(), "error");
             }
-        };
+    );
 
-        function toggleAadharDivs() {
-            const yesRadio = document.getElementById('<%= aadharYes.ClientID %>');
-            const noRadio = document.getElementById('<%= aadharNo.ClientID %>');
-            const yesDiv = document.getElementById('aadharYesDiv');
-            const noDiv = document.getElementById('aadharNoDiv');
+        return false; // Prevent default form submission
+    }
 
-            if (yesRadio && yesRadio.checked) {
-                if (yesDiv) yesDiv.style.display = 'block';
-                if (noDiv) noDiv.style.display = 'none';
-            } else if (noRadio && noRadio.checked) {
-                if (yesDiv) yesDiv.style.display = 'none';
-                if (noDiv) noDiv.style.display = 'block';
-            }
+     // Handle Aadhar div visibility on page load
+     window.onload = function () {
+         debugger;
+         const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
+
+        const regularPrivateFields = [
+            '<%= txtMobile.ClientID %>',
+            '<%= txtAdress.ClientID %>',
+            '<%= txtEmail.ClientID %>',
+            '<%= ddlMaritalStatus.ClientID %>',
+            '<%= txtpincode.ClientID %>',
+            '<%= txtBranchName.ClientID %>',
+            '<%= txtIFSCCode.ClientID %>',
+            '<%= txtBankACNo.ClientID %>',
+            '<%= txtIdentification1.ClientID %>',
+            '<%= txtIdentification2.ClientID %>',
+            '<%= ddlMedium.ClientID %>',
+            '<%= showaadhardiv.ClientID %>',
+            '<%= aadharYes.ClientID %>',
+            '<%= aadharNo.ClientID %>',
+            '<%= txtAadharNumber.ClientID %>',
+            '<%= aadharNoDiv.ClientID %>',
+            '<%= fuAadharFile.ClientID %>'
+         
+        ];
+
+        const enableFieldIds = examType === "1" || examType === "5" || examType === "6" || examType === "4" || examType === "2" || examType === "3" ? regularPrivateFields : [];
+        const enableSet = new Set(enableFieldIds);
+        const allFields = document.querySelectorAll('input, select, textarea, button, div');
+
+        allFields.forEach(function(field) {
+            if (field.id === 'btnUpdate') return;
+            field.disabled = !enableSet.has(field.id);
+        });
+
+        const updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
+        if (updateBtn) {
+            updateBtn.disabled = false;
         }
 
-        function enforceMaxLength(el, maxLength) {
-            if (el.value.length > maxLength) {
-                el.value = el.value.slice(0, maxLength);
+       <%-- if (examType == "3") {
+            const NextBtn = document.getElementById('<%= btnAddStudentReg.ClientID %>');
+            if (NextBtn) {
+                NextBtn.style.display = "inline-block";
+                NextBtn.disabled = false;
             }
-        }
-    </script>
+        }--%>
+
+         // Handle Aadhar options and toggle visibility of sections
+         const yesRadio = document.getElementById('<%= aadharYes.ClientID %>');
+         const noRadio = document.getElementById('<%= aadharNo.ClientID %>');
+    const aadharNumberField = document.getElementById('<%= txtAadharNumber.ClientID %>');
+         const hfAadharOption = document.getElementById('<%= hfAadharOption.ClientID %>');
+
+         if (yesRadio && noRadio && hfAadharOption) {
+             if (aadharNumberField && aadharNumberField.value.trim() !== "") {
+                 yesRadio.checked = true;
+                 hfAadharOption.value = "Yes";
+             } else {
+                 noRadio.checked = true;
+                 hfAadharOption.value = "No";
+             }
+
+             // Correctly call the function on load to set initial state
+             toggleAadharDivs();
+
+             yesRadio.addEventListener('change', function () {
+                 hfAadharOption.value = "Yes";
+                 toggleAadharDivs();
+             });
+
+             noRadio.addEventListener('change', function () {
+                 hfAadharOption.value = "No";
+                 toggleAadharDivs();
+             });
+         }
+    };
+
+    // Corrected toggleAadharDivs function
+     function toggleAadharDivs() {
+         const yesRadio = document.getElementById('<%= aadharYes.ClientID %>');
+      const noRadio = document.getElementById('<%= aadharNo.ClientID %>');
+      const yesDiv = document.getElementById('<%= aadharYesDiv.ClientID %>');
+    const noDiv = document.getElementById('<%= aadharNoDiv.ClientID %>');
+
+    if (!yesDiv || !noDiv) {
+        console.warn('Aadhar sections not found.');
+        return;
+    }
+
+    if (yesRadio && yesRadio.checked) {
+        yesDiv.style.display = 'block';
+        noDiv.style.display = 'none';
+        document.getElementById('<%= hfAadharOption.ClientID %>').value = 'Yes';
+    } else if (noRadio && noRadio.checked) {
+        yesDiv.style.display = 'none';
+        noDiv.style.display = 'block';
+             document.getElementById('<%= hfAadharOption.ClientID %>').value = 'No';
+         }
+     }
+
+     // Ensure the correct state on initial page load
+     window.addEventListener('load', toggleAadharDivs);
+
+
+    function goToNextStep() {
+        var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+        var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
+        var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+        var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+
+         PageMethods.GoToNextStep(studentId, facultyId, collegeCode, examTypeId,
+             function (response) {
+                 if (response.status === "success") {
+                     swal("Success", response.message, "success").then(() => {
+                         var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
+                             "&FacultyId=" + encodeURIComponent(facultyId) +
+                             "&ExamTypeId=" + encodeURIComponent(examTypeId) +
+                             "&collegeCode=" + encodeURIComponent(collegeCode);
+                         window.location.href = url;
+                     });
+                 } else {
+                     swal("Error", response.message, "error");
+                 }
+             },
+             function (error) {
+                 swal("Error", "Server error: " + error.get_message(), "error");
+             }
+         );
+
+         return false; // Prevent form submission
+     }
+
+     // Enforce max length for fields
+     function enforceMaxLength(el, maxLength) {
+         if (el.value.length > maxLength) {
+             el.value = el.value.slice(0, maxLength);
+         }
+     }
+
+ </script>
+
 </asp:Content>
