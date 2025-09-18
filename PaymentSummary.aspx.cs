@@ -44,24 +44,24 @@ public partial class PaymentSummary : System.Web.UI.Page
             if (Session["CollegeId"] != null)
             {
                 log.Info("Session CollegeId found: " + Session["CollegeId"]);
-                if (Session["CollegeName"].ToString() == "Admin")
-                {
-                    //txt_Panel1CollegeName.Text = "";
-                    //btngetCount.Visible = true;
-                    //lblpanel1college.Visible = true;
-                    //txt_Panel1CollegeName.Visible = true;
+                //if (Session["CollegeName"].ToString() == "Admin")
+                //{
+                //    //txt_Panel1CollegeName.Text = "";
+                //    //btngetCount.Visible = true;
+                //    //lblpanel1college.Visible = true;
+                //    //txt_Panel1CollegeName.Visible = true;
 
-                    txt_CollegeName.Text = "";
-                    btngetsummary.Visible = true;
-                    lblcollege.Visible = true;
-                    txt_CollegeName.Visible = true;
-                }
-                else
-                {
-                    log.Info("User is not Admin. Running GetCount() and BindSummary().");
-                   // GetCount();
-                    BindSummary();
-                }
+                //    txt_CollegeName.Text = "";
+                //    btngetsummary.Visible = true;
+                //    lblcollege.Visible = true;
+                //    txt_CollegeName.Visible = true;
+                //}
+                //else
+                //{
+                //    log.Info("User is not Admin. Running GetCount() and BindSummary().");
+                //   // GetCount();
+                //    BindSummary();
+                //}
 
 
 
@@ -74,70 +74,7 @@ public partial class PaymentSummary : System.Web.UI.Page
         }
 
     }
-    private void BindSummary()
-    {
-        //int CollegeId = Convert.ToInt32(Session["CollegeId"]);
-        string CollegeId = "";
-        if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
-        {
-            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
-
-            if (dt.Rows.Count > 0)
-            {
-                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
-            }
-        }
-        else if (Session["CollegeId"] != null)
-        {
-            CollegeId = Session["CollegeId"].ToString();
-        }
-        else
-        {
-
-            Response.Redirect("Login.aspx");
-            return;
-        }
-        DataSet ds = dl.GetCollegeWiseSeatSummaryForInfo(Convert.ToInt32(CollegeId));
-
-        if (ds.Tables.Count > 0)
-        {
-            rptRegulareSeatMatrix.DataSource = ds.Tables[0];
-            rptRegulareSeatMatrix.DataBind();
-
-            DataView dv = new DataView(ds.Tables[0]);
-            dv.RowFilter = "SummaryTitle IN ('ARTS', 'COMMERCE')";
-
-            rptPrivateSeatMatrix.DataSource = dv;
-            rptPrivateSeatMatrix.DataBind();
-            //rptPrivateSeatMatrix.DataSource = ds.Tables[0];
-            //rptPrivateSeatMatrix.DataBind();
-        }
-
-        if (ds.Tables.Count > 1)
-        {
-            rptFeeSubmitted.DataSource = ds.Tables[1];
-            rptFeeSubmitted.DataBind();
-        }
-
-        if (ds.Tables.Count > 2)
-        {
-            rptUnsuccessful.DataSource = ds.Tables[2];
-            rptUnsuccessful.DataBind();
-        }
-
-        if (ds.Tables.Count > 3)
-        {
-            rptFormSubmitted.DataSource = ds.Tables[3];
-            rptFormSubmitted.DataBind();
-        }
-
-    }
-
-    protected void btngetsummary_Click(object sender, EventArgs e)
-    {
-        BindSummary();
-    }
-
+  
 
     //private void GetCount()
     //{
