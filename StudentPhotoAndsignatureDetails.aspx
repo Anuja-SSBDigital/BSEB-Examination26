@@ -39,7 +39,7 @@
                             <asp:HiddenField ID="hfCategoryType" runat="server" />
                             <asp:HiddenField ID="hfExistingPhotoPath" runat="server" />
                             <asp:HiddenField ID="hfExistingSignaturePath" runat="server" />
-                            <asp:Button ID="btnUpdate" runat="server" Text="UPDATE" CssClass="btn btn-primary px-4 mt-2"
+                            <asp:Button ID="btnUpdate" runat="server" Text="Update" CssClass="btn btn-primary px-4 mt-2"
                                 OnClientClick="return validateForm();" OnClick="btnUpdate_Click" />
                         </div>
                     </div>
