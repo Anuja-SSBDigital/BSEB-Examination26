@@ -44,24 +44,20 @@ public partial class PaymentSummary : System.Web.UI.Page
             if (Session["CollegeId"] != null)
             {
                 log.Info("Session CollegeId found: " + Session["CollegeId"]);
-                //if (Session["CollegeName"].ToString() == "Admin")
-                //{
-                //    //txt_Panel1CollegeName.Text = "";
-                //    //btngetCount.Visible = true;
-                //    //lblpanel1college.Visible = true;
-                //    //txt_Panel1CollegeName.Visible = true;
-
-                //    txt_CollegeName.Text = "";
-                //    btngetsummary.Visible = true;
-                //    lblcollege.Visible = true;
-                //    txt_CollegeName.Visible = true;
-                //}
-                //else
-                //{
-                //    log.Info("User is not Admin. Running GetCount() and BindSummary().");
-                //   // GetCount();
-                //    BindSummary();
-                //}
+                if (Session["CollegeName"].ToString() == "Admin")
+                {
+                   
+                    txt_CollegeName.Text = "";
+                    btngetsummary.Visible = true;
+                    lblcollege.Visible = true;
+                    txt_CollegeName.Visible = true;
+                }
+                else
+                {
+                    log.Info("User is not Admin. Running GetCount() and BindSummary().");
+                    // GetCount();
+                    BindSummary();
+                }
 
 
 
@@ -74,99 +70,130 @@ public partial class PaymentSummary : System.Web.UI.Page
         }
 
     }
-  
+    private void BindSummary()
+    {
+        string CollegeId = "";
+        if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
+        {
+            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
+            if (dt.Rows.Count > 0)
+            {
+                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+            }
+        }
+        else if (Session["CollegeId"] != null)
+        {
+            CollegeId = Session["CollegeId"].ToString();
+        }
+        else
+        {
+            Response.Redirect("Login.aspx");
+            return;
+        }
 
-    //private void GetCount()
-    //{
-    //    string CollegeId = "";
-    //    if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
-    //    {
-    //        DataTable dt = dl.getcollegeidbasedonCollegecode(txt_Panel1CollegeName.Text);
+        DataSet ds = dl.GetExamCollegeWiseSeatSummaryForInfo(Convert.ToInt32(CollegeId));
+        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+        {
+            ResetCells();
+            return;
+        }
 
-    //        if (dt.Rows.Count > 0)
-    //        {
-    //            CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
-    //        }
-    //    }
-    //    else if (Session["CollegeId"] != null)
-    //    {
-    //        CollegeId = Session["CollegeId"].ToString();
-    //    }
-    //    else
-    //    {
+        DataTable dtSummary = ds.Tables[0];
 
-    //        Response.Redirect("Login.aspx");
-    //        return;
-    //    }
-    //    DataTable dtResult = dl.GetDeclarationAndPaymentStatusCount(Convert.ToInt32(CollegeId));
-    //    if (dtResult != null && dtResult.Rows.Count > 0)
-    //    {
-    //        DataRow dr = dtResult.Rows[0];
+        // Reset cells before filling
+        ResetCells();
 
-    //        int paymentCount = Convert.ToInt32(dr["PaymentStatusCount"]);
-    //        int declarationCount = Convert.ToInt32(dr["DeclarationFormSubmittedCount"]);
-    //        int declarationNotSubmittedCount = Convert.ToInt32(dr["NotSubmittedCount"]);
+        // 🔹 Fill Science
+        FillFacultyExamType(dtSummary, "SCIENCE", "REGULAR", tdSciRegFee, tdSciRegForm, tdSciRegFormNot);
+        FillFacultyExamType(dtSummary, "SCIENCE", "EX REGULAR", tdSciExFee, tdSciExForm, tdSciExFormNot);
+        FillFacultyExamType(dtSummary, "SCIENCE", "COMPARTMENTAL", tdSciCompFee, tdSciCompForm, tdSciCompFormNot);
+        FillFacultyExamType(dtSummary, "SCIENCE", "IMPROVEMENT", tdSciImpFee, tdSciImpForm, tdSciImpFormNot);
+        FillFacultyExamType(dtSummary, "SCIENCE", "QUALIFYING", tdSciQualFee, tdSciQualForm, tdSciQualFormNot);
 
-    //        lblPaymentStatusCount.Text = paymentCount + " (" + NumberToHindiWords(paymentCount) + ")";
-    //        lblDeclarationNotSubmittedCount.Text = declarationNotSubmittedCount + " (" + NumberToHindiWords(declarationNotSubmittedCount) + ")";
-    //        lblDeclarationNotSubmittedCount2.Text = declarationNotSubmittedCount + " (" + NumberToHindiWords(declarationNotSubmittedCount) + ")";
-    //        lblDeclarationNotSubmittedCount3.Text = declarationNotSubmittedCount + " (" + NumberToHindiWords(declarationNotSubmittedCount) + ")";
-    //        lblDeclarationFormSubmittedCount.Text = declarationCount + " (" + NumberToHindiWords(declarationCount) + ")";
-    //        lblDeclarationFormSubmittedCount1.Text = declarationCount + " (" + NumberToHindiWords(declarationCount) + ")";
-    //    }
-    //}
-    //protected void btngetCount_Click(object sender, EventArgs e)
-    //{
+        // 🔹 Fill Arts
+        FillFacultyExamType(dtSummary, "ARTS", "REGULAR", tdArtsRegFee, tdArtsRegForm, tdArtsRegFormNot);
+        FillFacultyExamType(dtSummary, "ARTS", "EX REGULAR", tdArtsExFee, tdArtsExForm, tdArtsExFormNot);
+        FillFacultyExamType(dtSummary, "ARTS", "COMPARTMENTAL", tdArtsCompFee, tdArtsCompForm, tdArtsCompFormNot);
+        FillFacultyExamType(dtSummary, "ARTS", "IMPROVEMENT", tdArtsImpFee, tdArtsImpForm, tdArtsImpFormNot);
+        FillFacultyExamType(dtSummary, "ARTS", "QUALIFYING", tdArtsQualFee, tdArtsQualForm, tdArtsQualFormNot);
 
-    //    GetCount();
-    //}
 
-    //public static string NumberToHindiWords(int number)
-    //{
-    //    string[] units = { "", "एक", "दो", "तीन", "चार", "पाँच", "छह", "सात", "आठ", "नौ",
-    //                   "दस", "ग्यारह", "बारह", "तेरह", "चौदह", "पंद्रह", "सोलह", "सत्रह", "अठारह", "उन्नीस" };
+        // 🔹 Fill Commerce
+        FillFacultyExamType(dtSummary, "COMMERCE", "REGULAR", tdComRegFee, tdComRegForm, tdComRegFormNot);
+        FillFacultyExamType(dtSummary, "COMMERCE", "EX REGULAR", tdComExFee, tdComExForm, tdComExFormNot);
+        FillFacultyExamType(dtSummary, "COMMERCE", "COMPARTMENTAL", tdComCompFee, tdComCompForm, tdComCompFormNot);
+        FillFacultyExamType(dtSummary, "COMMERCE", "IMPROVEMENT", tdComImpFee, tdComImpForm, tdComImpFormNot);
+        FillFacultyExamType(dtSummary, "COMMERCE", "QUALIFYING", tdComQualFee, tdComQualForm, tdComQualFormNot);
 
-    //    string[] tens = { "", "", "बीस", "तीस", "चालीस", "पचास", "साठ", "सत्तर", "अस्सी", "नब्बे" };
+        // 🔹 Fill Vocational
+        FillFacultyExamType(dtSummary, "VOCATIONAL", "REGULAR", tdVocRegFee, tdVocRegForm, tdVocRegFormNot);
+        FillFacultyExamType(dtSummary, "VOCATIONAL", "EX REGULAR", tdVocExFee, tdVocExForm, tdVocExFormNot);
+        FillFacultyExamType(dtSummary, "VOCATIONAL", "COMPARTMENTAL", tdVocCompFee, tdVocCompForm, tdVocCompFormNot);
+        FillFacultyExamType(dtSummary, "VOCATIONAL", "IMPROVEMENT", tdVocImpFee, tdVocImpForm, tdVocImpFormNot);
+        FillFacultyExamType(dtSummary, "VOCATIONAL", "QUALIFYING", tdVocQualFee, tdVocQualForm, tdVocQualFormNot);
+    }
 
-    //    if (number == 0)
-    //        return "शून्य";
+    protected void btngetsummary_Click(object sender, EventArgs e)
+    {
+        BindSummary();
+    }
+    private void ResetCells()
+    {
+        tdSciRegFee.InnerText = tdSciRegForm.InnerText = tdSciRegFormNot.InnerText = "--";
+        tdSciExFee.InnerText = tdSciExForm.InnerText = tdSciExFormNot.InnerText = "--";
+        tdSciCompFee.InnerText = tdSciCompForm.InnerText = tdSciCompFormNot.InnerText = "--";
+        tdSciImpFee.InnerText = tdSciImpForm.InnerText = tdSciImpFormNot.InnerText = "--";
+        tdSciQualFee.InnerText = tdSciQualForm.InnerText = tdSciQualFormNot.InnerText = "--";
 
-    //    if (number < 20)
-    //        return units[number];
+        tdArtsRegFee.InnerText = tdArtsRegForm.InnerText = tdArtsRegFormNot.InnerText = "--";
+        tdArtsExFee.InnerText = tdArtsExForm.InnerText = tdArtsExFormNot.InnerText = "--";
+        tdArtsCompFee.InnerText = tdArtsCompForm.InnerText = tdArtsCompFormNot.InnerText = "--";
+        tdArtsImpFee.InnerText = tdArtsImpForm.InnerText = tdArtsImpFormNot.InnerText = "--";
+        tdArtsQualFee.InnerText = tdArtsQualForm.InnerText = tdArtsQualFormNot.InnerText = "--";
 
-    //    if (number < 100)
-    //    {
-    //        int t = number / 10;
-    //        int u = number % 10;
-    //        return tens[t] + (u > 0 ? " " + units[u] : "");
-    //    }
+        tdComRegFee.InnerText = tdComRegForm.InnerText = tdComRegFormNot.InnerText = "--";
+        tdComExFee.InnerText = tdComExForm.InnerText = tdComExFormNot.InnerText = "--";
+        tdComCompFee.InnerText = tdComCompForm.InnerText = tdComCompFormNot.InnerText = "--";
+        tdComImpFee.InnerText = tdComImpForm.InnerText = tdComImpFormNot.InnerText = "--";
+        tdComQualFee.InnerText = tdComQualForm.InnerText = tdComQualFormNot.InnerText = "--";
 
-    //    if (number < 1000)
-    //    {
-    //        int h = number / 100;
-    //        int r = number % 100;
-    //        return units[h] + " सौ" + (r > 0 ? " " + NumberToHindiWords(r) : "");
-    //    }
+        tdVocRegFee.InnerText = tdVocRegForm.InnerText = tdVocRegFormNot.InnerText = "--";
+        tdVocExFee.InnerText = tdVocExForm.InnerText = tdVocExFormNot.InnerText = "--";
+        tdVocCompFee.InnerText = tdVocCompForm.InnerText = tdVocCompFormNot.InnerText = "--";
+        tdVocImpFee.InnerText = tdVocImpForm.InnerText = tdVocImpFormNot.InnerText = "--";
+        tdVocQualFee.InnerText = tdVocQualForm.InnerText = tdVocQualFormNot.InnerText = "--";
+    }
+    private void FillFacultyExamType(
+     DataTable dt, string facultyName, string examKeyword,
+     System.Web.UI.HtmlControls.HtmlTableCell feeCell,
+     System.Web.UI.HtmlControls.HtmlTableCell formCell,
+     System.Web.UI.HtmlControls.HtmlTableCell formNotCell)
+    {
+        // normalize input
+        string facultyUpper = facultyName.ToUpper();
+        string examUpper = examKeyword.ToUpper();
 
-    //    if (number < 100000)
-    //    {
-    //        int th = number / 1000;
-    //        int r = number % 1000;
-    //        return NumberToHindiWords(th) + " हजार" + (r > 0 ? " " + NumberToHindiWords(r) : "");
-    //    }
+        // Look for exact match on Exam Type
+        var row = dt.AsEnumerable()
+            .FirstOrDefault(r =>
+                r.Field<string>("Faculty") != null &&
+                r.Field<string>("Exam Type") != null &&
+                r.Field<string>("Faculty").Trim().ToUpper() == facultyUpper &&
+                r.Field<string>("Exam Type").Trim().ToUpper() == examUpper);
 
-    //    if (number < 10000000)
-    //    {
-    //        int l = number / 100000;
-    //        int r = number % 100000;
-    //        return NumberToHindiWords(l) + " लाख" + (r > 0 ? " " + NumberToHindiWords(r) : "");
-    //    }
-
-    //    // करोड़ तक सपोर्ट
-    //    int cr = number / 10000000;
-    //    int rr = number % 10000000;
-    //    return NumberToHindiWords(cr) + " करोड़" + (rr > 0 ? " " + NumberToHindiWords(rr) : "");
-    //}
+        if (row != null)
+        {
+            feeCell.InnerText = row["Fee Submitted"].ToString();
+            formCell.InnerText = row["Form Submitted"].ToString();
+            formNotCell.InnerText = row["Form Not Submitted"].ToString();
+        }
+        else
+        {
+            feeCell.InnerText = "--";
+            formCell.InnerText = "--";
+            formNotCell.InnerText = "--";
+        }
+    }
 
 
 
