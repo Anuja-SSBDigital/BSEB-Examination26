@@ -72,65 +72,85 @@ public partial class PaymentSummary : System.Web.UI.Page
     }
     private void BindSummary()
     {
-        string CollegeId = "";
-        if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
+        try
         {
-            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
-            if (dt.Rows.Count > 0)
+            string CollegeId = "";
+            if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
             {
-                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
+                if (dt.Rows.Count > 0)
+                {
+                    CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                }
             }
-        }
-        else if (Session["CollegeId"] != null)
-        {
-            CollegeId = Session["CollegeId"].ToString();
-        }
-        else
-        {
-            Response.Redirect("Login.aspx");
-            return;
-        }
+            else if (Session["CollegeId"] != null)
+            {
+                CollegeId = Session["CollegeId"].ToString();
+            }
+            else
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
 
-        DataSet ds = dl.GetExamCollegeWiseSeatSummaryForInfo(Convert.ToInt32(CollegeId));
-        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-        {
+            DataSet ds = dl.GetExamCollegeWiseSeatSummaryForInfo(Convert.ToInt32(CollegeId));
+            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                ResetCells();
+                return;
+            }
+
+            DataTable dtSummary = ds.Tables[0];
+
+            // Reset cells before filling
             ResetCells();
-            return;
+
+            // 🔹 Fill Science
+            FillFacultyExamType(dtSummary, "SCIENCE", "REGULAR", tdSciRegFee, tdSciRegForm, tdSciRegFormNot);
+            FillFacultyExamType(dtSummary, "SCIENCE", "EX REGULAR", tdSciExFee, tdSciExForm, tdSciExFormNot);
+            FillFacultyExamType(dtSummary, "SCIENCE", "COMPARTMENTAL", tdSciCompFee, tdSciCompForm, tdSciCompFormNot);
+            FillFacultyExamType(dtSummary, "SCIENCE", "IMPROVEMENT", tdSciImpFee, tdSciImpForm, tdSciImpFormNot);
+            FillFacultyExamType(dtSummary, "SCIENCE", "QUALIFYING", tdSciQualFee, tdSciQualForm, tdSciQualFormNot);
+
+            // 🔹 Fill Arts
+            FillFacultyExamType(dtSummary, "ARTS", "REGULAR", tdArtsRegFee, tdArtsRegForm, tdArtsRegFormNot);
+            FillFacultyExamType(dtSummary, "ARTS", "EX REGULAR", tdArtsExFee, tdArtsExForm, tdArtsExFormNot);
+            FillFacultyExamType(dtSummary, "ARTS", "COMPARTMENTAL", tdArtsCompFee, tdArtsCompForm, tdArtsCompFormNot);
+            FillFacultyExamType(dtSummary, "ARTS", "IMPROVEMENT", tdArtsImpFee, tdArtsImpForm, tdArtsImpFormNot);
+            FillFacultyExamType(dtSummary, "ARTS", "QUALIFYING", tdArtsQualFee, tdArtsQualForm, tdArtsQualFormNot);
+
+
+            // 🔹 Fill Commerce
+            FillFacultyExamType(dtSummary, "COMMERCE", "REGULAR", tdComRegFee, tdComRegForm, tdComRegFormNot);
+            FillFacultyExamType(dtSummary, "COMMERCE", "EX REGULAR", tdComExFee, tdComExForm, tdComExFormNot);
+            FillFacultyExamType(dtSummary, "COMMERCE", "COMPARTMENTAL", tdComCompFee, tdComCompForm, tdComCompFormNot);
+            FillFacultyExamType(dtSummary, "COMMERCE", "IMPROVEMENT", tdComImpFee, tdComImpForm, tdComImpFormNot);
+            FillFacultyExamType(dtSummary, "COMMERCE", "QUALIFYING", tdComQualFee, tdComQualForm, tdComQualFormNot);
+
+            // 🔹 Fill Vocational
+            FillFacultyExamType(dtSummary, "VOCATIONAL", "REGULAR", tdVocRegFee, tdVocRegForm, tdVocRegFormNot);
+            FillFacultyExamType(dtSummary, "VOCATIONAL", "EX REGULAR", tdVocExFee, tdVocExForm, tdVocExFormNot);
+            FillFacultyExamType(dtSummary, "VOCATIONAL", "COMPARTMENTAL", tdVocCompFee, tdVocCompForm, tdVocCompFormNot);
+            FillFacultyExamType(dtSummary, "VOCATIONAL", "IMPROVEMENT", tdVocImpFee, tdVocImpForm, tdVocImpFormNot);
+            FillFacultyExamType(dtSummary, "VOCATIONAL", "QUALIFYING", tdVocQualFee, tdVocQualForm, tdVocQualFormNot);
+
+
         }
+        catch (Exception ex)
+        {
+            // Escape single quotes for JS safety
+            string safeMessage = ex.Message.Replace("'", "\\'");
 
-        DataTable dtSummary = ds.Tables[0];
-
-        // Reset cells before filling
-        ResetCells();
-
-        // 🔹 Fill Science
-        FillFacultyExamType(dtSummary, "SCIENCE", "REGULAR", tdSciRegFee, tdSciRegForm, tdSciRegFormNot);
-        FillFacultyExamType(dtSummary, "SCIENCE", "EX REGULAR", tdSciExFee, tdSciExForm, tdSciExFormNot);
-        FillFacultyExamType(dtSummary, "SCIENCE", "COMPARTMENTAL", tdSciCompFee, tdSciCompForm, tdSciCompFormNot);
-        FillFacultyExamType(dtSummary, "SCIENCE", "IMPROVEMENT", tdSciImpFee, tdSciImpForm, tdSciImpFormNot);
-        FillFacultyExamType(dtSummary, "SCIENCE", "QUALIFYING", tdSciQualFee, tdSciQualForm, tdSciQualFormNot);
-
-        // 🔹 Fill Arts
-        FillFacultyExamType(dtSummary, "ARTS", "REGULAR", tdArtsRegFee, tdArtsRegForm, tdArtsRegFormNot);
-        FillFacultyExamType(dtSummary, "ARTS", "EX REGULAR", tdArtsExFee, tdArtsExForm, tdArtsExFormNot);
-        FillFacultyExamType(dtSummary, "ARTS", "COMPARTMENTAL", tdArtsCompFee, tdArtsCompForm, tdArtsCompFormNot);
-        FillFacultyExamType(dtSummary, "ARTS", "IMPROVEMENT", tdArtsImpFee, tdArtsImpForm, tdArtsImpFormNot);
-        FillFacultyExamType(dtSummary, "ARTS", "QUALIFYING", tdArtsQualFee, tdArtsQualForm, tdArtsQualFormNot);
-
-
-        // 🔹 Fill Commerce
-        FillFacultyExamType(dtSummary, "COMMERCE", "REGULAR", tdComRegFee, tdComRegForm, tdComRegFormNot);
-        FillFacultyExamType(dtSummary, "COMMERCE", "EX REGULAR", tdComExFee, tdComExForm, tdComExFormNot);
-        FillFacultyExamType(dtSummary, "COMMERCE", "COMPARTMENTAL", tdComCompFee, tdComCompForm, tdComCompFormNot);
-        FillFacultyExamType(dtSummary, "COMMERCE", "IMPROVEMENT", tdComImpFee, tdComImpForm, tdComImpFormNot);
-        FillFacultyExamType(dtSummary, "COMMERCE", "QUALIFYING", tdComQualFee, tdComQualForm, tdComQualFormNot);
-
-        // 🔹 Fill Vocational
-        FillFacultyExamType(dtSummary, "VOCATIONAL", "REGULAR", tdVocRegFee, tdVocRegForm, tdVocRegFormNot);
-        FillFacultyExamType(dtSummary, "VOCATIONAL", "EX REGULAR", tdVocExFee, tdVocExForm, tdVocExFormNot);
-        FillFacultyExamType(dtSummary, "VOCATIONAL", "COMPARTMENTAL", tdVocCompFee, tdVocCompForm, tdVocCompFormNot);
-        FillFacultyExamType(dtSummary, "VOCATIONAL", "IMPROVEMENT", tdVocImpFee, tdVocImpForm, tdVocImpFormNot);
-        FillFacultyExamType(dtSummary, "VOCATIONAL", "QUALIFYING", tdVocQualFee, tdVocQualForm, tdVocQualFormNot);
+            // Show in SweetAlert
+            ScriptManager.RegisterStartupScript(this, GetType(), "SeatSummaryError", @"
+        swal({
+            title: 'Error',
+            text: 'Error loading summary: " + safeMessage + @"',
+            icon: 'error',
+            button: 'Close'
+        });
+    ", true);
+        }
     }
 
     protected void btngetsummary_Click(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Activities.Statements;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -18,6 +19,7 @@ using iTextSharp.tool.xml;
 public partial class response : System.Web.UI.Page
 {
     DBHelper db = new DBHelper();
+    Encryption sabPaisa = new Encryption();
     public Dictionary<string, string> sabPaisaResponse(string query, string authIV, string authKey)
     {
         string decQuery = "";
@@ -99,40 +101,48 @@ public partial class response : System.Web.UI.Page
                 string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
                 string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
 
-                Dictionary<string, string> sabPaisaRespdict = sabPaisaResponse(encryptedResponse, authIV, authKey);
+                // URL decode the query in case it was URL encoded
+                string decodedQuery = HttpUtility.UrlDecode(encryptedResponse);
+                string decQuery = decodedQuery.Replace("%2B", "+").Replace("%2F", "/").Replace("%3D", "=");
+                decQuery = sabPaisa.DecryptString(authKey, authIV, decQuery);
 
-                foreach (KeyValuePair<string, string> pair in sabPaisaRespdict)
-                {
-                    //divresponse.InnerHtml += "<br/>" + pair.Key + " - " + pair.Value;
+                Dictionary<string, string> dictParams = sabPaisa.queryParser(decQuery);
+                // Format the response dictionary into a string for display
+                string formattedString = string.Join("<br/>", dictParams.Select(kv => kv.Key + ": " + kv.Value));
 
-                    if (pair.Key.Equals("statusCode", StringComparison.OrdinalIgnoreCase))
-                    {
-                        lblStatus.Text = pair.Value;
-                    }
-                }
+                string ghg = formattedString;
+                //foreach (KeyValuePair<string, string> pair in sabPaisaRespdict)
+                //{
+                //    //divresponse.InnerHtml += "<br/>" + pair.Key + " - " + pair.Value;
+
+                //    if (pair.Key.Equals("statusCode", StringComparison.OrdinalIgnoreCase))
+                //    {
+                //        lblStatus.Text = pair.Value;
+                //    }
+                //}
 
                 // Optional: Update DB based on payment status
-                string payerName = sabPaisaRespdict.ContainsKey("payerName") ? sabPaisaRespdict["payerName"] : "";
-                string payerEmail = sabPaisaRespdict.ContainsKey("payerEmail") ? sabPaisaRespdict["payerEmail"] : "";
-                string payerMobile = sabPaisaRespdict.ContainsKey("payerMobile") ? sabPaisaRespdict["payerMobile"] : "";
-                string clientTxnId = sabPaisaRespdict.ContainsKey("clientTxnId") ? sabPaisaRespdict["clientTxnId"] : "";
-                string payerAddress = sabPaisaRespdict.ContainsKey("payerAddress") ? sabPaisaRespdict["payerAddress"] : "";
-                string amount = sabPaisaRespdict.ContainsKey("amount") ? sabPaisaRespdict["amount"] : "";
-                string clientCode = sabPaisaRespdict.ContainsKey("clientCode") ? sabPaisaRespdict["clientCode"] : "";
-                string paidAmount = sabPaisaRespdict.ContainsKey("paidAmount") ? sabPaisaRespdict["paidAmount"] : "";
-                string paymentMode = sabPaisaRespdict.ContainsKey("paymentMode") ? sabPaisaRespdict["paymentMode"] : "";
-                string bankName = sabPaisaRespdict.ContainsKey("bankName") ? sabPaisaRespdict["bankName"] : "";
-                string amountType = sabPaisaRespdict.ContainsKey("amountType") ? sabPaisaRespdict["amountType"] : "";
-                string status = sabPaisaRespdict.ContainsKey("status") ? sabPaisaRespdict["status"] : "";
-                string statusCode = sabPaisaRespdict.ContainsKey("statusCode") ? sabPaisaRespdict["statusCode"] : "";
-                string challanNumber = sabPaisaRespdict.ContainsKey("challanNumber") ? sabPaisaRespdict["challanNumber"] : "";
-                string sabpaisaTxnId = sabPaisaRespdict.ContainsKey("sabpaisaTxnId") ? sabPaisaRespdict["sabpaisaTxnId"] : "";
-                string sabpaisaMessage = sabPaisaRespdict.ContainsKey("sabpaisaMessage") ? sabPaisaRespdict["sabpaisaMessage"] : "";
-                string bankMessage = sabPaisaRespdict.ContainsKey("bankMessage") ? sabPaisaRespdict["bankMessage"] : "";
-                string bankErrorCode = sabPaisaRespdict.ContainsKey("bankErrorCode") ? sabPaisaRespdict["bankErrorCode"] : "";
-                string sabpaisaErrorCode = sabPaisaRespdict.ContainsKey("sabpaisaErrorCode") ? sabPaisaRespdict["sabpaisaErrorCode"] : "";
-                string bankTxnId = sabPaisaRespdict.ContainsKey("bankTxnId") ? sabPaisaRespdict["bankTxnId"] : "";
-                string transDate = sabPaisaRespdict.ContainsKey("transDate") ? sabPaisaRespdict["transDate"] : "";
+                string payerName = dictParams.ContainsKey("payerName") ? dictParams["payerName"] : "";
+                string payerEmail = dictParams.ContainsKey("payerEmail") ? dictParams["payerEmail"] : "";
+                string payerMobile = dictParams.ContainsKey("payerMobile") ? dictParams["payerMobile"] : "";
+                string clientTxnId = dictParams.ContainsKey("clientTxnId") ? dictParams["clientTxnId"] : "";
+                string payerAddress = dictParams.ContainsKey("payerAddress") ? dictParams["payerAddress"] : "";
+                string amount = dictParams.ContainsKey("amount") ? dictParams["amount"] : "";
+                string clientCode = dictParams.ContainsKey("clientCode") ? dictParams["clientCode"] : "";
+                string paidAmount = dictParams.ContainsKey("paidAmount") ? dictParams["paidAmount"] : "";
+                string paymentMode = dictParams.ContainsKey("paymentMode") ? dictParams["paymentMode"] : "";
+                string bankName = dictParams.ContainsKey("bankName") ? dictParams["bankName"] : "";
+                string amountType = dictParams.ContainsKey("amountType") ? dictParams["amountType"] : "";
+                string status = dictParams.ContainsKey("status") ? dictParams["status"] : "";
+                string statusCode = dictParams.ContainsKey("statusCode") ? dictParams["statusCode"] : "";
+                string challanNumber = dictParams.ContainsKey("challanNumber") ? dictParams["challanNumber"] : "";
+                string sabpaisaTxnId = dictParams.ContainsKey("sabpaisaTxnId") ? dictParams["sabpaisaTxnId"] : "";
+                string sabpaisaMessage = dictParams.ContainsKey("sabpaisaMessage") ? dictParams["sabpaisaMessage"] : "";
+                string bankMessage = dictParams.ContainsKey("bankMessage") ? dictParams["bankMessage"] : "";
+                string bankErrorCode = dictParams.ContainsKey("bankErrorCode") ? dictParams["bankErrorCode"] : "";
+                string sabpaisaErrorCode = dictParams.ContainsKey("sabpaisaErrorCode") ? dictParams["sabpaisaErrorCode"] : "";
+                string bankTxnId = dictParams.ContainsKey("bankTxnId") ? dictParams["bankTxnId"] : "";
+                string transDate = dictParams.ContainsKey("transDate") ? dictParams["transDate"] : "";
                 lblApplicantName.Text = payerName;
                 lblBankTransId.Text = bankTxnId;
                 lblClientTransId.Text = clientTxnId;
@@ -147,10 +157,7 @@ public partial class response : System.Web.UI.Page
                 {
                     respayment = db.UpdateStudentPaymentDetails(clientTxnId, paidAmount, status, paymentMode, sabpaisaTxnId, bankTxnId, transDate, statusCode, sabpaisaMessage, challanNumber, sabpaisaErrorCode, bankMessage, bankErrorCode, "1");
                 }
-                else
-                {
-                    respayment = db.UpdateStudentPaymentDetails(clientTxnId, paidAmount, status, paymentMode, sabpaisaTxnId, bankTxnId, transDate, statusCode, sabpaisaMessage, challanNumber, sabpaisaErrorCode, bankMessage, bankErrorCode, "0");
-                }
+               
 
                 // Handle based on both DB update and payment status
                 if (respayment == 0 && status.ToUpper() == "SUCCESS")
@@ -158,12 +165,12 @@ public partial class response : System.Web.UI.Page
                     // Success from both bank and DB
                     imgSuccess.Visible = true;
                     string script = @"
-    swal({
-        title: 'Success!',
-        text: 'Payment processed successfully.',
-        icon: 'success',
-        button: 'OK'
-    });";
+                swal({
+                    title: 'Success!',
+                    text: 'Payment processed successfully.',
+                    icon: 'success',
+                    button: 'OK'
+                });";
                     ScriptManager.RegisterStartupScript(this, GetType(), "PaymentSuccess", script, true);
                 }
                 else if (respayment == 0 && status.ToUpper() == "FAILED")
@@ -171,12 +178,12 @@ public partial class response : System.Web.UI.Page
                     // Bank marked it as failed
                     imgFailure.Visible = true;
                     string script = @"
-    swal({
-        title: 'Payment Failed',
-        text: 'Payment failed as per bank response. Please try again.',
-        icon: 'error',
-        button: 'Retry'
-    });";
+                swal({
+                    title: 'Payment Failed',
+                    text: 'Payment failed as per bank response. Please try again.',
+                    icon: 'error',
+                    button: 'Retry'
+                });";
                     ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
                 }
                 else if (respayment == 2)
@@ -184,12 +191,12 @@ public partial class response : System.Web.UI.Page
                     // No DB record found
                     imgFailure.Visible = true;
                     string script = @"
-    swal({
-        title: 'No Record Found',
-        text: 'No payment record found for the given ClientTxnId.',
-        icon: 'warning',
-        button: 'Close'
-    });";
+                swal({
+                    title: 'No Record Found',
+                    text: 'No payment record found for the given ClientTxnId.',
+                    icon: 'warning',
+                    button: 'Close'
+                });";
                     ScriptManager.RegisterStartupScript(this, GetType(), "PaymentNotFound", script, true);
                 }
                 else
@@ -197,19 +204,28 @@ public partial class response : System.Web.UI.Page
                     // Unknown case
                     imgFailure.Visible = true;
                     string script = @"
-    swal({
-        title: 'Error',
-        text: 'An unknown error occurred during payment processing.',
-        icon: 'error',
-        button: 'Close'
-    });";
+                swal({
+                    title: 'Error',
+                    text: 'An unknown error occurred during payment processing.',
+                    icon: 'error',
+                    button: 'Close'
+                });";
                     ScriptManager.RegisterStartupScript(this, GetType(), "PaymentUnknownError", script, true);
                 }
 
             }
             catch (Exception ex)
             {
-                //divresponse.InnerHtml = "Error processing response: " + ex.Message;
+                imgFailure.Visible = true;
+                string safeMessage = ex.Message.Replace("'", "\\'");
+                string script = @"
+    swal({
+        title: 'Error',
+        text: 'Error processing response: " + safeMessage + @"',
+        icon: 'error',
+        button: 'Close'
+    });";
+                ScriptManager.RegisterStartupScript(this, GetType(), "PaymentCatchError", script, true);
             }
         }
     }

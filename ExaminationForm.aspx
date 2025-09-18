@@ -652,7 +652,7 @@
         <div class="print-btn-container" style="text-align: center !important; margin-bottom: 10px;">
             <%-- <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClientClick="window.print(); return false;" />--%>
             <a href="DwnldExamForm.aspx" class="btn btn-primary no-print" id="btnback" style="text-decoration: none !important;">Back</a>
-            <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClick="btnPrint_Click" OnClientClick="updateAndPrint(); return false;" CssClass="btn" />
+            <asp:Button ID="btnPrint" runat="server" Text="PDF" OnClick="btnPrint_Click" CssClass="btn" />
 
         </div>
 
@@ -1294,12 +1294,45 @@
                 </div>
             </ItemTemplate>
         </asp:Repeater>
-          <%--<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>--%>
+        <%--<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>--%>
 
-        <script  type="text/javascript" src ="assets/js/customforexamform.js"></script>
+        <script type="text/javascript" src="assets/js/customforexamform.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript">
+
+
+            //function updateAndPrint() {
+            //    const urlParams = new URLSearchParams(window.location.search);
+            //    const studentData = urlParams.get("studentData");
+
+            //    if (studentData) {
+            //        $.ajax({
+            //            type: "POST",
+            //            url: "ExaminationForm.aspx/UpdateDownloaded",
+            //            data: JSON.stringify({ studentData: studentData }),
+            //            contentType: "application/json; charset=utf-8",
+            //            dataType: "json",
+            //            success: function (response) {
+            //                if (response.d && response.d.startsWith("error:")) {
+            //                    alert("Update failed: " + response.d);  // 🔔 Show server error
+            //                } else {
+            //                    console.log("Update result:", response.d);
+            //                }
+            //                window.print();
+            //            },
+            //            error: function (xhr, status, error) {
+            //                alert("AJAX error: " + error); // 🔔 Show client error
+            //                window.print();
+            //            }
+            //        });
+            //    } else {
+            //        window.print();
+            //    }
+            //}
+</script>
     </form>
-  
 
-     
+
+
 </body>
 </html>

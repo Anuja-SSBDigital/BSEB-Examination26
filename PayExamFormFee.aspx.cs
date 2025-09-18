@@ -291,170 +291,209 @@ public partial class PayExamFormFee : System.Web.UI.Page
         }
         catch (Exception exOuter)
         {
+            string script = string.Format(@"
+    swal({{
+        title: 'Failed',
+        text: '{0}',
+        icon: 'error',
+        button: 'Retry'
+    }});", exOuter.Message.Replace("'", "\\'"));
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
             System.Diagnostics.Debug.WriteLine("General Error: " + exOuter.Message);
         }
     }
 
     protected void btn_paynow_Click(object sender, EventArgs e)
     {
-
-        string collegeCode = "";
-        string collegeName = "";
-        int collegeId = 0;
-        string Mobileno = "";
-        string EmailId = "";
-
-        if (Session["CollegeName"].ToString() == "Admin")
+        try
         {
-            DataTable dtres = db.getcollegeidbasedonCollegecode(txt_collegename.Text);
+            string collegeCode = "";
+            string collegeName = "";
+            int collegeId = 0;
+            string Mobileno = "";
+            string EmailId = "";
 
-            if (dtres.Rows.Count > 0)
+            if (Session["CollegeName"].ToString() == "Admin")
             {
-                collegeCode = dtres.Rows[0]["CollegeCode"].ToString();
-                collegeName = dtres.Rows[0]["CollegeName"].ToString();
-                collegeId = Convert.ToInt32(dtres.Rows[0]["Pk_CollegeId"]);
-                Mobileno = dtres.Rows[0]["PrincipalMobileNo"].ToString();
-                EmailId = dtres.Rows[0]["EmailId"].ToString();
+                DataTable dtres = db.getcollegeidbasedonCollegecode(txt_collegename.Text);
+
+                if (dtres.Rows.Count > 0)
+                {
+                    collegeCode = dtres.Rows[0]["CollegeCode"].ToString();
+                    collegeName = dtres.Rows[0]["CollegeName"].ToString();
+                    collegeId = Convert.ToInt32(dtres.Rows[0]["Pk_CollegeId"]);
+                    Mobileno = dtres.Rows[0]["PrincipalMobileNo"].ToString();
+                    EmailId = dtres.Rows[0]["EmailId"].ToString();
+                }
             }
-        }
-        else
-        {
-            Mobileno = Session["PrincipalMobileNo"].ToString();
-            collegeCode = Session["CollegeCode"].ToString();
-            collegeName = Session["CollegeName"].ToString();
-            collegeId = Convert.ToInt32(Session["CollegeId"]);
-            EmailId = Session["EmailId"].ToString();
-        }
+            else
+            {
+                Mobileno = Session["PrincipalMobileNo"].ToString();
+                collegeCode = Session["CollegeCode"].ToString();
+                collegeName = Session["CollegeName"].ToString();
+                collegeId = Convert.ToInt32(Session["CollegeId"]);
+                EmailId = Session["EmailId"].ToString();
+            }
 
-        string username = Session["username"].ToString();
+            string username = Session["username"].ToString();
 
-        // ✅ Get selected IDs from hidden field
-        string selectedStudentIds = hfSelectedIds.Value;
+            // ✅ Get selected IDs from hidden field
+            string selectedStudentIds = hfSelectedIds.Value;
 
-        if (string.IsNullOrEmpty(selectedStudentIds))
-        {
-            string script = @"
+            if (string.IsNullOrEmpty(selectedStudentIds))
+            {
+                string script = @"
             swal({
                 title: 'Failed',
                 text: 'Please select at least one student',
                 icon: 'error',
                 button: 'Retry'
             });";
-            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
-            return;
-        }
-
-        // ✅ Calculate total amount from selected students
-        //long totalAmount = 0;
-        //string[] selectedIdsArray = selectedStudentIds.Split(',');
-
-        //foreach (RepeaterItem item in rptStudents.Items)
-        //{
-        //    HiddenField hfStudentID = (HiddenField)item.FindControl("hfStudentID");
-        //    Label lblFee = (Label)item.FindControl("lblFee");
-
-        //    if (hfStudentID != null && lblFee != null && selectedIdsArray.Contains(hfStudentID.Value))
-        //    {
-        //        totalAmount += Convert.ToInt64(lblFee.Text);
-        //    }
-        //}
-
-        string payerName = collegeName + " | " + collegeCode;
-        string payerMobile = ""; // optional
-        string payerEmail = "";  // optional
-
-        string clientTxnId = "N/A";
-
-        // ✅ Insert payment details into DB
-        string message = db.InsertStudentPaymentDetails(
-            collegeId,
-            2,
-            ddl_paymode.SelectedValue,
-            Convert.ToDecimal(hfTotalAmount.Value),
-            selectedStudentIds
-        );
-
-        if (message.Contains("Seat limit exceeded"))
-        {
-            string script = @"
-            swal({
-                title: 'Failed!',
-                text: '" + message.Replace("'", "\\'") + @"',
-                icon: 'error',
-                button: 'OK'
-            });";
-            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentSeatLimit", script, true);
-            return;
-        }
-        else if (message.StartsWith("Success"))
-        {
-            int txnIndex = message.IndexOf("Transaction ID:");
-            if (txnIndex != -1)
-            {
-                clientTxnId = message.Substring(txnIndex + "Transaction ID:".Length).Trim();
+                ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
+                return;
             }
 
-            string script = @"
-            swal({
-                title: 'Success!',
-                text: 'Payment completed successfully.',
-                icon: 'success',
-                button: 'OK'
-            });";
-            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentSuccess", script, true);
-        }
-        else
-        {
-            string script = @"
+            // ✅ Calculate total amount from selected students
+            //long totalAmount = 0;
+            //string[] selectedIdsArray = selectedStudentIds.Split(',');
+
+            //foreach (RepeaterItem item in rptStudents.Items)
+            //{
+            //    HiddenField hfStudentID = (HiddenField)item.FindControl("hfStudentID");
+            //    Label lblFee = (Label)item.FindControl("lblFee");
+
+            //    if (hfStudentID != null && lblFee != null && selectedIdsArray.Contains(hfStudentID.Value))
+            //    {
+            //        totalAmount += Convert.ToInt64(lblFee.Text);
+            //    }
+            //}
+
+            string payerName = collegeCode;
+            string payerMobile = Mobileno;
+            string payerEmail = EmailId;
+
+            string clientTxnId = "N/A";
+            string studentFeeMapping = hfSelectedStudentFees.Value;
+            decimal totalAmount = 0;
+
+            if (!string.IsNullOrEmpty(studentFeeMapping))
+            {
+                foreach (string item in studentFeeMapping.Split(','))
+                {
+                    string[] parts = item.Split(':');
+                    decimal fee;
+                    if (parts.Length == 2 && decimal.TryParse(parts[1], out fee))
+                    {
+                        totalAmount += fee;
+                    }
+                }
+            }
+
+            // ✅ Insert payment details into DB
+            string message = db.InsertExamStudentPayment(
+                collegeId,
+                2,
+                ddl_paymode.SelectedValue,
+                totalAmount,
+                selectedStudentIds
+            );
+
+            if (message.StartsWith("Success"))
+            {
+                int txnIndex = message.IndexOf("Transaction ID:");
+                if (txnIndex != -1)
+                {
+                    clientTxnId = message.Substring(txnIndex + "Transaction ID:".Length).Trim();
+                }
+
+                //string script = @"
+                //swal({
+                //    title: 'Success!',
+                //    text: 'Payment completed successfully.',
+                //    icon: 'success',
+                //    button: 'OK'
+                //});";
+                //ScriptManager.RegisterStartupScript(this, GetType(), "PaymentSuccess", script, true);
+            }
+            else
+            {
+                string script = @"
             swal({
                 title: 'Failed!',
                 text: '" + message.Replace("'", "\\'") + @"',
                 icon: 'error',
                 button: 'OK'
             });";
-            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFail", script, true);
-            return;
+                ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFail", script, true);
+                return;
+            }
+
+
+            string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+            string transUserName = ConfigurationManager.AppSettings["transUserName"];
+            string transUserPassword = ConfigurationManager.AppSettings["transUserPassword"];
+            string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+            string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
+            string callbackUrl = ConfigurationManager.AppSettings["callbackUrl"];
+            string mcc = ConfigurationManager.AppSettings["mcc"];
+            string AmountType = ConfigurationManager.AppSettings["AmountType"];
+            string channelid = ConfigurationManager.AppSettings["channelid"];
+
+
+            string query = "";
+
+            query = query + "payerName=" + payerName.Trim() + "";
+            query = query + "&payerEmail=" + payerEmail.Trim() + "";
+            query = query + "&payerMobile=" + payerMobile.Trim() + "";
+            query = query + "&clientCode=" + clientCode.Trim() + "";
+            query = query + "&transUserName=" + transUserName.Trim() + "";
+            query = query + "&transUserPassword=" + transUserPassword.Trim() + "";
+            query = query + "&payerAddress=" + "" + "";
+            query = query + "&clientTxnId=" + clientTxnId.Trim() + "";
+            query = query + "&amount=" + totalAmount.ToString() + "";
+            query = query + "&amountType=" + AmountType.Trim() + "";
+            query = query + "&channelId=" + channelid.Trim() + "";
+            query = query + "&mcc=" + mcc.Trim() + "";
+            query = query + "&callbackUrl=" + callbackUrl.Trim() + "";
+
+            // Pass extra parameters in Udf1 to udf20 
+            //query = query + "&udf1=" + Class.Trim() + "";
+            //query = query + "&udf2=" + Roll.Trim() + "";
+            Encryption enc = new Encryption();
+            // Encrypting the query string
+            string encdata = enc.EncryptString(authKey, authIV, query);
+
+            // Create an HTML form for submitting the request to the payment gateway
+            string respString = "<html>" +
+                              "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
+                                                                               // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                  "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                      "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
+                                      "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
+                                      "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled
+                                  "</form>" +
+                              "</body>" +
+                           "</html>";
+
+
+
+            Response.Write(respString);
+        }
+        catch (Exception ex)
+        {
+            string safeMessage = ex.Message.Replace("'", "\\'");
+            string script = @"
+    swal({
+        title: 'Error',
+        text: 'Error during payment initialization: " + safeMessage + @"',
+        icon: 'error',
+        button: 'Close'
+    });";
+            ScriptManager.RegisterStartupScript(this, GetType(), "PaymentInitError", script, true);
         }
 
-        // ✅ Prepare SabPaisa redirect values
-        string clientCode = ConfigurationManager.AppSettings["Clientcode"];
-        string transUserName = ConfigurationManager.AppSettings["transUserName"];
-        string transUserPassword = ConfigurationManager.AppSettings["transUserPassword"];
-        string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
-        string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
-        string callbackUrl = ConfigurationManager.AppSettings["callbackUrl"];
 
-        string encryptedData = forwardToSabPaisa(
-            clientCode,
-            transUserName,
-            transUserPassword,
-            authKey,
-            authIV,
-            payerName,
-            payerEmail,
-            payerMobile,
-            "",
-            clientTxnId,
-           hfTotalAmount.Value,
-            "INR",
-            "W",
-            "8795",
-            callbackUrl
-        );
-
-        string respString = "<html>" +
-            "<body onload='document.forms[\"sabPaisaForm\"].submit()'>" +
-            //  "<form name='sabPaisaForm' method='post' action='https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
-            "<form name='sabPaisaForm' method='post' action='https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
-            "<input type='hidden' name='encData' value='" + encryptedData + "' />" +
-            "<input type='hidden' name='clientCode' value='" + clientCode + "' />" +
-            "</form>" +
-            "</body>" +
-            "</html>";
-
-        Response.Clear();
-        Response.Write(respString);
-        Response.End();
 
     }
 

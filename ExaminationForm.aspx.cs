@@ -46,7 +46,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                             ExamTypeId = parts[3];
                             CollegeCode = parts[4];
                             Session["CollegeCode"] = CollegeCode.ToString();
-                           int studentId;
+                            int studentId;
                             if (int.TryParse(studentIdStr, out studentId))
                             {
                                 // Replaced interpolated string with string.Format
@@ -69,9 +69,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                         newRow["StudentName"] = sourceRow["StudentName"];
                                         newRow["MotherName"] = sourceRow["MotherName"];
                                         newRow["FatherName"] = sourceRow["FatherName"];
-                                        newRow["dob"] = sourceRow["dob"] != DBNull.Value
-                                                                ? Convert.ToDateTime(sourceRow["dob"]).ToString("dd/MM/yyyy")
-                                                                : "";
+                                        newRow["DOB"] = sourceRow["DOB"] != DBNull.Value && sourceRow["DOB"] != null ? ParseDateOfBirth(sourceRow["DOB"]) : "";
                                         newRow["MatricBoardName"] = sourceRow["MatricBoardName"];
                                         newRow["MatricRollCode"] = sourceRow["MatricRollCode"];
                                         newRow["MatricRollNumber"] = sourceRow["MatricRollNumber"];
@@ -95,6 +93,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                         newRow["MediumName"] = sourceRow["MediumName"];
                                         newRow["RegistrationNo"] = sourceRow["RegistrationNo"];
                                         newRow["UniqueNo"] = sourceRow["UniqueNo"];
+
 
                                         object isDifferently = sourceRow["DifferentlyAbled"];
 
@@ -149,7 +148,7 @@ public partial class ExaminationForm : System.Web.UI.Page
         dt.Columns.Add("StudentName");
         dt.Columns.Add("MotherName");
         dt.Columns.Add("FatherName");
-        dt.Columns.Add("dob");
+        dt.Columns.Add("DOB");
         dt.Columns.Add("MatricBoardName");
         dt.Columns.Add("MatricRollCode");
         dt.Columns.Add("MatricRollNumber");
@@ -475,7 +474,7 @@ public partial class ExaminationForm : System.Web.UI.Page
             {
                 DataRowView drv = (DataRowView)e.Item.DataItem;
 
-              
+
                 string photoPath = string.Empty;
                 if (drv["StudentPhotoPath"] != DBNull.Value)
                 {
@@ -499,7 +498,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                 string StudentId = Session["StudentId"] != null ? Session["StudentId"].ToString() : "";
 
                 Image imgPhoto = (Image)e.Item.FindControl("imgPhoto");
-                Image imgSign = (Image)e.Item.FindControl("imgSign"); 
+                Image imgSign = (Image)e.Item.FindControl("imgSign");
                 if (imgPhoto != null && !string.IsNullOrEmpty(photoPath))
                 {
                     imgPhoto.ImageUrl = ResolveUrl(photoPath);
@@ -531,10 +530,10 @@ public partial class ExaminationForm : System.Web.UI.Page
                 //    return;
                 //}
 
-           
+
                 DataTable appliedSubjects = dl.GetAppliedSubjects(StudentId);
 
-                StudentSubjectData ssd = LoadSubjects(facultyId, collegeId, appliedSubjects); 
+                StudentSubjectData ssd = LoadSubjects(facultyId, collegeId, appliedSubjects);
                 //StudentSubjectData ssd = LoadSubjects(facultyId, collegeId);
 
                 Repeater rptCompulsorySubjectsCombined = e.Item.FindControl("rptCompulsorySubjectsCombined") as Repeater;
@@ -564,7 +563,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                         rptVocElective.DataBind();
                     }
                 }
-                else if(rptElectiveSubjects != null && ssd.ElectiveSubjects != null && ssd.ElectiveSubjects.Rows.Count > 0)
+                else if (rptElectiveSubjects != null && ssd.ElectiveSubjects != null && ssd.ElectiveSubjects.Rows.Count > 0)
                 {
                     rptElectiveSubjects.DataSource = ssd.ElectiveSubjects;
                     rptElectiveSubjects.DataBind();
@@ -645,7 +644,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                         int studentId;
                         if (int.TryParse(Parts[0], out studentId))
                         {
-                            dl.UpdateStudentsDownloaded(studentId);
+                            dl.UpdateExamStudentsFormDownloaded(studentId);
                         }
 
                     }
@@ -665,34 +664,34 @@ public partial class ExaminationForm : System.Web.UI.Page
     }
 
 
-    [System.Web.Services.WebMethod]
-    public static string UpdateDownloaded(string studentData)
-    {
-        try
-        {
-            string decodedStudentData = HttpContext.Current.Server.UrlDecode(studentData);
-            List<string> selectedStudents = decodedStudentData.Split(new string[] { ",|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+    //[System.Web.Services.WebMethod]
+    //public static string UpdateDownloaded(string studentData)
+    //{
+    //    try
+    //    {
+    //        string decodedStudentData = HttpContext.Current.Server.UrlDecode(studentData);
+    //        List<string> selectedStudents = decodedStudentData.Split(new string[] { ",|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            foreach (var StuIds in selectedStudents)
-            {
-                var Parts = StuIds.Split('|');
-                if (Parts.Length == 3)
-                {
-                    int studentId;
-                    if (int.TryParse(Parts[0], out studentId))
-                    {
-                        // Call your existing DL method
-                        DBHelper db = new DBHelper();
-                        db.UpdateStudentsDownloaded(studentId);
-                    }
-                }
-            }
-            return "success";
-        }
-        catch (Exception ex)
-        {
-            return "error: " + "Load Page Again";
-        }
-    }
+    //        foreach (var StuIds in selectedStudents)
+    //        {
+    //            var Parts = StuIds.Split('|');
+    //            if (Parts.Length == 3)
+    //            {
+    //                int studentId;
+    //                if (int.TryParse(Parts[0], out studentId))
+    //                {
+    //                    // Call your existing DL method
+    //                    DBHelper db = new DBHelper();
+    //                    db.UpdateExamStudentsFormDownloaded(studentId);
+    //                }
+    //            }
+    //        }
+    //        return "success";
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return "error: " + "Load Page Again";
+    //    }
+    //}
 
 }

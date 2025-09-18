@@ -49,9 +49,15 @@ public partial class StudentRegisteredList : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            // Log the exception
-            Console.WriteLine("Error in BindFacultydropdown: " + ex.Message);
-            throw ex;
+            string safeMessage = ex.Message.Replace("'", "\\'");
+            ScriptManager.RegisterStartupScript(this, GetType(), "DropdownError", @"
+        swal({
+            title: 'Error',
+            text: 'An error occurred while binding dropdowns: " + safeMessage + @"',
+            icon: 'error',
+            button: 'Close'
+        });
+    ", true);
         }
     }
     protected void Page_Load(object sender, EventArgs e)

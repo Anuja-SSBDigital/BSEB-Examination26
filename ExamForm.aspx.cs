@@ -153,42 +153,58 @@ public partial class ExamForm : System.Web.UI.Page
 
     protected void btnViewRecord_Click(object sender, EventArgs e)
     {
-   
-        string CollegeId = "";
-        if (Session["CollegeName"].ToString() == "Admin")
-        {
-            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
 
-            if (dt.Rows.Count > 0)
+        try
+        {
+            string CollegeId = "";
+            if (Session["CollegeName"].ToString() == "Admin")
             {
-                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
+
+                if (dt.Rows.Count > 0)
+                {
+                    CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+
+                }
 
             }
+            else
+            {
+                CollegeId = hfCollegeId.Value;
+            }
+
+
+            getcollegewiseseatsummary();
+            //string RegistrationType = Request.Form["regType"];
+            //string CategoryType = "Regular";
+
+            int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
+            int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
+            string StudentName = txtStudentName.Text.Trim();
+            //string CategoryName = ddl_category.SelectedValue;
+
+            DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, StudentName);
+            //DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, RegistrationType, StudentName);
+            bool hasRecords = result != null && result.Rows.Count > 0;
+            pnlNoRecords.Visible = !hasRecords;
+            pnlStudentTable.Visible = hasRecords;
+
+            rptStudentList.DataSource = hasRecords ? result : null;
+            rptStudentList.DataBind();
 
         }
-        else
+        catch (Exception ex)
         {
-            CollegeId = hfCollegeId.Value;
+            string safeMessage = ex.Message.Replace("'", "\\'");
+            ScriptManager.RegisterStartupScript(this, GetType(), "StudentRegiListError", @"
+        swal({
+            title: 'Error',
+            text: 'An error occurred while loading student data: " + safeMessage + @"',
+            icon: 'error',
+            button: 'Close'
+        });
+    ", true);
         }
-
-
-        getcollegewiseseatsummary();
-        //string RegistrationType = Request.Form["regType"];
-        //string CategoryType = "Regular";
-
-        int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
-        int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
-        string StudentName = txtStudentName.Text.Trim();
-        //string CategoryName = ddl_category.SelectedValue;
-
-        DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, StudentName);
-        //DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, RegistrationType, StudentName);
-        bool hasRecords = result != null && result.Rows.Count > 0;
-        pnlNoRecords.Visible = !hasRecords;
-        pnlStudentTable.Visible = hasRecords;
-
-        rptStudentList.DataSource = hasRecords ? result : null;
-        rptStudentList.DataBind();
 
         //string script = string.Format(@"
         //<script type='text/javascript'>
@@ -199,7 +215,7 @@ public partial class ExamForm : System.Web.UI.Page
         //</script>", RegistrationType);
 
         //ClientScript.RegisterStartupScript(this.GetType(), "SetRadios", script);
-   
+
 
     }
     protected void rptStudentList_ItemDataBound(object sender, RepeaterItemEventArgs e)

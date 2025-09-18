@@ -61,10 +61,10 @@ public partial class DwnldExamForm : System.Web.UI.Page
 
         //DataTable dtExamcat = dl.getExamCatfordropdown();
 
-       
+
         //DataRow[] filteredRows = dtExamcat.Select("Pk_ExamTypeId = 1 OR Pk_ExamTypeId = 5");
 
-       
+
         //DataTable filteredDt = dtExamcat.Clone(); 
         //foreach (DataRow row in filteredRows)
         //{
@@ -90,67 +90,87 @@ public partial class DwnldExamForm : System.Web.UI.Page
     protected void btnGetExamStudentData(object sender, EventArgs e)
     {
 
-        int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
-        //int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
-        string CategoryName = ddl_category.SelectedValue;
-        string CollegeNameAndCode = txt_CollegeName.Text.Trim();
-        
-        string CollegeId = "";
-        if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
+        try
         {
-            DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
 
-            if (dt.Rows.Count > 0)
+            int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
+            //int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
+            string CategoryName = ddl_category.SelectedValue;
+            string CollegeNameAndCode = txt_CollegeName.Text.Trim();
+
+            string CollegeId = "";
+            if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
             {
-                CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                DataTable dt = dl.getcollegeidbasedonCollegecode(txt_CollegeName.Text);
+
+                if (dt.Rows.Count > 0)
+                {
+                    CollegeId = dt.Rows[0]["Pk_CollegeId"].ToString();
+                }
             }
-        }
-        else if (Session["CollegeId"] != null)
-        {
-            CollegeId = Session["CollegeId"].ToString();
+            else if (Session["CollegeId"] != null)
+            {
+                CollegeId = Session["CollegeId"].ToString();
+            }
+
+            string StudentName = txtStudentName.Text.Trim();
+
+            // DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId, 3, "");
+            DataTable result = dl.getExamDwnldStudentData(CollegeId, StudentName, facultyId, 0, CategoryName, "");
+            //DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId,0, CategoryName, "");
+            if (result != null && result.Rows.Count > 0)
+            {
+                rptStudents.DataSource = result;
+                rptStudents.DataBind();
+                pnlNoRecords.Visible = false;
+                pnlStudentTable.Visible = true;
+
+                string examTypeName = result.Rows[0]["ExamTypeName"].ToString();
+                Session["CollegeCode"] = result.Rows[0]["CollegeCode"].ToString();
+                btnDownloadPDF.Visible = true;
+                lblCollege.Text = result.Rows[0]["College"].ToString();
+                SpSearchresult.Visible = true;
+                pnlPager.Visible = true;
+                searchInputDIV.Visible = true;
+                //if (examTypeName == "REGULAR" || examTypeName == "PRIVATE")
+                //{
+                //    btnDownloadPDF.Visible = true;
+                //}
+                //else
+                //{
+                //    btnDownloadPDF.Visible = false;
+                //}
+            }
+            else
+            {
+                rptStudents.DataSource = null;
+                rptStudents.DataBind();
+                pnlStudentTable.Visible = false;
+                pnlNoRecords.Visible = true;
+                btnDownloadPDF.Visible = false;
+                SpSearchresult.Visible = false;
+                pnlPager.Visible = false;
+                searchInputDIV.Visible = false;
+            }
+
+            chkSelectAll.Checked = false;
+
+
         }
 
-        string StudentName = txtStudentName.Text.Trim();
-
-       // DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId, 3, "");
-        DataTable result = dl.getExamDwnldStudentData(CollegeId,StudentName, facultyId,0, CategoryName, "");
-        //DataTable result = dl.getExamDwnldStudentData(CollegeId, CollegeCode, StudentName, facultyId,0, CategoryName, "");
-        if (result != null && result.Rows.Count > 0)
+        catch (Exception ex)
         {
-            rptStudents.DataSource = result;
-            rptStudents.DataBind();
-            pnlNoRecords.Visible = false;
-            pnlStudentTable.Visible = true;
-           
-            string examTypeName = result.Rows[0]["ExamTypeName"].ToString();
-            Session["CollegeCode"] = result.Rows[0]["CollegeCode"].ToString();
-            btnDownloadPDF.Visible = true;
-            lblCollege.Text = result.Rows[0]["College"].ToString();
-            SpSearchresult.Visible = true;
-            pnlPager.Visible = true;
-            searchInputDIV.Visible = true;
-            //if (examTypeName == "REGULAR" || examTypeName == "PRIVATE")
-            //{
-            //    btnDownloadPDF.Visible = true;
-            //}
-            //else
-            //{
-            //    btnDownloadPDF.Visible = false;
-            //}
+            // Escape single quotes to avoid JS breakage
+            string safeMessage = ex.Message.Replace("'", "\\'");
+            ScriptManager.RegisterStartupScript(this, GetType(), "SearchError", @"
+        swal({
+            title: 'Error',
+            text: 'An error occurred: " + safeMessage + @"',
+            icon: 'error',
+            button: 'Close'
+        });
+    ", true);
         }
-        else
-        {
-            rptStudents.DataSource = null;
-            rptStudents.DataBind();
-            pnlStudentTable.Visible = false;
-            pnlNoRecords.Visible = true;
-            btnDownloadPDF.Visible = false;
-            SpSearchresult.Visible = false;
-            pnlPager.Visible = false;
-            searchInputDIV.Visible = false;
-        }
-
-        chkSelectAll.Checked = false;
 
 
     }
