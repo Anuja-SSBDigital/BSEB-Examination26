@@ -253,7 +253,7 @@
                         <h4>Confirm Details</h4>
                         <div class="card-header-action">
                             <div class="print-btn-container">
-                                <button type="button" id="btndownloadpdf" visible="false" runat="server" class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+                                <button type="button" id="btndownloadpdf" runat="server" class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
                                 <%--<asp:Button ID="btnPrint" CssClass="btn btn-info" runat="server" Text="PRINT" OnClick="btnPrint_Click" />--%>
                             </div>
                             <%--   <a href="register_27.aspx" class="btn btn-warning">Back to List</a>
@@ -481,10 +481,10 @@
                             </div>
 
                             <div class="mt-4 text-center" id="hideThisDiv">
-                                <p>
+                               <%-- <p>
                                     <strong>Amount:</strong>
                                     <asp:Label ID="lblStuFees" runat="server" />
-                                </p>
+                                </p>--%>
                                 <div class="form-check" style="display: ruby-text;">
                                     <h5 id="declarationContainer" runat="server">
                                         <input class="form-check-input" type="checkbox" id="declaration" runat="server">

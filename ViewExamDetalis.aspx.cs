@@ -144,7 +144,7 @@ public partial class ViewExamDetalis : System.Web.UI.Page
                 decimal feeToDisplay = concessionFee > 0 ? concessionFee : baseFee;
 
                 // Display the fee in currency format
-                lblStuFees.Text = feeToDisplay.ToString();
+               // lblStuFees.Text = feeToDisplay.ToString();
                 //lbl_aparid.Text = dr["ApaarId"].ToString();
                 //lblStuFees.Text = feeToDisplay.ToString("C");
             }

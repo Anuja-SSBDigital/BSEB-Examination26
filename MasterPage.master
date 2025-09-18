@@ -93,7 +93,7 @@
                             <li class="dropdown mt-1">
                                 <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="command"></i><span>Student Registration Management</span></a>
                                 <ul class="dropdown-menu" style="display: block;">
-                                   <%-- <li runat="server" id="li_dwnloadreg">
+                                    <%-- <li runat="server" id="li_dwnloadreg">
                                         <a href="dwnldregform.aspx" class="nav-link ">Download Registration Form</a>
                                     </li>
                                     <li runat="server" id="li_payment">
@@ -118,9 +118,7 @@
                                       <li runat="server" id="lidummyregcard">
                                         <a href="DownloadDummyRegCard.aspx" class="nav-link">Dummy Registration Card</a>
                                     </li>
-                                    <li runat="server" id="liRegisteredList">
-                                        <a href="StudentRegisteredList.aspx" class="nav-link">View Registered Student List</a>
-                                    </li>
+                                  
                                     <li runat="server" id="li_paymentsummary">
                                         <a href="PaymentSummary.aspx" class="nav-link">Payment Summary</a>
                                     </li>
@@ -136,7 +134,10 @@
                                     <li runat="server" id="li_ExaminationForm">
                                         <a href="ExamForm.aspx" class="nav-link">Exam Form</a>
                                     </li>
-                                   <%-- <li runat="server" id="li_Downloadadmitcard">
+                                    <li runat="server" id="liRegisteredList">
+                                        <a href="StudentRegisteredList.aspx" class="nav-link">Exam Form Submitted List</a>
+                                    </li>
+                                    <%-- <li runat="server" id="li_Downloadadmitcard">
                                         <a href="Downloadadmitcard.aspx" class="nav-link">Download Admit Card</a>
                                     </li>
                                     <li runat="server" id="li_DownloadPracticaladmitcard">

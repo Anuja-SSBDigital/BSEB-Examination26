@@ -134,21 +134,21 @@
             <div class="header d-flex justify-content-between align-items-center px-3 py-2">
                 <!-- Left: Logo + Title -->
 
-                <div class="col-lg-12">
+                <div class="col-lg-8">
                     <div class="align-items-center d-flex justify-content-center">
                         <img src="assets/img/bsebimage2.png" alt="Logo" style="width: 45px; margin-right: 8px;">
                         <h5 class="mb-0 fw-bold">BIHAR SCHOOL EXAMINATION BOARD</h5>
                     </div>
 
                 </div>
-                <%-- <div class="col-lg-3">
+                 <div class="col-lg-4">
                     <div class="small" style="line-height: 1.4;">
-                        <div><span class="fw-lighter">Help Desk No.:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>
-                        <div class="fw-lighter">(10 AM to 6 PM)</div>
-                        <div><span class="fw-lighter">Help Desk Email:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>
-                        <div><span class="fw-lighter">Payment Help Desk No.:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>
+                        <div><span class="fw-lighter">Help Desk No.:</span> 0612-2230039<span style="color: #d32f2f;" class="fw-lighter"></span></div>
+                       <%-- <div class="fw-lighter">(10 AM to 6 PM)</div>--%>
+                        <div><span class="fw-lighter">Help Desk Email: <b>bsebinterhelpdesk@gmail.com</b></span> <%--<span style="color: #d32f2f;" class="fw-lighter"></span>--%></div>
+                 <%--       <div><span class="fw-lighter">Payment Help Desk No.:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>--%>
                     </div>
-                </div>--%>
+                </div>
                 <!-- Right: Help Desk Info -->
 
             </div>
@@ -253,7 +253,7 @@
                         <div class="info-card text-center d-flex flex-column h-100">
                             <img src="assets/img/bsebimage.jpg" class="logo_head" alt="Logo">
                             <h5>Bihar School Examination Board</h5>
-                            <p>Academic Year 2025–2027 Registration.</p>
+                            <p>Academic Year 2024–26 Registration.</p>
                             <hr>
                             <p><i class="fas fa-user"></i>Login to start your session</p>
 

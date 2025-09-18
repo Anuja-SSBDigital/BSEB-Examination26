@@ -142,7 +142,7 @@
                                 <th>Father Name</th>
                                 <th>Mother Name</th>
                                 <th>TransactionId</th>
-                                <th>From Edit</th>
+                                <th>Edit</th>
                                 <th>View</th>
                                 <th>Status</th>
                             </tr>
