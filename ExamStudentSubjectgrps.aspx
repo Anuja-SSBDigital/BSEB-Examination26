@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-                <div id="VocElectiveSection" runat="server">
+              <%--  <div id="VocElectiveSection" runat="server">
                     <div class="q33-box borderline" ID="Elective1titleVoc" runat="server">
                         <div class="section-title">Elective Subject Group (Total 300 Marks)</div>
                         <p ID="Elective1titleVoc2" runat="server">(Select (✓) any three subjects - each 100 Marks)</p>
@@ -182,7 +182,7 @@
 
                         </table>
                     </div>
-                </div>
+                </div>--%>
 
             </div>
         </div>
