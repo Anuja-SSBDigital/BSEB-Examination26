@@ -94,7 +94,7 @@ public partial class DwnldExamForm : System.Web.UI.Page
         //int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
         string CategoryName = ddl_category.SelectedValue;
         string CollegeNameAndCode = txt_CollegeName.Text.Trim();
-        string CollegeCode = "";
+        
         string CollegeId = "";
         if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
         {
