@@ -234,11 +234,11 @@ public partial class StudentExamRegForm : System.Web.UI.Page
          
                 string ExamTypeId = row["ExamTypeId"].ToString().Trim();
                 hnd_extype.Value = ExamTypeId;
-                if (ExamTypeId == "3")
-                {
-                    btnAddStudentReg.Visible = true;
-                   btnUpdate.Visible = false;
-                }
+                //if (ExamTypeId == "3")
+                //{
+                //    btnAddStudentReg.Visible = true;
+                //   btnUpdate.Visible = false;
+                //}
                 
 
                 txtStudentName.Text = row["StudentName"].ToString();
@@ -364,17 +364,78 @@ public partial class StudentExamRegForm : System.Web.UI.Page
         }
 
     }
+
+    //[System.Web.Services.WebMethod]
+    //public static object UpdateStudent(string studentId, string facultyId, string mobile, string email, string Adress, string ddlMaritalStatus, string pincode, string BranchName, string IFSCCode, string BankACNo, string Identification1, string Identification2, string ddlMedium, string ExamTypeId, string CollegeCode)
+    //{
+    //    try
+    //    {
+    //        DBHelper dl = new DBHelper();
+    //        int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, Adress, ddlMaritalStatus, pincode, BranchName, IFSCCode, BankACNo, Identification1, Identification2, ddlMedium, Convert.ToInt32(ExamTypeId));
+
+    //        if (result > 0)
+    //        {
+    //            string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(ExamTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(CollegeCode);
+    //            return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
+    //        }
+    //        else
+    //        {
+    //            return new { status = "error", message = "Update failed. Please try again." };
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return new { status = "error", message = "Exception: " + ex.Message };
+    //    }
+    //}
+
+
+
     [System.Web.Services.WebMethod]
-    public static object UpdateStudent(string studentId, string facultyId, string mobile, string email, string Adress, string ddlMaritalStatus, string pincode, string BranchName, string IFSCCode, string BankACNo, string Identification1, string Identification2, string ddlMedium, string ExamTypeId, string CollegeCode)
+    public static object UpdateStudent(
+     string studentId, string facultyId, string mobile, string email, string address,
+     string maritalStatus, string pincode, string branchName, string ifscCode, string bankACNo,
+     string identification1, string identification2, string medium, string examTypeId,
+     string collegeCode, string AadharNumber, string aadharFileName, string aadharFileExtension)
     {
         try
         {
+            // Default file name if no file uploaded
+            string adharfileFileName = string.Empty;
+
+            // If there's an uploaded file, process it
+            if (!string.IsNullOrEmpty(aadharFileName) && !string.IsNullOrEmpty(aadharFileExtension))
+            {
+                string photoBaseVirtual = "~/Uploads/Aadhar/Photos";
+                string photoBasePath = HttpContext.Current.Server.MapPath(photoBaseVirtual);
+
+                if (!System.IO.Directory.Exists(photoBasePath))
+                    System.IO.Directory.CreateDirectory(photoBasePath);
+
+                // Check the file extension to validate it
+                if (aadharFileExtension != "jpg" && aadharFileExtension != "jpeg"&& aadharFileExtension != "png")
+                    return new { status = "error", message = "Invalid file type" };
+
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string randomNum = new Random().Next(10000, 99999).ToString();
+                adharfileFileName = randomNum + "_" + timestamp + "." + aadharFileExtension;
+
+                // Save the file name (file content would need to be saved as well, if required)
+                string fullPath = System.IO.Path.Combine(photoBasePath, adharfileFileName);
+                // You will need to save the actual file content here, if required
+                // e.g., you can save the file content to the server using some method.
+            }
+
+            // Call the update method in DB or other logic as required
             DBHelper dl = new DBHelper();
-            int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, Adress, ddlMaritalStatus, pincode, BranchName, IFSCCode, BankACNo, Identification1, Identification2, ddlMedium, Convert.ToInt32(ExamTypeId));
+            int result = dl.UpdateStudentExamRegForm(
+                Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode,
+                branchName, ifscCode, bankACNo, identification1, identification2, medium,
+                Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName);
 
             if (result > 0)
             {
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(ExamTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(CollegeCode);
+                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
                 return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
             }
             else
@@ -387,138 +448,45 @@ public partial class StudentExamRegForm : System.Web.UI.Page
             return new { status = "error", message = "Exception: " + ex.Message };
         }
     }
+
+
     //[System.Web.Services.WebMethod]
-    //public static object UpdateStudent(string studentId, string facultyId, string mobile, string email, string address, string maritalStatus, string pincode, string branchName, string ifscCode, string bankACNo, string identification1, string identification2, string medium, string examTypeId, string collegeCode)
+    //public static object GoToNextStep(string studentId, string facultyId, string collegeCode, string examTypeId)
     //{
     //    try
     //    {
-    //        DBHelper dl = new DBHelper();
-    //        int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2, medium, Convert.ToInt32(examTypeId));
+    //        //string redirectUrl = "StudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) +
+    //        //                     "&FacultyId=" + HttpUtility.UrlEncode(facultyId);
 
-    //        if (result > 0)
+    //        //if (HttpContext.Current.Session["CollegeName"].ToString() == "Admin")
+    //        //{
+    //        //    redirectUrl += "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+    //        //}
+
+    //        //return new { status = "success", redirectUrl = redirectUrl };
+    //        bool isAdmin = false;
+
+    //        if (HttpContext.Current.Session != null && HttpContext.Current.Session["CollegeName"] != null && HttpContext.Current.Session["CollegeName"].ToString() == "Admin")
     //        {
-    //            string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
-    //            return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
+    //            isAdmin = true;
     //        }
-    //        else
-    //        {
-    //            return new { status = "error", message = "Update failed. Please try again." };
-    //        }
+
+    //        collegeCode = HttpContext.Current.Session != null && HttpContext.Current.Session["CollegeCode"] != null ? HttpContext.Current.Session["CollegeCode"].ToString() : "";
+    //        //string examTypeId = HttpContext.Current.Request.QueryString["examTypeId"];
+    //        string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&examTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode); ;
+
+    //        //if (isAdmin)
+    //        //{
+    //        //    redirectUrl += "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+    //        //}
+
+    //        return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
     //    }
     //    catch (Exception ex)
     //    {
-    //        return new { status = "error", message = "Exception: " + ex.Message };
+    //        return new { status = "error", message = ex.Message };
     //    }
     //}
-
-    //[System.Web.Services.WebMethod]
-    //public static object UpdateStudent(
-    //  string studentId, string facultyId, string mobile, string email, string address,
-    //  string maritalStatus, string pincode, string branchName, string ifscCode, string bankACNo,
-    //  string identification1, string identification2, string medium, string examTypeId,
-    //  string collegeCode
-    //    , string aadharNumber, bool hasAadharFile)
-    //{
-    //    try
-    //    {
-    //        // Default
-    //        string adharfileFileName = string.Empty;
-
-    //        if (hasAadharFile)
-    //        {
-    //            // Access FileUpload from current page context:
-    //            Page page = HttpContext.Current.Handler as Page;
-    //            if (page != null)
-    //            {
-    //                FileUpload fuAadharFile = (FileUpload)page.FindControl("fuAadharFile");
-    //                if (fuAadharFile != null && fuAadharFile.HasFile)
-    //                {
-    //                    string photoBaseVirtual = "~/Uploads/Aadhar/Photos";
-    //                    string photoBasePath = HttpContext.Current.Server.MapPath(photoBaseVirtual);
-
-    //                    if (!System.IO.Directory.Exists(photoBasePath))
-    //                        System.IO.Directory.CreateDirectory(photoBasePath);
-
-    //                    if (fuAadharFile.PostedFile.ContentLength > 102400)
-    //                        return new { status = "error", message = "File too large" };
-
-    //                    string extension = System.IO.Path.GetExtension(fuAadharFile.FileName).ToLower();
-    //                    if (extension != ".jpg" && extension != ".jpeg")
-    //                        return new { status = "error", message = "Invalid file type" };
-
-    //                    string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-    //                    string randomNum = new Random().Next(10000, 99999).ToString();
-    //                    adharfileFileName = randomNum + "_" + timestamp + extension;
-
-    //                    string fullPath = System.IO.Path.Combine(photoBasePath, adharfileFileName);
-    //                    fuAadharFile.SaveAs(fullPath);
-    //                }
-    //            }
-    //        }
-
-    //        // call your update method with either number or file:
-    //        DBHelper dl = new DBHelper();
-    //        int result = dl.UpdateStudentExamRegForm(
-    //            Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode,
-    //            branchName, ifscCode, bankACNo, identification1, identification2, medium,
-    //            Convert.ToInt32(examTypeId), aadharNumber, adharfileFileName);
-
-    //        if (result > 0)
-    //        {
-    //            string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) +
-    //                                 "&FacultyId=" + HttpUtility.UrlEncode(facultyId) +
-    //                                 "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) +
-    //                                 "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
-    //            return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
-    //        }
-    //        else
-    //        {
-    //            return new { status = "error", message = "Update failed. Please try again." };
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return new { status = "error", message = "Exception: " + ex.Message };
-    //    }
-    //}
-
-    [System.Web.Services.WebMethod]
-    public static object GoToNextStep(string studentId, string facultyId, string collegeCode, string examTypeId)
-    {
-        try
-        {
-            //string redirectUrl = "StudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) +
-            //                     "&FacultyId=" + HttpUtility.UrlEncode(facultyId);
-
-            //if (HttpContext.Current.Session["CollegeName"].ToString() == "Admin")
-            //{
-            //    redirectUrl += "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
-            //}
-
-            //return new { status = "success", redirectUrl = redirectUrl };
-            bool isAdmin = false;
-
-            if (HttpContext.Current.Session != null && HttpContext.Current.Session["CollegeName"] != null && HttpContext.Current.Session["CollegeName"].ToString() == "Admin")
-            {
-                isAdmin = true;
-            }
-
-            collegeCode = HttpContext.Current.Session != null && HttpContext.Current.Session["CollegeCode"] != null ? HttpContext.Current.Session["CollegeCode"].ToString() : "";
-            //string examTypeId = HttpContext.Current.Request.QueryString["examTypeId"];
-            string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&examTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode); ;
-
-            //if (isAdmin)
-            //{
-            //    redirectUrl += "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
-            //}
-
-            return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
-        }
-        catch (Exception ex)
-        {
-            return new { status = "error", message = ex.Message };
-        }
-    }
 
 
     public void BindFacultydropdown()
