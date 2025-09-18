@@ -92,39 +92,39 @@ public partial class ViewExamDetalis : System.Web.UI.Page
             if (dt != null && dt.Rows.Count > 0)
             {
                 DataRow dr = dt.Rows[0];
-                lblStudentName.Text = dr["StudentName"].ToString();
-                lblExamTypeName.Text = dr["ExamTypeName"].ToString();
-                //lblCategory.Text = dr["CategoryName"].ToString();
-                lblFatherName.Text = dr["FatherName"].ToString();
-                lblMotherName.Text = dr["MotherName"].ToString();
-                lblCollege.Text = dr["College"].ToString();
+                lblStudentName.Text = dr["StudentName"].ToString().ToUpper();
+                lblExamTypeName.Text = dr["ExamTypeName"].ToString().ToUpper();
+                //lblCategory.Text = dr["CategoryName"].ToString().ToUpper();
+                lblFatherName.Text = dr["FatherName"].ToString().ToUpper();
+                lblMotherName.Text = dr["MotherName"].ToString().ToUpper();
+                lblCollege.Text = dr["College"].ToString().ToUpper();
                 lblDOB.Text = dr["DOB"] != DBNull.Value ? Convert.ToDateTime(dr["DOB"]).ToString("dd/MM/yyyy") : "";
 
-                lblMatricBoardName.Text = dr["MatricBoardName"].ToString();
-                lblRollCode.Text = dr["MatricRollCode"].ToString();
-                lblRollNumber.Text = dr["MatricRollNumber"].ToString();
-                lblPassingYear.Text = dr["MatricPassingYear"].ToString();
-                lblGender.Text = dr["GenderName"].ToString();
-                lblCaste.Text = dr["CasteCategoryCode"].ToString();
-                lblDifferentlyAbled.Text = dr["DifferentlyAbled"] != DBNull.Value && Convert.ToBoolean(dr["DifferentlyAbled"]) ? "yes" : "no";
+                lblMatricBoardName.Text = dr["MatricBoardName"].ToString().ToUpper();
+                lblRollCode.Text = dr["MatricRollCode"].ToString().ToUpper();
+                lblRollNumber.Text = dr["MatricRollNumber"].ToString().ToUpper();
+                lblPassingYear.Text = dr["MatricPassingYear"].ToString().ToUpper();
+                lblGender.Text = dr["GenderName"].ToString().ToUpper();
+                lblCaste.Text = dr["CasteCategoryCode"].ToString().ToUpper();
+                lblDifferentlyAbled.Text = dr["DifferentlyAbled"] != DBNull.Value && Convert.ToBoolean(dr["DifferentlyAbled"]) ? "YES" : "NO";
 
                 //lblDisabledNote.Text = "";
-                lblNationality.Text = dr["Nationality"].ToString();
-                lblReligion.Text = dr["Religion"].ToString();
-                lblArea.Text = dr["AreaName"].ToString();
+                lblNationality.Text = dr["Nationality"].ToString().ToUpper();
+                lblReligion.Text = dr["Religion"].ToString().ToUpper();
+                lblArea.Text = dr["AreaName"].ToString().ToUpper();
                 lblMobileNo.Text = dr["MobileNo"].ToString();
-                lblEmailId.Text = dr["EmailId"].ToString();
-                lblParentMobileNo.Text = dr["ParentGuardianMobileNo"].ToString();
+                lblEmailId.Text = dr["EmailId"].ToString().ToUpper();
+                //lblParentMobileNo.Text = dr["ParentGuardianMobileNo"].ToString();
                 lblAadharNo.Text = dr["AadharNumber"].ToString();
-                lblAddress.Text = dr["StudentAddress"].ToString();
+                lblAddress.Text = dr["StudentAddress"].ToString().ToUpper();
                 lblPinCode.Text = dr["PinCode"].ToString();
-                lblMaritalStatus.Text = dr["MaritalStatus"].ToString();
+                lblMaritalStatus.Text = dr["MaritalStatus"].ToString().ToUpper();
                 lblAccountNo.Text = dr["StudentBankAccountNo"].ToString();
-                lblBankBranch.Text = dr["BankBranchName"].ToString();
-                lblIFSC.Text = dr["IFSCCode"].ToString();
-                lblIdent1.Text = dr["IdentificationMark1"].ToString();
-                lblIdent2.Text = dr["IdentificationMark2"].ToString();
-                lblMedium.Text = dr["ExamMediumName"].ToString();
+                lblBankBranch.Text = dr["BankBranchName"].ToString().ToUpper();
+                lblIFSC.Text = dr["IFSCCode"].ToString().ToUpper();
+                lblIdent1.Text = dr["IdentificationMark1"].ToString().ToUpper();
+                lblIdent2.Text = dr["IdentificationMark2"].ToString().ToUpper();
+                lblMedium.Text = dr["ExamMediumName"].ToString().ToUpper();
 
                 //imgPhoto.ImageUrl = dr["StudentPhotoPath"].ToString();
                 //imgSignature.ImageUrl = dr["StudentSignaturePath"].ToString();
