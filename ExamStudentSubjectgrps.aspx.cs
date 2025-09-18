@@ -175,7 +175,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                     rptElectiveSubjects.DataSource = electiveReshaped;
                                     rptElectiveSubjects.DataBind();
                                     ViewState["ElectiveSubjects"] = electiveReshaped;
-                                    VocElectiveSection.Visible = false;
+                                //    VocElectiveSection.Visible = false;
 
                                 //}
                                     // ========== Elective (GroupName = 'Elective')
@@ -183,7 +183,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 if (ExamTypeId == "2")
                                 {
                                     ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
-                                    VocElectiveSection.Visible = false;
+                                  //  VocElectiveSection.Visible = false;
                                     divAdditionalSubjects.Visible = false;
 
                                     //Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
@@ -206,7 +206,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 //Elective1title2.Visible = false;
                                 ElectiveCard.Visible = false;
                                 divVocationalSubjects.Visible = false;
-                                VocElectiveSection.Visible = false;
+                               // VocElectiveSection.Visible = false;
                             }
                             if (ExamTypeId == "4" || ExamTypeId =="6")
                             {
@@ -324,11 +324,11 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                     vocElectiveTable.Rows.Add(newRow);
                                 }
 
-                                rptVocElectiveSubjects.DataSource = vocElectiveTable;
-                                rptVocElectiveSubjects.DataBind();
+                                //rptVocElectiveSubjects.DataSource = vocElectiveTable;
+                                //rptVocElectiveSubjects.DataBind();
 
                                 ElectiveSection.Visible = false;
-                                VocElectiveSection.Visible = true;
+                              //  VocElectiveSection.Visible = true;
 
                             }
                             else
@@ -357,7 +357,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 rptElectiveSubjects.DataSource = electiveReshaped;
                                 rptElectiveSubjects.DataBind();
                                 ViewState["ElectiveSubjects"] = electiveReshaped;
-                                VocElectiveSection.Visible = false;
+                               // VocElectiveSection.Visible = false;
                             }
                             // =========================
                             // 3-column layout for "Additional"
@@ -509,10 +509,10 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
             LoadComGrpMap(studentId);
             if (!SaveSelectedSubjects(rptVocationalAdditionalSubjects, studentId, modifiedBy, 5, Convert.ToInt32(ExamTypeId)))
                 return;
-            if (FacultyId == "4")
-            {
-                SaveSelectedSubjects(rptVocElectiveSubjects, studentId, modifiedBy, 3, Convert.ToInt32(ExamTypeId));
-            }
+            ////if (FacultyId == "4")
+            ////{
+            ////    SaveSelectedSubjects(rptVocElectiveSubjects, studentId, modifiedBy, 3, Convert.ToInt32(ExamTypeId));
+            ////}
             // Process each Repeater
             SaveSelectedSubjects(rptCompulsorySubjects, studentId, modifiedBy, 1, Convert.ToInt32(ExamTypeId));
             SaveSelectedSubjects(rptCompulsorySubjects2, studentId, modifiedBy, 2, Convert.ToInt32(ExamTypeId));
@@ -1076,11 +1076,11 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                 groupWiseCodes[group].Add(code);
             }
-            if (FacultyId == "4")
-            {
+            //if (FacultyId == "4")
+            //{
 
-                ApplyToVocElectiveSubjects(rptVocElectiveSubjects, groupWiseCodes, "3");
-            }
+            //    ApplyToVocElectiveSubjects(rptVocElectiveSubjects, groupWiseCodes, "3");
+            //}
             ApplyToCompulsorySubjects(rptCompulsorySubjects, groupWiseCodes, "1");
             ApplyToCompulsorySubjects(rptCompulsorySubjects2, groupWiseCodes, "2");
             ApplyToElectiveSubjects(rptElectiveSubjects, groupWiseCodes, "3");
