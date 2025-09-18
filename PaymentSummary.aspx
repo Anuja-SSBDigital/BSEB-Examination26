@@ -42,137 +42,126 @@
     
 
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Exam Form Submission Summary</h4>
-                </div>
-
-                <!-- ✅ Card Body -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="faculty-header">
-                                <tr>
-                                    <th>Faculty / Exam Type</th>
-                                    <th>Fee Submitted</th>
-                                    <th>Form Submitted</th>
-                                    <th>Form Not Submitted</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Science -->
-                                <tr class="category-row">
-                                    <td colspan="4">Science</td>
-                                </tr>
-                                <tr>
-                                    <td>Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Ex Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Compartment</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Improvement</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Qualifying</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-
-                                <!-- Arts -->
-                                <tr class="category-row">
-                                    <td colspan="4">Arts</td>
-                                </tr>
-                                <tr>
-                                    <td>Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Ex Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Compartment</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Improvement</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Qualifying</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-
-                                <!-- Commerce -->
-                                <tr class="category-row">
-                                    <td colspan="4">Commerce</td>
-                                </tr>
-                                <tr>
-                                    <td>Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Ex Regular</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Compartment</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Improvement</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                                <tr>
-                                    <td>Qualifying</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+<div class="row">
+    <!-- Science Card -->
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Science - Exam Form Submission Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="faculty-header">
+                            <tr>
+                                <th>Faculty / Exam Type</th>
+                                <th>Fee Submitted</th>
+                                <th>Form Submitted</th>
+                                <th>Form Not Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Ex Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Compartment</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Improvement</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Qualifying</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <!-- Arts Card -->
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Arts - Exam Form Submission Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="faculty-header">
+                            <tr>
+                                <th>Faculty / Exam Type</th>
+                                <th>Fee Submitted</th>
+                                <th>Form Submitted</th>
+                                <th>Form Not Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Ex Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Compartment</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Improvement</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Qualifying</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commerce Card -->
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Commerce - Exam Form Submission Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="faculty-header">
+                            <tr>
+                                <th>Faculty / Exam Type</th>
+                                <th>Fee Submitted</th>
+                                <th>Form Submitted</th>
+                                <th>Form Not Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Ex Regular</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Compartment</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Improvement</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                            <tr>
+                                <td>Qualifying</td><td>--</td><td>--</td><td>--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </asp:Content>
 
