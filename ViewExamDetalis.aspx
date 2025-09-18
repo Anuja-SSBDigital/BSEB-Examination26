@@ -367,10 +367,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="label">Parent/Guardian No:</td>
+                                  <%--  <td class="label">Parent/Guardian No:</td>
                                     <td>
                                         <asp:Label ID="lblParentMobileNo" runat="server" />
-                                    </td>
+                                    </td>--%>
                                     <td class="label">Aadhar No:</td>
                                     <td>
                                         <asp:Label ID="lblAadharNo" runat="server" />
