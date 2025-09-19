@@ -75,7 +75,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                         newRow["MatricRollNumber"] = sourceRow["MatricRollNumber"];
                                         newRow["MatricPassingYear"] = sourceRow["MatricPassingYear"];
                                         newRow["Gender"] = sourceRow["Gender"];
-                                        newRow["CasteCategory"] = sourceRow["CasteCategory"];
+                                        newRow["CasteCategory"] = sourceRow["CasteCategoryCode"];
                                         newRow["Nationality"] = sourceRow["Nationality"];
                                         newRow["Religion"] = sourceRow["Religion"];
                                         newRow["AadharNumber"] = sourceRow["AadharNumber"];
@@ -421,22 +421,31 @@ public partial class ExaminationForm : System.Web.UI.Page
             return "";
 
         DateTime dob;
-        string dobString = dobValue.ToString();
+        string dobString = dobValue.ToString().Trim();
 
-        // Try parsing again with DateTime.TryParseExact, in case it's a different format
-        if (DateTime.TryParseExact(dobString, new string[] { "yyyy-MM-dd", "dd/MM/yyyy" },
-                                   CultureInfo.InvariantCulture, DateTimeStyles.None, out dob))
+        // Support multiple formats including dd-MM-yyyy
+        string[] formats = { "yyyy-MM-dd", "dd/MM/yyyy", "dd-MM-yyyy" };
+
+        if (DateTime.TryParseExact(dobString, formats,
+                                   CultureInfo.InvariantCulture,
+                                   DateTimeStyles.None,
+                                   out dob))
         {
-            string dobStr = dob.ToString("ddMMyyyy");  // Convert to ddMMyyyy format
+            // Convert to ddMMyyyy format (only digits)
+            string dobStr = dob.ToString("ddMMyyyy");
             if (index >= 0 && index < dobStr.Length)
             {
-                log.Info("DOB is here " + dobStr);
                 return dobStr[index].ToString();
             }
         }
         else
         {
-            log.Warn("Invalid DOB format: " + dobString);
+            // Last resort – just strip non-digits from the string
+            string onlyDigits = System.Text.RegularExpressions.Regex.Replace(dobString, @"\D", "");
+            if (onlyDigits.Length >= 8 && index >= 0 && index < onlyDigits.Length)
+            {
+                return onlyDigits[index].ToString();
+            }
         }
 
         return "";
@@ -639,7 +648,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                 {
                     var Parts = StuIds.Split('|');
                     // int id; // This variable is declared but never used. Can be removed or used if needed.
-                    if (Parts.Length == 3)
+                    if (Parts.Length == 5)
                     {
                         int studentId;
                         if (int.TryParse(Parts[0], out studentId))
