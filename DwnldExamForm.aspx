@@ -370,15 +370,19 @@
             var rows = document.querySelectorAll("#dataTable tbody tr");
 
             rows.forEach(function (row) {
-                var studentName = row.cells[1].textContent.toLowerCase();
-                var fatherName = row.cells[2].textContent.toLowerCase();
-                var motherName = row.cells[3].textContent.toLowerCase();
-                var dob = row.cells[4].textContent.toLowerCase();
+                var Registration = row.cells[2].textContent.toLowerCase();
+                var studentName = row.cells[3].textContent.toLowerCase();
+                var fatherName = row.cells[4].textContent.toLowerCase();
+                var motherName = row.cells[5].textContent.toLowerCase();
+                var dob = row.cells[6].textContent.toLowerCase();
+                var FormDownloaded = row.cells[7].textContent.toLowerCase();
 
-                var match = studentName.includes(searchText) ||
+                var match = Registration.includes(searchText) ||
+               studentName.includes(searchText) ||
                     fatherName.includes(searchText) ||
                     motherName.includes(searchText) ||
-                    dob.includes(searchText);
+                    dob.includes(searchText) ||
+                    FormDownloaded.includes(searchText);
 
                 row.dataset.visible = match ? "true" : "false";
             });
