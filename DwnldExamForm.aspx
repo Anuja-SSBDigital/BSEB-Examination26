@@ -148,6 +148,7 @@
                     </div>
 
                     <div class="text-right mt-3">
+                        <asp:Button ID="btnDownlaodCSV" runat="server" Text="Download CSV" CssClass="btn btn-primary" OnClick="btn_GenerateCSV_Click" Visible="false" />
                         <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click" Visible="false" />
                     </div>
 
@@ -196,13 +197,21 @@
 
                                                 <td class="repeater-col"><%# Container.ItemIndex + 1 %></td>
                                                 <td class="repeater-col">
-                                                    <%# Eval("RegistrationNo") %>
+
+                                                    <asp:Label ID="lblRegistrationNo" runat="server" Text='<%# Eval("RegistrationNo") %>' />
 
                                                     <%-- Added here --%>
                                                 </td>
-                                                <td class="repeater-col"><%# Eval("StudentName") %></td>
-                                                <td class="repeater-col"><%# Eval("FatherName") %></td>
-                                                <td class="repeater-col"><%# Eval("MotherName") %></td>
+                                                <td class="repeater-col">
+                                                    <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("StudentName") %>' />
+                                                </td>
+                                                <td class="repeater-col">
+                                                    <asp:Label ID="lblFatherName" runat="server" Text='<%# Eval("FatherName") %>' />
+                                                </td>
+                                                <td class="repeater-col">
+                                                    <asp:Label ID="lblMotherName" runat="server" Text='<%# Eval("MotherName") %>' />
+                                                </td>
+
                                                 <%--<td class="repeater-col">
                                  <%# Eval("Faculty") %>
                                  <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
@@ -210,10 +219,16 @@
                                  <%-- Added here </td>--%>
 
                                                 <asp:HiddenField ID="hfExamTypeId" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
                                                 <td class="repeater-col">
-                                                    <%# Eval("FormDownloaded").ToString() == "True" || Eval("FormDownloaded").ToString().ToUpper() == "YES" ? "YES" : "NO" %>
+                                                    <asp:Label ID="lblDob" runat="server"
+                                                        Text='<%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %>' />
                                                 </td>
+
+                                                <td class="repeater-col">
+                                                    <asp:Label ID="lblFormDownloaded" runat="server"
+                                                        Text='<%# (Eval("FormDownloaded").ToString() == "True" || Eval("FormDownloaded").ToString().ToUpper() == "YES") ? "YES" : "NO" %>' />
+                                                </td>
+
                                             </tr>
                                         </ItemTemplate>
                                     </asp:Repeater>
@@ -238,12 +253,12 @@
     <script type="text/javascript">
         function validateFaculty() {
             var collegeNameInput = document.getElementById('<%= txt_CollegeName.ClientID %>');
-          var collegeNameErrorSpan = document.getElementById('CollegeNameError');
+            var collegeNameErrorSpan = document.getElementById('CollegeNameError');
 
-          var facultyDropdown = document.getElementById('<%= ddlFaculty.ClientID %>');
-          var facultyErrorSpan = document.getElementById('facultyError');
+            var facultyDropdown = document.getElementById('<%= ddlFaculty.ClientID %>');
+            var facultyErrorSpan = document.getElementById('facultyError');
 
-          var catDropdown = document.getElementById('<%= ddl_category.ClientID %>');
+            var catDropdown = document.getElementById('<%= ddl_category.ClientID %>');
             var catErrorSpan = document.getElementById('ExamCatError');
 
             collegeNameErrorSpan.style.display = "none";
@@ -378,7 +393,7 @@
                 var FormDownloaded = row.cells[7].textContent.toLowerCase();
 
                 var match = Registration.includes(searchText) ||
-               studentName.includes(searchText) ||
+                    studentName.includes(searchText) ||
                     fatherName.includes(searchText) ||
                     motherName.includes(searchText) ||
                     dob.includes(searchText) ||

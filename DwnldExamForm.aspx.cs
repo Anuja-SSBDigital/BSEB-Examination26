@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -128,6 +130,7 @@ public partial class DwnldExamForm : System.Web.UI.Page
                 string examTypeName = result.Rows[0]["ExamTypeName"].ToString();
                 Session["CollegeCode"] = result.Rows[0]["CollegeCode"].ToString();
                 btnDownloadPDF.Visible = true;
+                btnDownlaodCSV.Visible = true;
                 lblCollege.Text = result.Rows[0]["College"].ToString();
                 SpSearchresult.Visible = true;
                 pnlPager.Visible = true;
@@ -148,6 +151,7 @@ public partial class DwnldExamForm : System.Web.UI.Page
                 pnlStudentTable.Visible = false;
                 pnlNoRecords.Visible = true;
                 btnDownloadPDF.Visible = false;
+                btnDownlaodCSV.Visible = false;
                 SpSearchresult.Visible = false;
                 pnlPager.Visible = false;
                 searchInputDIV.Visible = false;
@@ -173,6 +177,79 @@ public partial class DwnldExamForm : System.Web.UI.Page
         }
 
 
+    }
+
+    protected void btn_GenerateCSV_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            // 🔹 Rebind the Repeater to restore items before exporting
+            btnGetExamStudentData(null, null);
+
+            StringBuilder csvContent = new StringBuilder();
+
+            // Header Row
+            string[] headers = { "No.", "Registration No", "Student Name", "Father Name", "Mother Name", "DOB", "Form Downloaded" };
+            csvContent.AppendLine(string.Join(",", headers));
+
+            int rowIndex = 1;
+
+            foreach (RepeaterItem item in rptStudents.Items)
+            {
+                Label RegistrationNo = (Label)item.FindControl("lblRegistrationNo");
+                Label lblStudentName = (Label)item.FindControl("lblStudentName");
+                Label LabelFatherName = (Label)item.FindControl("lblFatherName");
+                Label LabelMotherName = (Label)item.FindControl("lblMotherName");
+                Label LabelDob = (Label)item.FindControl("lblDob"); 
+                Label LabelFormDownloaded = (Label)item.FindControl("lblFormDownloaded");
+
+                string[] row = {
+                rowIndex.ToString(),
+                EscapeCsv(RegistrationNo.Text),
+                EscapeCsv(lblStudentName.Text),
+                EscapeCsv(LabelFatherName.Text),
+                EscapeCsv(LabelMotherName.Text),
+                EscapeCsv(LabelDob.Text),
+                EscapeCsv(LabelFormDownloaded.Text)
+            };
+
+                csvContent.AppendLine(string.Join(",", row));
+                rowIndex++;
+            }
+
+            // Export CSV
+            byte[] csvBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csvContent.ToString())).ToArray();
+
+            Response.Clear();
+            Response.Buffer = true;
+            Response.ContentType = "text/csv";
+            Response.AddHeader("content-disposition", "attachment;filename=StudentExaminationlist.csv");
+            Response.OutputStream.Write(csvBytes, 0, csvBytes.Length);
+            Response.Flush();
+            Response.End();
+        }
+        catch (ThreadAbortException)
+        {
+            // Ignore. Response.End() throws this.
+        }
+        catch (Exception ex)
+        {
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error generating CSV: " + ex.Message.Replace("'", "\\'") + "');", true);
+        }
+    }
+
+    private string EscapeCsv(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return "";
+
+        input = input.Trim();
+
+        if (input.Contains(",") || input.Contains("\"") || input.Contains("\n") || input.Contains("\r"))
+        {
+            return "\"" + input.Replace("\"", "\"\"") + "\""; // Escape quotes
+        }
+
+        return input;
     }
 
     protected void btnDownloadPDF_Click(object sender, EventArgs e)
