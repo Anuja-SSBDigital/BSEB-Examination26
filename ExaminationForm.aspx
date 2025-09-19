@@ -663,7 +663,7 @@
                     <div class="lineheart_a">
                         <div class="page" id="page1">
                             <div class="form-header">
-                                <div class="board-title">BIHAR SCHOOL EXAMINATION BOARD, PATNA</div>
+                                <div class="board-title" style="font-size: x-large;">BIHAR SCHOOL EXAMINATION BOARD</div>
                                 <div class="exam-title"></div>
 
                                 <div class="faculty-box">
@@ -672,8 +672,8 @@
 
                                 </div>
                                 <div class="hindi-line">
-                                    <strong>Online Examination Application Form for Intermediate Annual Examination, 2026</strong>
-                                    <p>(Only for Regular & Private student's registered for Session-2024-26)</p>
+                                    <strong>Online Examination Application Form for Intermediate Annual Examination, 2026
+                                    <p>(Only for Regular & Private student's registered for Session-2024-26)</p></strong>
                                 </div>
 
                                 <div class="session-line">
@@ -683,9 +683,9 @@
 
                             <div class="notes">
 
-                                <p><strong>नोट:-</strong>(i) सूचीकरण हेतु आपके द्वारा दी गई सूचनाओं के आधार पर आपका सूचीकरण विवरण इस प्रपत्र के खण्ड 'A' (क्रमांक- 1 से 17) में अंकित है।</p>
+                                <p><strong>नोट:-(i) सूचीकरण हेतु आपके द्वारा दी गई सूचनाओं के आधार पर आपका सूचीकरण विवरण इस प्रपत्र के खण्ड 'A' (क्रमांक- 1 से 17) में अंकित है।</p>
                                 <p>(ii) खण्ड 'A' (क्रमांक- 1 से 17) के अंकित विवरणों में विद्यार्थी द्वारा किसी भी प्रकार का कोई छेड़-छाड़/परिवर्तन नहीं किया जाएगा। अर्थात् क्रमांक- 1 से 17 तक में विद्यार्थी द्वारा कुछ भी नहीं लिखा जाएगा।</p>
-                                <p>(iii) विद्यार्थी द्वारा इस आवेदन प्रपत्र में मात्र खण्ड 'B' के बिन्दुओं को ही भरा जाएगा।</p>
+                                <p>(iii) विद्यार्थी द्वारा इस आवेदन प्रपत्र में मात्र खण्ड 'B' के बिन्दुओं को ही भरा जाएगा।</p></strong>
                             </div>
 
                             <div class="section-header2">खण्ड – 'A'</div>
@@ -696,8 +696,8 @@
 
 
 
-                                <p><strong>नोट:-</strong>खण्ड 'A' (क्रमांक- 1 से 17) के अंकित विवरणों में विद्यार्थी द्वारा किसी भी प्रकार का कोई छेड़-छाड़/परिवर्तन नहीं किया जाएगा। अर्थात् क्रमांक- 1 से 17 तक में विद्यार्थी द्वारा कुछ भी नहीं लिखा जाएगा।</p>
-
+                                <p><strong>नोट:-खण्ड 'A' (क्रमांक- 1 से 17) के अंकित विवरणों में विद्यार्थी द्वारा किसी भी प्रकार का कोई छेड़-छाड़/परिवर्तन नहीं किया जाएगा। अर्थात् क्रमांक- 1 से 17 तक में विद्यार्थी द्वारा कुछ भी नहीं लिखा जाएगा।</p>
+                                </strong>
 
                                 <table>
 
@@ -714,7 +714,7 @@
                                         <td colspan="4"><%# Eval("UniqueNo") %></td>
                                     </tr>
                                     <tr>
-                                        <td class="no-border">3. Category</td>
+                                        <td class="no-border">3.Student Category</td>
                                         <td colspan="4"><%# Eval("CategoryName") %></td>
                                     </tr>
                                     <tr>
@@ -893,7 +893,7 @@
                                 <div class="section-header2">खण्ड - 'B'</div>
                                 <center>
                                     <p>
-                                        (विद्यार्थी द्वारा केवल खंड 'B' के बिंदुओं (क्रमांक 18 से 35 तक) को ही भरा जाएगा)
+                                        (विद्यार्थी द्वारा केवल खंड 'B' के बिंदुओं (क्रमांक 18 से 34 तक) को ही भरा जाएगा)
                                     </p>
                                 </center>
 
@@ -1033,7 +1033,7 @@
 
                                 <!-- Student’s Address -->
                                 <div class="input-row">
-                                    <label>27. Student’s Address</label>
+                                    <label>27. Student’s Address in English</label>
                                     <input type="text" class="form-input" value='<%--<%# Eval("StudentAddress") %>--%>' />
                                 </div>
                                 <div class="input-row">
