@@ -749,7 +749,7 @@
          debugger;
          const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
 
-        const regularPrivateFields = [
+      const regularPrivateFields = [
             '<%= txtMobile.ClientID %>',
             '<%= txtAdress.ClientID %>',
             '<%= txtEmail.ClientID %>',
@@ -799,17 +799,15 @@
          const hfAadharOption = document.getElementById('<%= hfAadharOption.ClientID %>');
 
          if (yesRadio && noRadio && hfAadharOption) {
-             if (aadharNumberField && aadharNumberField.value.trim() !== "") {
-                 yesRadio.checked = true;
-                 hfAadharOption.value = "Yes";
-             } else {
-                 noRadio.checked = true;
-                 hfAadharOption.value = "No";
-             }
+             // ✅ Always default to Yes, no matter what value is in txtAadharNumber
+             yesRadio.checked = true;
+             noRadio.checked = false;
+             hfAadharOption.value = "Yes";
 
-             // Correctly call the function on load to set initial state
+             // Show correct divs
              toggleAadharDivs();
 
+             // Handle changes
              yesRadio.addEventListener('change', function () {
                  hfAadharOption.value = "Yes";
                  toggleAadharDivs();
@@ -820,6 +818,29 @@
                  toggleAadharDivs();
              });
          }
+
+         //if (yesRadio && noRadio && hfAadharOption) {
+         //    if (aadharNumberField && aadharNumberField.value.trim() !== "") {
+         //        yesRadio.checked = true;
+         //        hfAadharOption.value = "Yes";
+         //    } else {
+         //        noRadio.checked = true;
+         //        hfAadharOption.value = "No";
+         //    }
+
+         //    // Correctly call the function on load to set initial state
+         //    toggleAadharDivs();
+
+         //    yesRadio.addEventListener('change', function () {
+         //        hfAadharOption.value = "Yes";
+         //        toggleAadharDivs();
+         //    });
+
+         //    noRadio.addEventListener('change', function () {
+         //        hfAadharOption.value = "No";
+         //        toggleAadharDivs();
+         //    });
+         //}
     };
 
     // Corrected toggleAadharDivs function
@@ -844,6 +865,7 @@
              document.getElementById('<%= hfAadharOption.ClientID %>').value = 'No';
          }
      }
+
 
      // Ensure the correct state on initial page load
      window.addEventListener('load', toggleAadharDivs);
