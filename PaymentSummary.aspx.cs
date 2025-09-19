@@ -159,29 +159,29 @@ public partial class PaymentSummary : System.Web.UI.Page
     }
     private void ResetCells()
     {
-        tdSciRegFee.InnerText = tdSciRegForm.InnerText = tdSciRegFormNot.InnerText = "--";
-        tdSciExFee.InnerText = tdSciExForm.InnerText = tdSciExFormNot.InnerText = "--";
-        tdSciCompFee.InnerText = tdSciCompForm.InnerText = tdSciCompFormNot.InnerText = "--";
-        tdSciImpFee.InnerText = tdSciImpForm.InnerText = tdSciImpFormNot.InnerText = "--";
-        tdSciQualFee.InnerText = tdSciQualForm.InnerText = tdSciQualFormNot.InnerText = "--";
+        tdSciRegFee.InnerText = tdSciRegForm.InnerText = tdSciRegFormNot.InnerText = "0";
+        tdSciExFee.InnerText = tdSciExForm.InnerText = tdSciExFormNot.InnerText = "0";
+        tdSciCompFee.InnerText = tdSciCompForm.InnerText = tdSciCompFormNot.InnerText = "0";
+        tdSciImpFee.InnerText = tdSciImpForm.InnerText = tdSciImpFormNot.InnerText = "0";
+        tdSciQualFee.InnerText = tdSciQualForm.InnerText = tdSciQualFormNot.InnerText = "0";
 
-        tdArtsRegFee.InnerText = tdArtsRegForm.InnerText = tdArtsRegFormNot.InnerText = "--";
-        tdArtsExFee.InnerText = tdArtsExForm.InnerText = tdArtsExFormNot.InnerText = "--";
-        tdArtsCompFee.InnerText = tdArtsCompForm.InnerText = tdArtsCompFormNot.InnerText = "--";
-        tdArtsImpFee.InnerText = tdArtsImpForm.InnerText = tdArtsImpFormNot.InnerText = "--";
-        tdArtsQualFee.InnerText = tdArtsQualForm.InnerText = tdArtsQualFormNot.InnerText = "--";
+        tdArtsRegFee.InnerText = tdArtsRegForm.InnerText = tdArtsRegFormNot.InnerText = "0";
+        tdArtsExFee.InnerText = tdArtsExForm.InnerText = tdArtsExFormNot.InnerText = "0";
+        tdArtsCompFee.InnerText = tdArtsCompForm.InnerText = tdArtsCompFormNot.InnerText = "0";
+        tdArtsImpFee.InnerText = tdArtsImpForm.InnerText = tdArtsImpFormNot.InnerText = "0";
+        tdArtsQualFee.InnerText = tdArtsQualForm.InnerText = tdArtsQualFormNot.InnerText = "0";
 
-        tdComRegFee.InnerText = tdComRegForm.InnerText = tdComRegFormNot.InnerText = "--";
-        tdComExFee.InnerText = tdComExForm.InnerText = tdComExFormNot.InnerText = "--";
-        tdComCompFee.InnerText = tdComCompForm.InnerText = tdComCompFormNot.InnerText = "--";
-        tdComImpFee.InnerText = tdComImpForm.InnerText = tdComImpFormNot.InnerText = "--";
-        tdComQualFee.InnerText = tdComQualForm.InnerText = tdComQualFormNot.InnerText = "--";
+        tdComRegFee.InnerText = tdComRegForm.InnerText = tdComRegFormNot.InnerText = "0";
+        tdComExFee.InnerText = tdComExForm.InnerText = tdComExFormNot.InnerText = "0";
+        tdComCompFee.InnerText = tdComCompForm.InnerText = tdComCompFormNot.InnerText = "0";
+        tdComImpFee.InnerText = tdComImpForm.InnerText = tdComImpFormNot.InnerText = "0";
+        tdComQualFee.InnerText = tdComQualForm.InnerText = tdComQualFormNot.InnerText = "0";
 
-        tdVocRegFee.InnerText = tdVocRegForm.InnerText = tdVocRegFormNot.InnerText = "--";
-        tdVocExFee.InnerText = tdVocExForm.InnerText = tdVocExFormNot.InnerText = "--";
-        tdVocCompFee.InnerText = tdVocCompForm.InnerText = tdVocCompFormNot.InnerText = "--";
-        tdVocImpFee.InnerText = tdVocImpForm.InnerText = tdVocImpFormNot.InnerText = "--";
-        tdVocQualFee.InnerText = tdVocQualForm.InnerText = tdVocQualFormNot.InnerText = "--";
+        tdVocRegFee.InnerText = tdVocRegForm.InnerText = tdVocRegFormNot.InnerText = "0";
+        tdVocExFee.InnerText = tdVocExForm.InnerText = tdVocExFormNot.InnerText = "0";
+        tdVocCompFee.InnerText = tdVocCompForm.InnerText = tdVocCompFormNot.InnerText = "0";
+        tdVocImpFee.InnerText = tdVocImpForm.InnerText = tdVocImpFormNot.InnerText = "0";
+        tdVocQualFee.InnerText = tdVocQualForm.InnerText = tdVocQualFormNot.InnerText = "0";
     }
     private void FillFacultyExamType(
      DataTable dt, string facultyName, string examKeyword,
@@ -209,9 +209,9 @@ public partial class PaymentSummary : System.Web.UI.Page
         }
         else
         {
-            feeCell.InnerText = "--";
-            formCell.InnerText = "--";
-            formNotCell.InnerText = "--";
+            feeCell.InnerText = "0";
+            formCell.InnerText = "0";
+            formNotCell.InnerText = "0";
         }
     }
 
