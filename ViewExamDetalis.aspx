@@ -509,19 +509,19 @@
                                 </thead>
                                 <tbody>
                                     <asp:Repeater ID="rptSubjects" runat="server">
-                                        <itemtemplate>
+                                        <ItemTemplate>
                                             <tr>
                                                 <td><%# Container.ItemIndex + 1 %></td>
                                                 <td><%# Eval("SubjectGroup") %></td>
                                                 <td><%# Eval("SubjectPaperCode") %></td>
                                                 <td><%# Eval("PaperType") == null || Eval("PaperType").ToString() == "" ? Eval("SubjectName") : Eval("SubjectName") + " (" + Eval("PaperType") + ")" %></td>
                                             </tr>
-                                        </itemtemplate>
+                                        </ItemTemplate>
                                     </asp:Repeater>
                                 </tbody>
                             </table>
 
-                            <div class="page-break"></div>
+                            <%--                            <div class="page-break"></div>--%>
                             <!-- Forces new PDF page -->
 
 
@@ -553,13 +553,22 @@
                                     <strong>Amount:</strong>
                                     <asp:Label ID="lblStuFees" runat="server" />
                                 </p>--%>
-                                <div class="form-check" style="display: ruby-text;">
+                                <div class="row" id="declarationContainer" runat="server">
+                                    <div class="form-group mb-0 col-12">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="remember" class="custom-control-input" id="declaration" runat="server">
+                                            <label class="custom-control-label font-18 font-bold text-danger" for="<%= declaration.ClientID %>">I hereby declare that the above information mentioned is Correct and best of my knowledge.</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--<div class="form-check">
                                     <h5 id="declarationContainer" runat="server">
-                                        <input class="form-check-input" type="checkbox" id="declaration" runat="server">
-                                        <label class="form-check-label text-danger" for="<%= declaration.ClientID %>">I hereby declare that the above information mentioned is Correct and best of my knowledge. </label>
+                                        <input class="form-check-input" type="checkbox" >
+                                        <label class="form-check-label text-danger" for="<%= declaration.ClientID %>"> </label>
                                     </h5>
 
-                                </div>
+                                </div>--%>
 
                                 <div class="col-md-12">
                                     <asp:HiddenField ID="hfCategoryType" runat="server" />
