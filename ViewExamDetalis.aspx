@@ -50,8 +50,8 @@
             page-break-before: always;
         }
 
-        input[type=checkbox]{
-        transform: scale(1.5);
+        input[type=checkbox] {
+            transform: scale(1.5);
         }
         /*  @media print {
     #btnPrint,
@@ -264,169 +264,237 @@
                         <div class="card-body">
 
                             <h4 class="text-center d-none" id="hidelble">Confirm Details</h4>
-                            <table class=" mb-3">
-                                <tr>
-                                    <td class="label">Student Name:</td>
-                                    <td>
+                            <style>
+                                .info-container {
+                                    width: 100%;
+                                    max-width: 900px;
+                                    margin: auto;
+                                    border: 1px solid #000;
+                                    padding: 10px 15px;
+                                    font-family: Arial, sans-serif;
+                                    font-size: 14px;
+                                }
+
+                                .info-section {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    margin-bottom: 6px;
+                                    border-bottom: 1px solid #ddd;
+                                    padding: 4px 0;
+                                }
+
+                                .info-label {
+                                    flex: 0 0 35%;
+                                    font-weight: bold;
+                                    color: #000;
+                                }
+
+                                .info-value {
+                                    flex: 0 0 65%;
+                                    color: #333;
+                                }
+                            </style>
+
+                            <div class="info-container">
+
+                                <div class="info-section">
+                                    <div class="info-label">Student Name:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblStudentName" runat="server" />
-                                    </td>
-                                    <%--<td class="label">Category:</td>
-                                     <td>
-                                         <asp:Label ID="Label1" runat="server" />
-                                     </td>--%>
-                                    <td class="label">Exam Type:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Exam Type:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblExamTypeName" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Father Name:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Father Name:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblFatherName" runat="server" />
-                                    </td>
-                                    <td class="label">Mother Name:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Mother Name:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblMotherName" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">+2 School/College Code&Name:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">+2 School/College Code & Name:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblCollege" runat="server" />
-                                    </td>
-                                    <td class="label">Date Of Birth:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Date of Birth:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblDOB" runat="server" />
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
 
-                                <tr>
-                                    <td class="label">Matric/Class X Board's Name:</td>
-                                    <td>
+                                <div class="info-section">
+                                    <div class="info-label">Matric/Class X Board's Name:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblMatricBoardName" runat="server" />
-                                    </td>
-                                    <td class="label">Matric/Class X Board's Roll Code:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Matric/Class X Board's Roll Code:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblRollCode" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Roll Number:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Roll Number:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblRollNumber" runat="server" />
-                                    </td>
-                                    <td class="label">Passing Year:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Passing Year:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblPassingYear" runat="server" />
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
 
-
-                                <tr>
-                                    <td class="label">Gender:</td>
-                                    <td>
+                                <div class="info-section">
+                                    <div class="info-label">Gender:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblGender" runat="server" />
-                                    </td>
-                                    <td class="label">Caste Category:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Caste Category:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblCaste" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Differently Abled:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Differently Abled:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblDifferentlyAbled" runat="server" />
-                                    </td>
-                                   
-                             
-                                    <td class="label">Nationality:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Nationality:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblNationality" runat="server" />
-                                    </td>
-                                   
-                                </tr>
-                                <tr>
-                                    <td class="label">Religion:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Religion:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblReligion" runat="server" />
-                                    </td>
-                                    <td class="label">Area:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Area:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblArea" runat="server" />
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
 
-                                <tr>
-                                    <td class="label">Mobile No of Student:</td>
-                                    <td>
+                                <div class="info-section">
+                                    <div class="info-label">Mobile No of Student:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblMobileNo" runat="server" />
-                                    </td>
-                                    <td class="label">Email ID:</td>
-                                    <td>
-                                        <asp:Label ID="lblEmailId" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                  <%--  <td class="label">Parent/Guardian No:</td>
-                                    <td>
-                                        <asp:Label ID="lblParentMobileNo" runat="server" />
-                                    </td>--%>
-                                    <td class="label">Aadhar No:</td>
-                                    <td>
-                                        <asp:Label ID="lblAadharNo" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Address:</td>
-                                    <td>
-                                        <asp:Label ID="lblAddress" runat="server" />
-                                    </td>
-                                    <td class="label">Pin Code:</td>
-                                    <td>
-                                        <asp:Label ID="lblPinCode" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                     <td class="label">Student Bank A/C No:</td>
-                                    <td>
-                                        <asp:Label ID="lblAccountNo" runat="server" />
-                                    </td>
-                                    <td class="label">Marital Status:</td>
-                                    <td>
-                                        <asp:Label ID="lblMaritalStatus" runat="server" />
-                                    </td>
-                                   
-                                </tr>
-                                <tr>
-                                    <td class="label">Bank & Branch Name:</td>
-                                    <td>
-                                        <asp:Label ID="lblBankBranch" runat="server" />
-                                    </td>
-                                    <td class="label">IFSC Code:</td>
-                                    <td>
-                                        <asp:Label ID="lblIFSC" runat="server" />
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
 
-                                <tr>
-                                    <td class="label">Two Identification (i):</td>
-                                    <td>
+                                <div class="info-section">
+                                    <div class="info-label">Email ID:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblEmailId" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Aadhar No:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblAadharNo" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Address:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblAddress" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Pin Code:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblPinCode" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Student Bank A/C No:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblAccountNo" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Marital Status:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblMaritalStatus" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Bank & Branch Name:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblBankBranch" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">IFSC Code:</div>
+                                    <div class="info-value">
+                                        <asp:Label ID="lblIFSC" runat="server" />
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Two Identification (i):</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblIdent1" runat="server" />
-                                    </td>
-                                    <td class="label">(ii):</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Identification (ii):</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblIdent2" runat="server" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label">Exam Medium:</td>
-                                    <td>
+                                    </div>
+                                </div>
+
+                                <div class="info-section">
+                                    <div class="info-label">Exam Medium:</div>
+                                    <div class="info-value">
                                         <asp:Label ID="lblMedium" runat="server" />
-                                    </td>
-                                    <%--<td class="label">Aapar Id:</td>
-                                    <td><asp:Label ID="lbl_aparid" runat="server" /></td>--%>
-                                </tr>
-                            </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
 
 
 
@@ -435,20 +503,20 @@
                                     <tr>
                                         <th>S.No.</th>
                                         <th>Subject Group</th>
-                                          <th>Subject Code</th>
+                                        <th>Subject Code</th>
                                         <th>Subject Name</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <asp:Repeater ID="rptSubjects" runat="server">
-                                        <ItemTemplate>
+                                        <itemtemplate>
                                             <tr>
                                                 <td><%# Container.ItemIndex + 1 %></td>
                                                 <td><%# Eval("SubjectGroup") %></td>
-                                                 <td><%# Eval("SubjectPaperCode") %></td>
-                                        <td><%# Eval("PaperType") == null || Eval("PaperType").ToString() == "" ? Eval("SubjectName") : Eval("SubjectName") + " (" + Eval("PaperType") + ")" %></td>
+                                                <td><%# Eval("SubjectPaperCode") %></td>
+                                                <td><%# Eval("PaperType") == null || Eval("PaperType").ToString() == "" ? Eval("SubjectName") : Eval("SubjectName") + " (" + Eval("PaperType") + ")" %></td>
                                             </tr>
-                                        </ItemTemplate>
+                                        </itemtemplate>
                                     </asp:Repeater>
                                 </tbody>
                             </table>
@@ -481,7 +549,7 @@
                             </div>
 
                             <div class="mt-4 text-center" id="hideThisDiv">
-                               <%-- <p>
+                                <%-- <p>
                                     <strong>Amount:</strong>
                                     <asp:Label ID="lblStuFees" runat="server" />
                                 </p>--%>
@@ -506,51 +574,51 @@
 
             </div>
         </div>
-        </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-        <script>
-            function downloadPDF() {
-                // Hide/show elements
-                document.getElementById('hideThisDiv').style.display = 'none';
-                document.getElementById('hidelble').classList.remove('d-none');
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadPDF() {
+            // Hide/show elements
+            document.getElementById('hideThisDiv').style.display = 'none';
+            document.getElementById('hidelble').classList.remove('d-none');
 
-                const element = document.getElementById("printableDiv");
+            const element = document.getElementById("printableDiv");
 
 
 
-                // Generate PDF
-                html2pdf().set({
-                    margin: 8,
-                    filename: 'ConfirmDetails.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                }).from(element).save().then(() => {
-                    // Restore UI
-                    document.getElementById('hideThisDiv').style.display = 'block';
-                    document.getElementById('hidelble').classList.add('d-none');
+            // Generate PDF
+            html2pdf().set({
+                margin: 8,
+                filename: 'ConfirmDetails.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).from(element).save().then(() => {
+                // Restore UI
+                document.getElementById('hideThisDiv').style.display = 'block';
+                document.getElementById('hidelble').classList.add('d-none');
+            });
+        }
+
+    </script>
+
+    <script>
+
+        function validateRegViewDetails() {
+            debugger
+            var declarationCheckbox = document.getElementById('<%= declaration.ClientID %>');
+
+            if (!declarationCheckbox.checked) {
+                sweetAlert({
+                    title: "Declaration Required",
+                    text: "Please agree to the declaration by checking the box to proceed.",
+                    type: "warning",
+                    confirmButtonText: "OK",
+                    allowOutsideClick: true
                 });
+                return false;
             }
+        }
 
-        </script>
-
-        <script>
-
-            function validateRegViewDetails() {
-                debugger
-                var declarationCheckbox = document.getElementById('<%= declaration.ClientID %>');
-
-                if (!declarationCheckbox.checked) {
-                    sweetAlert({
-                        title: "Declaration Required",
-                        text: "Please agree to the declaration by checking the box to proceed.",
-                        type: "warning",
-                        confirmButtonText: "OK",
-                        allowOutsideClick: true
-                    });
-                    return false;
-                }
-            }
-
-        </script>
+    </script>
 </asp:Content>
