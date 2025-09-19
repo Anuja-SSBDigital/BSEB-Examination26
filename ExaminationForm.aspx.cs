@@ -58,8 +58,8 @@ public partial class ExaminationForm : System.Web.UI.Page
                                     foreach (DataRow sourceRow in dt.Rows)
                                     {
                                         DataRow newRow = mergedTable.NewRow();
-                                        newRow["StudentPhotoPath"] = sourceRow["StudentPhotoPath"];
-                                        newRow["StudentSignaturePath"] = sourceRow["StudentSignaturePath"];
+                                        //newRow["StudentPhotoPath"] = sourceRow["StudentPhotoPath"];
+                                        //newRow["StudentSignaturePath"] = sourceRow["StudentSignaturePath"];
                                         newRow["FacultyName"] = sourceRow["FacultyName"];
                                         newRow["OFSSCAFNo"] = sourceRow["OFSSCAFNo"];
                                         newRow["CategoryName"] = sourceRow["CategoryName"];
@@ -94,6 +94,8 @@ public partial class ExaminationForm : System.Web.UI.Page
                                         newRow["RegistrationNo"] = sourceRow["RegistrationNo"];
                                         newRow["UniqueNo"] = sourceRow["UniqueNo"];
 
+                                        newRow["StudentPhotoPath"] = "~/Uploads/StudentsReg/Photos/" + sourceRow["StudentPhotoPath"].ToString();
+                                        newRow["StudentSignaturePath"] = "~/Uploads/StudentsReg/Signatures/" + sourceRow["StudentSignaturePath"].ToString();
 
                                         object isDifferently = sourceRow["DifferentlyAbled"];
 
