@@ -634,8 +634,7 @@
             border: none;
             width: 100%;
         }
-
-        }
+     
     </style>
     <style type="text/css" media="print">
         #btnPrint {
@@ -1126,31 +1125,30 @@
                                             (Select any one subject, which is not selected under Compulsory Subject Group-1)</th>
                                     </tr>
                                     <asp:Repeater ID="rptCompulsorySubjectsCombined" runat="server">
-                                    <ItemTemplate>
-                                        <tr>
-                                            <td>
-                                                <%# Eval("Group1SubjectName") %>
-                                            </td>
-                                            <td>
-                                                <%# Eval("Group1SubjectCode") %>  <%-- ✅ New Code column --%>
-                                            </td>
-                                            <td style="border-right: 1px solid black">
-                                                <%# Eval("Group1CheckboxHtml") %>
-                                            </td>
+                                         <ItemTemplate>
+                                                   <tr>
+                                                       <td>
+                                                           <%# Eval("Group1SubjectName") %>
+                                                       </td>
+                                                       <td>
+                                                           <%# Eval("Group1SubjectCode") %>  <%-- ✅ New Code column --%>
+                                                       </td>
+                                                       <td style="border-right: 1px solid black">
+                                                           <%# Eval("Group1CheckboxHtml") %>
+                                                       </td>
 
-                                            <td>
-                                                <%# Eval("Group2SubjectName") %>
-                                            </td>
-                                            <td>
-                                                <%# Eval("Group2SubjectCode") %>  <%-- ✅ New Code column --%>
-                                            </td>
-                                            <td style="border-right: 1px solid black">
-                                                <%# Eval("Group2CheckboxHtml") %>
-                                            </td>
-                                        </tr>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-
+                                                       <td>
+                                                           <%# Eval("Group2SubjectName") %>
+                                                       </td>
+                                                       <td>
+                                                           <%# Eval("Group2SubjectCode") %>  <%-- ✅ New Code column --%>
+                                                       </td>
+                                                       <td style="border-right: 1px solid black">
+                                                           <%# Eval("Group2CheckboxHtml") %>
+                                                       </td>
+                                                   </tr>
+                                               </ItemTemplate>
+                                           </asp:Repeater>
                                 </table>
                                 <div class="boxinside">
                                     <div class="section-title" style="text-align: center;">
