@@ -52,7 +52,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                 // Replaced interpolated string with string.Format
                                 log.Info(string.Format("Fetching data for StudentID: {0}, College: {1}, Faculty: {2}, ExamTypeId:{3}", studentId, CollegeId, FacultyId, ExamTypeId));
                                 DataTable dt = dl.GetDwnldExaminationFormData(Convert.ToInt32(studentId), Convert.ToInt32(CollegeId), Convert.ToInt32(FacultyId), Convert.ToInt32(ExamTypeId));
-                                Session["StudentId"] = studentId;
+                                //Session["StudentId"] = studentId;
                                 if (dt != null && dt.Rows.Count > 0)
                                 {
                                     foreach (DataRow sourceRow in dt.Rows)
@@ -60,6 +60,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                         DataRow newRow = mergedTable.NewRow();
                                         //newRow["StudentPhotoPath"] = sourceRow["StudentPhotoPath"];
                                         //newRow["StudentSignaturePath"] = sourceRow["StudentSignaturePath"];
+                                        //newRow["StudentId"] = studentId;
                                         newRow["FacultyName"] = sourceRow["FacultyName"];
                                         newRow["OFSSCAFNo"] = sourceRow["OFSSCAFNo"];
                                         newRow["CategoryName"] = sourceRow["CategoryName"];
@@ -108,6 +109,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                                             newRow["DifferentlyAbled"] = "No";
                                         }
                                         newRow["FacultyId"] = FacultyId;
+                                        newRow["StudentId"] = studentId;
                                         mergedTable.Rows.Add(newRow);
                                     }
                                 }
@@ -177,6 +179,7 @@ public partial class ExaminationForm : System.Web.UI.Page
         dt.Columns.Add("MediumName");
         dt.Columns.Add("FacultyId");
         dt.Columns.Add("UniqueNo");
+        dt.Columns.Add("StudentId");
         return dt;
     }
 
@@ -186,20 +189,38 @@ public partial class ExaminationForm : System.Web.UI.Page
 
         try
         {
-            if (Session["CollegeName"].ToString() == "Admin")
+            string collegeName = Session["CollegeName"] as string;
+            string collegeCode = Session["CollegeCode"] as string;
+            string sessionCollegeId = Session["CollegeId"] as string;
+            if (!string.IsNullOrEmpty(collegeName) && collegeName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
             {
-                string collegeCode = Session["CollegeCode"].ToString();
-                DataTable dtres = dl.getcollegeidbasedonCollegecode(collegeCode);
-
-                if (dtres.Rows.Count > 0)
+                if (!string.IsNullOrEmpty(collegeCode))
                 {
-                    CollegeId = dtres.Rows[0]["Pk_CollegeId"].ToString();
+                    DataTable dtres = dl.getcollegeidbasedonCollegecode(collegeCode);
+                    if (dtres.Rows.Count > 0)
+                    {
+                        CollegeId = dtres.Rows[0]["Pk_CollegeId"].ToString();
+                    }
                 }
             }
-            else
+            else if (!string.IsNullOrEmpty(sessionCollegeId))
             {
-                CollegeId = Session["CollegeId"].ToString();
+                CollegeId = sessionCollegeId;
             }
+            //if (Session["CollegeName"].ToString() == "Admin")
+            //{
+            //    string collegeCode = Session["CollegeCode"].ToString();
+            //    DataTable dtres = dl.getcollegeidbasedonCollegecode(collegeCode);
+
+            //    if (dtres.Rows.Count > 0)
+            //    {
+            //        CollegeId = dtres.Rows[0]["Pk_CollegeId"].ToString();
+            //    }
+            //}
+            //else
+            //{
+            //    CollegeId = Session["CollegeId"].ToString();
+            //}
 
             DataTable allSubjects = dl.GetSubjectsByGroup(FacultyId, CollegeId);
 
@@ -215,20 +236,14 @@ public partial class ExaminationForm : System.Web.UI.Page
                     return appliedCode == subjectCode && appliedComGrp == comGrp;
                 });
             };
-
-            var allCompulsorySubjects = allSubjects.AsEnumerable()
-      .Where(r => r["GroupName"].ToString() == "Compulsory")
-      .OrderBy(r => r["SubjectPaperCode"].ToString())
-      .ToList();
+     
+            var allCompulsorySubjects = allSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Compulsory").OrderBy(r => r["SubjectPaperCode"].ToString()).ToList();
 
             // Group 1: Only English & Hindi
-            var group1Subjects = allCompulsorySubjects
-                .Where(r => r["SubjectPaperName"].ToString().Trim().Equals("Hindi", StringComparison.OrdinalIgnoreCase)
-                         || r["SubjectPaperName"].ToString().Trim().Equals("English", StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            var group1Subjects = allCompulsorySubjects.Where(r => r["SubjectPaperName"].ToString().Trim().Equals("Hindi", StringComparison.OrdinalIgnoreCase)|| r["SubjectPaperName"].ToString().Trim().Equals("English", StringComparison.OrdinalIgnoreCase)).ToList();
 
             // Group 2: Include all subjects (including English & Hindi again)
-            var group2Subjects = allCompulsorySubjects;  // No filtering
+            var group2Subjects = allCompulsorySubjects;  // No filteringmo
 
             var combined = new List<CombinedSubject>();
             int maxRows = Math.Max(group1Subjects.Count, group2Subjects.Count);
@@ -242,7 +257,10 @@ public partial class ExaminationForm : System.Web.UI.Page
                     cs.Group1SubjectName = group1Subjects[i]["SubjectPaperName"].ToString();
                     cs.Group1SubjectCode = code1;
                     cs.Group1CheckboxHtml = "<input type='checkbox' name='compgrp1' value='" + code1 + "' "
-                        + (isApplied(code1, 1) ? "checked='checked'" : "") + " />";
+                     + (isApplied(code1, 1) ? "checked='checked'" : "") + " />";
+
+
+
                 }
 
                 if (i < group2Subjects.Count)
@@ -251,7 +269,8 @@ public partial class ExaminationForm : System.Web.UI.Page
                     cs.Group2SubjectName = group2Subjects[i]["SubjectPaperName"].ToString();
                     cs.Group2SubjectCode = code2;
                     cs.Group2CheckboxHtml = "<input type='checkbox' name='compgrp2' value='" + code2 + "' "
-                        + (isApplied(code2, 2) ? "checked='checked'" : "") + " />";
+                     + (isApplied(code2, 2) ? "checked='checked'" : "") + " />";
+
                 }
 
                 combined.Add(cs);
@@ -260,92 +279,104 @@ public partial class ExaminationForm : System.Web.UI.Page
 
 
 
-            // Elective Subjects
-            var electives = allSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Elective").ToList();
-            DataTable dtElective = new DataTable();
-            dtElective.Columns.Add("Name1"); dtElective.Columns.Add("Code1"); dtElective.Columns.Add("Checkbox1Html");
-            dtElective.Columns.Add("Name2"); dtElective.Columns.Add("Code2"); dtElective.Columns.Add("Checkbox2Html");
+         
 
-            for (int i = 0; i < electives.Count; i += 2)
+            if (FacultyId =="4")
             {
-                DataRow dr = dtElective.NewRow();
-                string code1 = electives[i]["SubjectPaperCode"].ToString();
-                dr["Name1"] = electives[i]["SubjectPaperName"];
-                dr["Code1"] = code1;
-                dr["Checkbox1Html"] = code1 + " <input type='checkbox' name='elective' value='" + code1 + "' "
-     + (isApplied(code1, 3) ? "checked='checked'" : "") + " />";
-
-
-                if (i + 1 < electives.Count)
-                {
-                    string code2 = electives[i + 1]["SubjectPaperCode"].ToString();
-                    dr["Name2"] = electives[i + 1]["SubjectPaperName"];
-                    dr["Code2"] = code2;
-                    dr["Checkbox2Html"] = code2 + " <input type='checkbox' name='elective' value='" + code2 + "' "
-        + (isApplied(code2, 3) ? "checked='checked'" : "") + " />";
-
-                }
-                dtElective.Rows.Add(dr);
-            }
-            subjectData.ElectiveSubjects = dtElective;
-
-            var vocElectives = allSubjects.AsEnumerable()
+                var vocElectives = allSubjects.AsEnumerable()
                  .Where(r => r["GroupName"].ToString().Equals("Elective", StringComparison.OrdinalIgnoreCase))
                  .ToList();
 
-            // Group and merge codes for duplicate SubjectPaperName
-            var grouped = vocElectives
-                .GroupBy(r => r["SubjectPaperName"].ToString())
-                .Select(g => new
+                //  Group and merge codes for duplicate SubjectPaperName
+
+                var grouped = vocElectives
+                    .GroupBy(r => r["SubjectPaperName"].ToString())
+                    .Select(g => new
+                    {
+                        SubjectName = g.Key,
+                        Code1 = string.Join(",", g.Select(r => r["SubjectPaperCode"].ToString()).Distinct()),
+                        Code2 = string.Join(",", g.Select(r => r.Table.Columns.Contains("SecondCode")
+                             ? r["SecondCode"].ToString() : "")
+                             .Where(c => !string.IsNullOrEmpty(c)).Distinct())
+                    })
+                    .ToList();
+
+                // Create DataTable for Repeater
+                DataTable dtVocElective = new DataTable();
+                dtVocElective.Columns.Add("Name1");
+                dtVocElective.Columns.Add("Code1");
+                dtVocElective.Columns.Add("Checkbox1Html");
+                dtVocElective.Columns.Add("Name2");
+                dtVocElective.Columns.Add("Code2");
+                dtVocElective.Columns.Add("Checkbox2Html");
+
+                for (int i = 0; i < grouped.Count; i += 2)
                 {
-                    SubjectName = g.Key,
-                    Code1 = string.Join(",", g.Select(r => r["SubjectPaperCode"].ToString()).Distinct()),
-                    Code2 = string.Join(",", g.Select(r => r.Table.Columns.Contains("SecondCode")
-                         ? r["SecondCode"].ToString() : "")
-                         .Where(c => !string.IsNullOrEmpty(c)).Distinct())
-                })
-                .ToList();
+                    DataRow dr = dtVocElective.NewRow();
 
-            // Create DataTable for Repeater
-            DataTable dtVocElective = new DataTable();
-            dtVocElective.Columns.Add("Name1");
-            dtVocElective.Columns.Add("Code1");
-            dtVocElective.Columns.Add("Checkbox1Html");
-            dtVocElective.Columns.Add("Name2");
-            dtVocElective.Columns.Add("Code2");
-            dtVocElective.Columns.Add("Checkbox2Html");
+                    // Column 1
+                    string code1 = grouped[i].Code1.Split(',').First(); // Get first code for checkbox value
+                    dr["Name1"] = grouped[i].SubjectName;
+                    dr["Code1"] = string.IsNullOrEmpty(grouped[i].Code2)
+                        ? grouped[i].Code1
+                        : string.Format("{0}, {1}", grouped[i].Code1, grouped[i].Code2);
+                    dr["Checkbox1Html"] = "<input type='checkbox' name='chkElective' value='"
+                        // + code1 + "' " + (isApplied(code1, 0) ? "checked='checked'" : "") + " />";
+                        + code1 + "' " + (isApplied(code1, 3) ? "checked='checked'" : "") + " />";
 
-            for (int i = 0; i < grouped.Count; i += 2)
-            {
-                DataRow dr = dtVocElective.NewRow();
+                    // Column 2 (if available)
+                    if (i + 1 < grouped.Count)
+                    {
+                        string code2 = grouped[i + 1].Code1.Split(',').First(); // Get first code for checkbox value
+                        dr["Name2"] = grouped[i + 1].SubjectName;
+                        dr["Code2"] = string.IsNullOrEmpty(grouped[i + 1].Code2)
+                            ? grouped[i + 1].Code1
+                            : string.Format("{0}, {1}", grouped[i + 1].Code1, grouped[i + 1].Code2);
+                        dr["Checkbox2Html"] = "<input type='checkbox' name='chkElective' value='"
+                            //     + code2 + "' " + (isApplied(code2, 0) ? "checked='checked'" : "") + " />";
+                            + code2 + "' " + (isApplied(code2, 3) ? "checked='checked'" : "") + " />";
+                    }
 
-                // Column 1
-                string code1 = grouped[i].Code1.Split(',').First(); // Get first code for checkbox value
-                dr["Name1"] = grouped[i].SubjectName;
-                dr["Code1"] = string.IsNullOrEmpty(grouped[i].Code2)
-                    ? grouped[i].Code1
-                    : string.Format("{0}, {1}", grouped[i].Code1, grouped[i].Code2);
-                dr["Checkbox1Html"] = "<input type='checkbox' name='chkElective' value='"
-                    + code1 + "' " + (isApplied(code1, 3) ? "checked='checked'" : "") + " />";
-
-                // Column 2 (if available)
-                if (i + 1 < grouped.Count)
-                {
-                    string code2 = grouped[i + 1].Code1.Split(',').First(); // Get first code for checkbox value
-                    dr["Name2"] = grouped[i + 1].SubjectName;
-                    dr["Code2"] = string.IsNullOrEmpty(grouped[i + 1].Code2)
-                        ? grouped[i + 1].Code1
-                        : string.Format("{0}, {1}", grouped[i + 1].Code1, grouped[i + 1].Code2);
-                    dr["Checkbox2Html"] = "<input type='checkbox' name='chkElective' value='"
-                        + code2 + "' " + (isApplied(code2, 3) ? "checked='checked'" : "") + " />";
+                    dtVocElective.Rows.Add(dr);
                 }
-
-                dtVocElective.Rows.Add(dr);
+                subjectData.VocationalElectiveSubjects = dtVocElective;
             }
-            subjectData.VocationalElectiveSubjects = dtVocElective;
+            else
+            {
+                // Elective Subjects
+                var electives = allSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Elective").ToList();
+                DataTable dtElective = new DataTable();
+                dtElective.Columns.Add("Name1"); dtElective.Columns.Add("Code1"); dtElective.Columns.Add("Checkbox1Html");
+                dtElective.Columns.Add("Name2"); dtElective.Columns.Add("Code2"); dtElective.Columns.Add("Checkbox2Html");
 
-            // Additional Subjects
-            var additionals = allSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Additional").ToList();
+                for (int i = 0; i < electives.Count; i += 2)
+                {
+                    DataRow dr = dtElective.NewRow();
+                    string code1 = electives[i]["SubjectPaperCode"].ToString();
+                    dr["Name1"] = electives[i]["SubjectPaperName"];
+                    dr["Code1"] = code1;
+                    dr["Checkbox1Html"] = code1 + " <input type='checkbox' name='elective' value='" + code1 + "' "
+         // + (isApplied(code1, 0) ? "checked='checked'" : "") + " />";
+         + (isApplied(code1, 3) ? "checked='checked'" : "") + " />";
+
+
+                    if (i + 1 < electives.Count)
+                    {
+                        string code2 = electives[i + 1]["SubjectPaperCode"].ToString();
+                        dr["Name2"] = electives[i + 1]["SubjectPaperName"];
+                        dr["Code2"] = code2;
+                        dr["Checkbox2Html"] = code2 + " <input type='checkbox' name='elective' value='" + code2 + "' "
+            //   + (isApplied(code2, 0) ? "checked='checked'" : "") + " />";
+            + (isApplied(code2, 3) ? "checked='checked'" : "") + " />";
+
+                    }
+                    dtElective.Rows.Add(dr);
+                }
+                subjectData.ElectiveSubjects = dtElective;
+            }
+
+                // Additional Subjects
+                var additionals = allSubjects.AsEnumerable().Where(r => r["GroupName"].ToString() == "Additional").ToList();
             DataTable dtAdditional = new DataTable();
             dtAdditional.Columns.Add("Name1"); dtAdditional.Columns.Add("Code1"); dtAdditional.Columns.Add("Checkbox1Html");
             dtAdditional.Columns.Add("Name2"); dtAdditional.Columns.Add("Code2"); dtAdditional.Columns.Add("Checkbox2Html");
@@ -360,6 +391,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                     dr["Name" + (j + 1)] = additionals[i + j]["SubjectPaperName"];
                     dr["Code" + (j + 1)] = code;
                     dr["Checkbox" + (j + 1) + "Html"] = code + " <input type='checkbox' name='addl' value='" + code + "' "
+    // + (isApplied(code, 0) ? "checked='checked'" : "") + " />";
      + (isApplied(code, 4) ? "checked='checked'" : "") + " />";
 
 
@@ -395,6 +427,7 @@ public partial class ExaminationForm : System.Web.UI.Page
                     string displayCode = code.Replace("(", "").Replace(")", ""); // This removes brackets
 
                     newVocationalRow["CheckboxHtml"] = "<input type='checkbox' name='vocational' value='" + displayCode + "' "
+                     //   + (isApplied(code, 0) ? "checked='checked'" : "") + " />";
                         + (isApplied(code, 5) ? "checked='checked'" : "") + " />";
 
                     vocationalDt.Rows.Add(newVocationalRow);
@@ -504,9 +537,10 @@ public partial class ExaminationForm : System.Web.UI.Page
                 //    studentIdStr = drv["StudentId"].ToString();
                 //}
                 DataRowView drv1 = (DataRowView)e.Item.DataItem;
+                string studentId = drv["StudentId"].ToString();
                 string facultyId = drv["FacultyId"] != null ? drv1["FacultyId"].ToString() : "";
                 string collegeId = Session["CollegeId"] != null ? Session["CollegeId"].ToString() : "";
-                string StudentId = Session["StudentId"] != null ? Session["StudentId"].ToString() : "";
+                //string StudentId = drv["StudentId"].ToString();
 
                 Image imgPhoto = (Image)e.Item.FindControl("imgPhoto");
                 Image imgSign = (Image)e.Item.FindControl("imgSign");
@@ -519,30 +553,10 @@ public partial class ExaminationForm : System.Web.UI.Page
                     imgSign.ImageUrl = ResolveUrl(signaturePath);
                 }
 
-                //string facultyId = string.Empty;
-                //if (drv["FacultyId"] != DBNull.Value)
-                //{
-                //    facultyId = drv["FacultyId"].ToString();
-                //}
-
-                //string collegeId = string.Empty;
-                //if (drv["CollegeId"] != DBNull.Value)
-                //{
-                //    collegeId = drv["CollegeId"].ToString();
-                //}
-                //else if (Session["CollegeId"] != null)
-                //{
-                //    collegeId = Session["CollegeId"].ToString();
-                //}
-
-                //if (string.IsNullOrEmpty(facultyId) || string.IsNullOrEmpty(collegeId))
-                //{
-                //    System.Diagnostics.Debug.WriteLine("Missing FacultyId or CollegeId for student in rptStudents_ItemDataBound.");
-                //    return;
-                //}
+              
 
 
-                DataTable appliedSubjects = dl.GetAppliedSubjects(StudentId);
+                DataTable appliedSubjects = dl.GetAppliedSubjects(studentId);
 
                 StudentSubjectData ssd = LoadSubjects(facultyId, collegeId, appliedSubjects);
                 //StudentSubjectData ssd = LoadSubjects(facultyId, collegeId);
