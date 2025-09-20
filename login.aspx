@@ -214,14 +214,14 @@
                           <%--  <p class="mt-4" style="color:red; font-weight:bold;font-size: 30px">
                                The website will remain closed for maintenance today from 9:00 PM to 10:30 PM.
                             </p>--%>
-                          <%--  <a href="assets/Notifications/ArtsPrivate.pdf"
-                                download="ArtsPrivate.pdf"
-                                style="color: #3059c4; display: block; font-size:20px;"
+                            <a href="assets/Notifications/Vigyapti-for-Inter-Annual-Exam-2026.pdf"
+                                download="Vigyapti-for-Inter-Annual-Exam-2026.pdf"
+                                style="color: #3059c4; display: block; font-size:25px;"
                                 class="mt-4">
-                                <i class="fas fa-file-download"></i>Click here to download Arts Private Registration form Session 2025-27
+                                <i class="fas fa-file-download"></i>Click here to download vigyapti for Intermediate Annual Examination 2026 
                             </a>
 
-                            <a href="assets/Notifications/CommercePrivate.pdf"
+                            <%--<a href="assets/Notifications/CommercePrivate.pdf"
                                 download="CommercePrivate.pdf"
                                 style="color: #3059c4; display: block; font-size:20px;"
                                 class="mt-4">
@@ -253,7 +253,7 @@
                         <div class="info-card text-center d-flex flex-column h-100">
                             <img src="assets/img/bsebimage.jpg" class="logo_head" alt="Logo">
                             <h5>Bihar School Examination Board</h5>
-                            <p>Academic Year 2024–26 Registration.</p>
+                            <p>Intermediate Annual Examination 2026</p>
                             <hr>
                             <p><i class="fas fa-user"></i>Login to start your session</p>
 

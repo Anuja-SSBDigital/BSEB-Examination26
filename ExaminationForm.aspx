@@ -677,7 +677,7 @@
                                 </div>
 
                                 <div class="session-line">
-                                    <u>Examination FORM-    SESSION:2024-26</u>
+                                    <u>EXAMINATION FORM-    SESSION:2024-26</u>
                                 </div>
                             </div>
 
@@ -702,8 +702,8 @@
                                 <table>
 
                                     <tr>
-                                        <td class="no-border">1. Registration no. & Year.</td>
-                                        <td colspan="4"><%# Eval("OFSSCAFNo") %></td>
+                                        <td class="no-border">1. Registration No. & Year.</td>
+                                        <td colspan="4"><%# Eval("RegistrationNo") %></td>
                                         <td rowspan="9" class="photo-cell no-border">
                                             <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Student Photo" /><br />
                                             <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Student Signature" />
@@ -1126,23 +1126,31 @@
                                             (Select any one subject, which is not selected under Compulsory Subject Group-1)</th>
                                     </tr>
                                     <asp:Repeater ID="rptCompulsorySubjectsCombined" runat="server">
-                                        <ItemTemplate>
-                                            <tr>
-                                                <td>
-                                                    <%# Eval("Group1SubjectName") %>
-                                                </td>
-                                                <td style="border-right: 1px solid black">
-                                                    <%# Eval("Group1CheckboxHtml") %>
-                                                </td>
-                                                <td>
-                                                    <%# Eval("Group2SubjectName") %>
-                                                </td>
-                                                <td style="border-right: 1px solid black">
-                                                    <%# Eval("Group2CheckboxHtml") %>
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:Repeater>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <%# Eval("Group1SubjectName") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("Group1SubjectCode") %>  <%-- ✅ New Code column --%>
+                                            </td>
+                                            <td style="border-right: 1px solid black">
+                                                <%# Eval("Group1CheckboxHtml") %>
+                                            </td>
+
+                                            <td>
+                                                <%# Eval("Group2SubjectName") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("Group2SubjectCode") %>  <%-- ✅ New Code column --%>
+                                            </td>
+                                            <td style="border-right: 1px solid black">
+                                                <%# Eval("Group2CheckboxHtml") %>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+
                                 </table>
                                 <div class="boxinside">
                                     <div class="section-title" style="text-align: center;">

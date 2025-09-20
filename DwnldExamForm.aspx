@@ -148,8 +148,9 @@
                     </div>
 
                     <div class="text-right mt-3">
-                        <asp:Button ID="btnDownlaodCSV" runat="server" Text="Download CSV" CssClass="btn btn-primary" OnClick="btn_GenerateCSV_Click" Visible="false" />
-                        <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click" Visible="false" />
+                         <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click" Visible="false" />
+                        <asp:Button ID="btnDownlaodCSV" runat="server" Text="Download CSV" CssClass="btn btn-success" OnClick="btn_GenerateCSV_Click" Visible="false" />
+                       
                     </div>
 
                     <div class="text-center">
