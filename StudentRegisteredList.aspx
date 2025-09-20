@@ -102,6 +102,9 @@
 
                     <div class="table-responsive" id="studentlistdata">
                         <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
+                            <div class="col-md-12 text-lg-right">
+                                <asp:Button ID="DwnTransaction_PDF" runat="server" Text="Download PDF" CssClass="btn btn-primary mb-2" OnClick="DwnTransaction_PDF_Click" />
+                            </div>
                             <%--<table class="table table-bordered table-striped table-sm" id="table-1">--%>
                             <table class="table table-hover table-bordered" id="table-1">
                                 <thead>
@@ -118,17 +121,27 @@
 
                                 <tbody>
                                     <asp:Repeater ID="rptStudentList" runat="server">
-                                        <ItemTemplate>
+                                        <itemtemplate>
                                             <tr>
                                                 <td><%# Container.ItemIndex + 1 %></td>
-                                                <td><%# Eval("CollegeCode") %></td>
-                                                <td><%# Eval("StudentName") %></td>
-                                                <td><%# Eval("FatherName") %></td>
-                                                <td><%# Eval("MotherName") %></td>
-                                                <td><%# Eval("YearOfPassing") %></td>
+                                                <td>
+                                                    <asp:Label ID="lblCollegeCode" runat="server" Text='<%# Eval("CollegeCode") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("StudentName") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblFatherName" runat="server" Text='<%# Eval("FatherName") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblMotherName" runat="server" Text='<%# Eval("MotherName") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblYearOfPassing" runat="server" Text='<%# Eval("YearOfPassing") %>'></asp:Label>
+                                                </td>
 
                                             </tr>
-                                        </ItemTemplate>
+                                        </itemtemplate>
                                     </asp:Repeater>
                                 </tbody>
                             </table>
