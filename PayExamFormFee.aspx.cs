@@ -113,87 +113,91 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
 
 
-                    //               foreach (DataRow row in result.Rows)
-                    //               {
-                    //                   string clientTxnId = row["ClientTxnId"].ToString();
-                    //                   string rowStatus = row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : "";
-                    //                   //string clientCode1 = "BSBI781"; // or from config
-                    //                   // string clientTxnId1 = "REG6305020250910181442029188"; // sample txn id
+                    foreach (DataRow row in result.Rows)
+                    {
+                        string clientTxnId = row["ClientTxnId"].ToString();
+                        string rowStatus = row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : "";
 
-                    //                   // ✅ Only call API if status is NULL or FAILED
-                    //                   if (!string.IsNullOrEmpty(clientTxnId) &&
-                    //(string.IsNullOrEmpty(rowStatus) ||
-                    // rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
-                    // rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase)))
-                    //                   {
-                    //                       string clientCode = ConfigurationManager.AppSettings["Clientcode"];
-                    //                       string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode="
-                    //                                    + clientCode + "&clientXtnId=" + clientTxnId;
+                        if (!string.IsNullOrEmpty(clientTxnId) &&
+                            (string.IsNullOrEmpty(rowStatus) ||
+                             rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
+                             rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+                            string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
 
-                    //                       // ✅ Correct: Use HttpClient to call API
-                    //                       string responseString = "";
+                            string responseString = "";
+                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                            request.Method = "GET";
 
-                    //                       // 🔹 Use WebRequest (same as your working btnCheckTxn_Click)
-                    //                       HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    //                       request.Method = "GET";
+                            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                            {
+                                responseString = reader.ReadToEnd();
+                            }
 
-                    //                       using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                    //                       {
-                    //                           using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                    //                           {
-                    //                               responseString = reader.ReadToEnd();
-                    //                           }
-                    //                       }
+                            XmlDocument xmlDoc = new XmlDocument();
+                            xmlDoc.LoadXml(responseString);
+                            XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
 
-                    //                       XmlDocument xmlDoc = new XmlDocument();
-                    //                       xmlDoc.LoadXml(responseString);
-                    //                       XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
+                            if (txnNode != null)
+                            {
+                                string apiStatus = txnNode.Attributes["status"].Value ?? "";
+                                string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"].Value ?? "";
+                                string bankTxnId = txnNode.Attributes["txnId"].Value ?? "";
+                                string paidAmount = txnNode.Attributes["payeeAmount"].Value ?? "";
+                                string paymentUpdateddate = txnNode.Attributes["transCompleteDate"].Value ?? "";
+                                string paymentmode = txnNode.Attributes["paymentMode"].Value ?? "";
+                                string errorcode = txnNode.Attributes["errorCode"].Value ?? "";
 
+                                // Update database
+                                db.UpdateChallanInquiry(clientTxnId, apiStatus, paymentStatusCode, bankTxnId, paidAmount, paymentmode, paymentUpdateddate);
 
+                                // Update student fees if SUCCESS
+                                if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
+                                    if (dsStudents != null && dsStudents.Tables.Count > 0)
+                                    {
+                                        DataTable dtStudents = dsStudents.Tables[1];
+                                        foreach (DataRow rowst in dtStudents.Rows)
+                                        {
+                                            int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                            db.UpdateStudentExamFeeSubmit(studentId);
+                                        }
+                                    }
+                                }
 
-                    //                       if (txnNode != null)
-                    //                       {
-                    //                           string apiStatus = txnNode.Attributes["status"].Value ?? "";
-                    //                           string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"].Value ?? "";
-                    //                           string bankTxnId = txnNode.Attributes["txnId"].Value ?? "";
-                    //                           string paidAmount = txnNode.Attributes["payeeAmount"].Value ?? "";
-                    //                           string paymentUpdateddate = txnNode.Attributes["transCompleteDate"].Value ?? "";
-                    //                           string paymentmode = txnNode.Attributes["paymentMode"].Value ?? "";
+                                // Show alert only if errorCode exists AND is not 400
+                                if (!string.IsNullOrEmpty(errorcode) && errorcode != "400")
+                                {
+                                    string script = @"
+swal({{
+    title: 'Failed',
+    text: 'Transaction ID: {clientTxnId}\nError Code: {errorcode}',
+    icon: 'error',
+    button: 'Retry'
+}});";
+                                    ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
+                                    System.Diagnostics.Debug.WriteLine("Transaction error for " + clientTxnId + ": " + errorcode);
+                                }
+                            }
+                            else
+                            {
+                                // txnNode is null
+                                string script = @"
+swal({{
+    title: 'Failed',
+    text: 'No transaction data found for Transaction ID: {clientTxnId}',
+    icon: 'error',
+    button: 'Retry'
+}});";
+                                ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
+                                System.Diagnostics.Debug.WriteLine("No transaction data found for " + clientTxnId);
+                            }
+                        }
+                    }
 
-                    //                           db.UpdateChallanInquiry(
-                    //                               clientTxnId,
-                    //                               apiStatus,
-                    //                               paymentStatusCode,
-                    //                               bankTxnId,
-                    //                               paidAmount,
-                    //                               paymentmode,
-                    //                               paymentUpdateddate
-                    //                           );
-
-                    //                           if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
-                    //                           {
-                    //                               DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
-
-                    //                               if (dsStudents != null && dsStudents.Tables.Count > 0)
-                    //                               {
-                    //                                   DataTable dtStudents = dsStudents.Tables[1];
-
-                    //                                   foreach (DataRow rowst in dtStudents.Rows)
-                    //                                   {
-                    //                                       int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
-                    //                                       db.UpdateStudentExamFeeSubmit(studentId);
-                    //                                   }
-                    //                               }
-
-                    //                           }
-                    //                       }
-                    //                       else
-                    //                       {
-                    //                           System.Diagnostics.Debug.WriteLine("No transaction data found for " + clientTxnId);
-                    //                       }
-
-                    //                   }
-                    //               }
 
 
 
@@ -442,6 +446,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
 
             string query = "";
+            string address = "";
 
             query = query + "payerName=" + payerName.Trim() + "";
             query = query + "&payerEmail=" + payerEmail.Trim() + "";
@@ -449,9 +454,10 @@ public partial class PayExamFormFee : System.Web.UI.Page
             query = query + "&clientCode=" + clientCode.Trim() + "";
             query = query + "&transUserName=" + transUserName.Trim() + "";
             query = query + "&transUserPassword=" + transUserPassword.Trim() + "";
-            query = query + "&payerAddress=" + "" + "";
+            query = query + "&payerAddress=" + address + "";
             query = query + "&clientTxnId=" + clientTxnId.Trim() + "";
             query = query + "&amount=" + totalAmount.ToString() + "";
+
             query = query + "&amountType=" + AmountType.Trim() + "";
             query = query + "&channelId=" + channelid.Trim() + "";
             query = query + "&mcc=" + mcc.Trim() + "";
@@ -467,8 +473,8 @@ public partial class PayExamFormFee : System.Web.UI.Page
             // Create an HTML form for submitting the request to the payment gateway
             string respString = "<html>" +
                               "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
-                                                                               // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                  "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                  "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                      // "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
                                       "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
                                       "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
                                       "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled
@@ -498,46 +504,46 @@ public partial class PayExamFormFee : System.Web.UI.Page
     }
 
 
-    public string forwardToSabPaisa(
-      string clientCode, string transUserName, string transUserPassword,
-      string authKey, string authIV, string payerName, string payerEmail, string payerMobile,
-      string payerAddress, string clientTxnId, string amount, string amountType,
-      string channelId, string mcc, string callbackUrl)
-    {
-        string query = "?clientCode=" + HttpUtility.UrlEncode(clientCode) +
-                       "&transUserName=" + HttpUtility.UrlEncode(transUserName) +
-                       "&transUserPassword=" + HttpUtility.UrlEncode(transUserPassword) +
-                       "&authKey=" + HttpUtility.UrlEncode(authKey) +
-                       "&authIV=" + HttpUtility.UrlEncode(authIV) +
-                       "&payerName=" + HttpUtility.UrlEncode(payerName) +
-                       "&payerEmail=" + HttpUtility.UrlEncode(payerEmail) +
-                       "&payerMobile=" + HttpUtility.UrlEncode(payerMobile) +
-                       "&payerAddress=" + HttpUtility.UrlEncode(payerAddress) +
-                       "&clientTxnId=" + HttpUtility.UrlEncode(clientTxnId) +
-                       "&amount=" + HttpUtility.UrlEncode(amount) +
-                       "&amountType=" + HttpUtility.UrlEncode(amountType) +
-                       "&channelId=" + HttpUtility.UrlEncode(channelId) +
-                       "&mcc=" + HttpUtility.UrlEncode(mcc) +
-                       "&callbackUrl=" + HttpUtility.UrlEncode(callbackUrl);
+    //public string forwardToSabPaisa(
+    //  string clientCode, string transUserName, string transUserPassword,
+    //  string authKey, string authIV, string payerName, string payerEmail, string payerMobile,
+    //  string payerAddress, string clientTxnId, string amount, string amountType,
+    //  string channelId, string mcc, string callbackUrl)
+    //{
+    //    string query = "?clientCode=" + HttpUtility.UrlEncode(clientCode) +
+    //                   "&transUserName=" + HttpUtility.UrlEncode(transUserName) +
+    //                   "&transUserPassword=" + HttpUtility.UrlEncode(transUserPassword) +
+    //                   "&authKey=" + HttpUtility.UrlEncode(authKey) +
+    //                   "&authIV=" + HttpUtility.UrlEncode(authIV) +
+    //                   "&payerName=" + HttpUtility.UrlEncode(payerName) +
+    //                   "&payerEmail=" + HttpUtility.UrlEncode(payerEmail) +
+    //                   "&payerMobile=" + HttpUtility.UrlEncode(payerMobile) +
+    //                   "&payerAddress=" + HttpUtility.UrlEncode(payerAddress) +
+    //                   "&clientTxnId=" + HttpUtility.UrlEncode(clientTxnId) +
+    //                   "&amount=" + HttpUtility.UrlEncode(amount) +
+    //                   "&amountType=" + HttpUtility.UrlEncode(amountType) +
+    //                   "&channelId=" + HttpUtility.UrlEncode(channelId) +
+    //                   "&mcc=" + HttpUtility.UrlEncode(mcc) +
+    //                   "&callbackUrl=" + HttpUtility.UrlEncode(callbackUrl);
 
-        return EncryptString(query, authIV, authKey);
-    }
-    public static string EncryptString(string plainText, string iv, string key)
-    {
-        using (var csp = new AesCryptoServiceProvider())
-        {
-            csp.Mode = CipherMode.CBC;
-            csp.Padding = PaddingMode.PKCS7;
-            csp.IV = Encoding.UTF8.GetBytes(iv);
-            csp.Key = Encoding.UTF8.GetBytes(key);
+    //    return EncryptString(query, authIV, authKey);
+    //}
+    //public static string EncryptString(string plainText, string iv, string key)
+    //{
+    //    using (var csp = new AesCryptoServiceProvider())
+    //    {
+    //        csp.Mode = CipherMode.CBC;
+    //        csp.Padding = PaddingMode.PKCS7;
+    //        csp.IV = Encoding.UTF8.GetBytes(iv);
+    //        csp.Key = Encoding.UTF8.GetBytes(key);
 
-            ICryptoTransform encryptor = csp.CreateEncryptor();
-            byte[] inputBuffer = Encoding.UTF8.GetBytes(plainText);
-            byte[] encryptedBytes = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
+    //        ICryptoTransform encryptor = csp.CreateEncryptor();
+    //        byte[] inputBuffer = Encoding.UTF8.GetBytes(plainText);
+    //        byte[] encryptedBytes = encryptor.TransformFinalBlock(inputBuffer, 0, inputBuffer.Length);
 
-            return Convert.ToBase64String(encryptedBytes);
-        }
-    }
+    //        return Convert.ToBase64String(encryptedBytes);
+    //    }
+    //}
 
     private static ICryptoTransform GetCryptoTransform(AesCryptoServiceProvider csp, bool encrypting, String AuthIV, String AuthKey)
     {

@@ -43,6 +43,30 @@
         .payment {
             display: ruby;
         }
+         .pagination {
+     text-align: center;
+     margin-top: 15px;
+     justify-content: flex-end !important;
+ }
+
+     .pagination a, .pagination span {
+         display: inline-block;
+         padding: 8px 16px;
+         text-decoration: none;
+         color: black;
+         border: 1px solid #ddd;
+         margin: 0 4px;
+     }
+
+         .pagination a.active {
+             background-color: #6777ef;
+             color: white;
+             border: 1px solid #6777ef;
+         }
+
+         .pagination a:hover:not(.active) {
+             background-color: #ddd;
+         }
     </style>
     <!-- for eye icon -->
 </asp:Content>
@@ -139,7 +163,7 @@
 
                     <!-- 🔍 Search -->
                     <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search by Student, Father, Mother Name or DOB" style="width: 300px; display:inline-block;" onkeyup="filterAndPaginate();" />
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by Registration No" style="width: 300px; display:inline-block;" onkeyup="filterAndPaginate();" />
                     </div>
 
                     <!-- Student Table -->
@@ -151,15 +175,16 @@
                                         <th class="repeater-checkbox">
                                             <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
                                             <asp:HiddenField ID="hfSelectedIds" runat="server" />
+                                             <asp:HiddenField ID="hfSelectedStudentFees" runat="server" />
                                         </th>
                                         <th>S. No.</th>
                                         <th>Registration No</th>
-                                        <th>Name</th>
+                                        <th>Student Name</th>
                                         <th>Father Name</th>
                                         <th>Mother Name</th>
                                         <th style="width: 80px;">DOB</th>
                                         <th >Caste Category</th>
-                                        <th>Category</th>
+                                        <th>Exam Type</th>
                                         <th>Fee Amount</th>
                                        
                                     </tr>
@@ -179,7 +204,7 @@
                                                 <td><%# Eval("MotherName") %></td>
                                                 <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
                                                 <td style="text-align:center;"><%# Eval("CasteCategoryCode") %></td>
-                                                <td><%# Eval("CategoryName") %></td>
+                                                <td><%# Eval("ExamTypeName") %></td>
                                                 <td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
                                                     <asp:Label ID="lblFee" runat="server"
                                                         Text='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>' />
@@ -218,7 +243,7 @@
                                     <th>+2 School/College Code</th>
                                     <th>Transaction ID</th>
                                     <th>Student No</th>
-                                    <th>Paid Amount</th>
+                                    <th>Payment Amount</th>
                                     <th>Payment Initiate Date</th>
                                     <th>Payment Updated Date</th>
                                     <th>Status</th>
@@ -234,7 +259,7 @@
                                             <td><%# Eval("CollegeCode") %></td>
                                             <td><%# Eval("ClientTxnId") %></td>
                                             <td><%# Eval("StudentsPerTransaction") %></td>
-                                            <td><%# Eval("AmountPaid") %></td>
+                                            <td><%# Eval("PaymentAmount") %></td>
                                             <td><%# Eval("PaymentInitiateDate", "{0:dd-MM-yyyy}") %></td>
                                             <td><%# Eval("PaymentUpdatedDate", "{0:dd-MM-yyyy}") %></td>
                                             <td><%# Eval("PaymentStatus") %></td>
@@ -319,7 +344,7 @@
             } else {
                 errorSpan.style.display = "none";
                 facultyDropdown.classList.remove("is-invalid");
-                return true;
+               // return true;
             }
        
             
@@ -337,7 +362,7 @@
 
 
         var currentPage = 1;
-        var rowsPerPage = 10;
+        var rowsPerPage = 100;
 
         document.addEventListener("DOMContentLoaded", function () {
             setupSelectAll();
@@ -345,22 +370,57 @@
             updateTotalAmount();
         });
 
-        function getSelectedIds() {
+
+        function getSelectedData() {
             var ids = [];
+            var fees = [];
+
             document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
                 var cb = row.querySelector("input[type=checkbox]");
                 var hf = row.querySelector("input[type=hidden][id$='hfStudentID']");
-                if (cb && cb.checked && hf) {
-                    ids.push(hf.value);
+                var feeCell = row.querySelector(".fee-amount");
+
+                if (cb && cb.checked && hf && feeCell) {
+                    var studentId = hf.value;
+                    var amount = parseFloat(feeCell.getAttribute("data-amount")) || 0;
+
+                    ids.push(studentId);
+                    fees.push(studentId + ":" + amount); // build mapping
                 }
             });
-            return ids;
+
+            return { ids: ids, fees: fees };
         }
 
         function updateHiddenField() {
-            var hiddenField = document.getElementById('<%= hfSelectedIds.ClientID %>');
-            hiddenField.value = getSelectedIds().join(',');
+            var data = getSelectedData();
+
+            // already present hidden field for IDs
+            var hiddenIds = document.getElementById('<%= hfSelectedIds.ClientID %>');
+        hiddenIds.value = data.ids.join(',');
+
+        // new hidden field for ID:Fee mapping
+        var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
+            hiddenFees.value = data.fees.join(',');
         }
+
+
+  <%--  function getSelectedIds() {
+        var ids = [];
+        document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+            var cb = row.querySelector("input[type=checkbox]");
+            var hf = row.querySelector("input[type=hidden][id$='hfStudentID']");
+            if (cb && cb.checked && hf) {
+                ids.push(hf.value);
+            }
+        });
+        return ids;
+    }
+
+    function updateHiddenField() {
+        var hiddenField = document.getElementById('<%= hfSelectedIds.ClientID %>');
+        hiddenField.value = getSelectedIds().join(',');
+    }--%>
 
         function updateTotalAmount() {
             var total = 0;
@@ -394,104 +454,155 @@
             updateTotalAmount();
         }
 
+ <%--   function setupSelectAll() {
+        var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+        if (!master) return;
+
+        master.addEventListener('change', function () {
+            var checked = this.checked;
+            document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+                if (row.dataset.visible !== "false") {
+                    var cb = row.querySelector("input[type=checkbox]");
+                    if (cb) cb.checked = checked;
+                }
+            });
+            updateSelectAllState();
+            updateTotalAmount();
+        });
+
+        attachRowHandlers();
+        updateSelectAllState();
+        updateTotalAmount();
+    }--%>
         function setupSelectAll() {
             var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-            if (!master) return;
+        if (!master) return;
 
-            master.addEventListener('change', function () {
-                var checked = this.checked;
-                document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
-                    if (row.dataset.visible !== "false") {
-                        var cb = row.querySelector("input[type=checkbox]");
-                        if (cb) cb.checked = checked;
-                    }
-                });
-                updateSelectAllState();
-                updateTotalAmount();
+        master.addEventListener('change', function () {
+            var checked = this.checked;
+            // ✅ Select only the rows currently shown (not hidden by pagination)
+            document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+                if (row.style.display !== "none") {
+                    var cb = row.querySelector("input[type=checkbox]");
+                    if (cb) cb.checked = checked;
+                }
             });
-
-            attachRowHandlers();
             updateSelectAllState();
             updateTotalAmount();
+        });
+
+
+        attachRowHandlers();
+        updateSelectAllState();
+        updateTotalAmount();
+    }
+
+  <%--  function updateSelectAllState() {
+        var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+        var checkboxes = document.querySelectorAll('#dataTable tbody tr[data-visible="true"] input[type=checkbox]');
+        var total = checkboxes.length;
+        var checkedCount = 0;
+
+        checkboxes.forEach(function (cb) {
+            if (cb.checked) checkedCount++;
+        });
+
+        if (checkedCount === 0) {
+            master.checked = false;
+            master.indeterminate = false;
+        } else if (checkedCount === total) {
+            master.checked = true;
+            master.indeterminate = false;
+        } else {
+            master.checked = false;
+            master.indeterminate = true;
         }
 
-        function updateSelectAllState() {
-            var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-            var checkboxes = document.querySelectorAll('#dataTable tbody tr[data-visible="true"] input[type=checkbox]');
-            var total = checkboxes.length;
-            var checkedCount = 0;
+        updateHiddenField();
+    }--%>
 
-            checkboxes.forEach(function (cb) {
-                if (cb.checked) checkedCount++;
-            });
+    function updateSelectAllState() {
+        var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+        var checkboxes = document.querySelectorAll('#dataTable tbody tr');
+        var visibleCheckboxes = [];
 
-            if (checkedCount === 0) {
-                master.checked = false;
-                master.indeterminate = false;
-            } else if (checkedCount === total) {
-                master.checked = true;
-                master.indeterminate = false;
-            } else {
-                master.checked = false;
-                master.indeterminate = true;
+        checkboxes.forEach(function (row) {
+            if (row.style.display !== "none") {
+                var cb = row.querySelector("input[type=checkbox]");
+                if (cb) visibleCheckboxes.push(cb);
             }
+        });
 
-            updateHiddenField();
+        var total = visibleCheckboxes.length;
+        var checkedCount = visibleCheckboxes.filter(cb => cb.checked).length;
+
+        if (checkedCount === 0) {
+            master.checked = false;
+            master.indeterminate = false;
+        } else if (checkedCount === total) {
+            master.checked = true;
+            master.indeterminate = false;
+        } else {
+            master.checked = false;
+            master.indeterminate = true;
         }
 
-        function filterAndPaginate() {
-            var searchText = document.getElementById("searchInput").value.toLowerCase();
-            var rows = document.querySelectorAll("#dataTable tbody tr");
+        updateHiddenField();
+    }
 
-            rows.forEach(function (row) {
-                var OfssReferenceNo = row.cells[1].textContent.toLowerCase();
-                var studentName = row.cells[2].textContent.toLowerCase();
-                var fatherName = row.cells[3].textContent.toLowerCase();
-                var motherName = row.cells[4].textContent.toLowerCase();
-                var dob = row.cells[5].textContent.toLowerCase();
-                var BoardName = row.cells[6].textContent.toLowerCase();
-                var Category = row.cells[7].textContent.toLowerCase();
-                var FeeAmount = row.cells[8].textContent.toLowerCase();
+    function filterAndPaginate() {
+        var searchText = document.getElementById("searchInput").value.toLowerCase();
+        var rows = document.querySelectorAll("#dataTable tbody tr");
 
-                var match = OfssReferenceNo.includes(searchText) || studentName.includes(searchText) ||
-                    fatherName.includes(searchText) || motherName.includes(searchText) ||
-                    dob.includes(searchText) || BoardName.includes(searchText) ||
-                    Category.includes(searchText) || FeeAmount.includes(searchText);
+        rows.forEach(function (row) {
+            var RegistrationNo = row.cells[2].textContent.toLowerCase();
+            var studentName = row.cells[2].textContent.toLowerCase();
+            var fatherName = row.cells[3].textContent.toLowerCase();
+            var motherName = row.cells[4].textContent.toLowerCase();
+            var dob = row.cells[5].textContent.toLowerCase();
+            var BoardName = row.cells[6].textContent.toLowerCase();
+            var Category = row.cells[7].textContent.toLowerCase();
+            var FeeAmount = row.cells[8].textContent.toLowerCase();
 
-                row.dataset.visible = match ? "true" : "false";
-            });
+            var match = RegistrationNo.includes(searchText) || studentName.includes(searchText) ||
+                fatherName.includes(searchText) || motherName.includes(searchText) ||
+                dob.includes(searchText) || BoardName.includes(searchText) ||
+                Category.includes(searchText) || FeeAmount.includes(searchText);
 
-            currentPage = 1;
-            paginateFilteredTable();
-        }
+            row.dataset.visible = match ? "true" : "false";
+        });
 
-        function paginateFilteredTable() {
-            var allRows = document.querySelectorAll("#dataTable tbody tr");
-            var visibleRows = Array.from(allRows).filter(function (row) {
-                return row.dataset.visible !== "false";
-            });
+        currentPage = 1;
+        paginateFilteredTable();
+    }
 
-            var totalRows = visibleRows.length;
-            var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
+    function paginateFilteredTable() {
+        var allRows = document.querySelectorAll("#dataTable tbody tr");
+        var visibleRows = Array.from(allRows).filter(function (row) {
+            return row.dataset.visible !== "false";
+        });
 
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
+        var totalRows = visibleRows.length;
+        var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
 
-            allRows.forEach(function (row) {
-                row.style.display = "none";
-            });
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
 
-            var start = (currentPage - 1) * rowsPerPage;
-            var end = start + rowsPerPage;
+        allRows.forEach(function (row) {
+            row.style.display = "none";
+        });
 
-            visibleRows.slice(start, end).forEach(function (row) {
-                row.style.display = "";
-            });
+        var start = (currentPage - 1) * rowsPerPage;
+        var end = start + rowsPerPage;
 
-            renderPagination(totalPages);
-            attachRowHandlers();
-            updateSelectAllState();
-            updateTotalAmount();
+        visibleRows.slice(start, end).forEach(function (row) {
+            row.style.display = "";
+        });
+
+        renderPagination(totalPages);
+        attachRowHandlers();
+        updateSelectAllState();
+        updateTotalAmount();
 
             var lblEntries = document.getElementById('<%= lblEntriesCount.ClientID %>');
             if (totalRows === 0) {
@@ -507,9 +618,11 @@
 
             if (totalPages <= 1) return;
 
+            // === Prev button ===
             var prev = document.createElement('a');
             prev.textContent = 'Prev';
             prev.href = 'javascript:void(0);';
+            if (currentPage === 1) prev.classList.add('disabled');
             prev.addEventListener('click', function () {
                 if (currentPage > 1) {
                     currentPage--;
@@ -518,23 +631,30 @@
             });
             container.appendChild(prev);
 
-            for (let i = 1; i <= totalPages; i++) {
-                var link = document.createElement('a');
-                link.textContent = i;
-                link.href = 'javascript:void(0);';
-                if (i === currentPage) link.classList.add('active');
-                link.addEventListener('click', (function (pageNum) {
-                    return function () {
-                        currentPage = pageNum;
-                        paginateFilteredTable();
-                    };
-                })(i));
-                container.appendChild(link);
+            // === Page numbers with ellipses ===
+            var maxVisible = 1; // how many page links to show at once
+            var startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            var endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (startPage > 1) {
+                addPageLink(container, 1);
+                if (startPage > 2) addDots(container);
             }
 
+            for (let i = startPage; i <= endPage; i++) {
+                addPageLink(container, i, i === currentPage);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) addDots(container);
+                addPageLink(container, totalPages);
+            }
+
+            // === Next button ===
             var next = document.createElement('a');
             next.textContent = 'Next';
             next.href = 'javascript:void(0);';
+            if (currentPage === totalPages) next.classList.add('disabled');
             next.addEventListener('click', function () {
                 if (currentPage < totalPages) {
                     currentPage++;
@@ -543,7 +663,25 @@
             });
             container.appendChild(next);
         }
+
+        function addPageLink(container, pageNum, isActive = false) {
+            var link = document.createElement('a');
+            link.textContent = pageNum;
+            link.href = 'javascript:void(0);';
+            if (isActive) link.classList.add('active');
+            link.addEventListener('click', function () {
+                currentPage = pageNum;
+                paginateFilteredTable();
+            });
+            container.appendChild(link);
+        }
+
+        function addDots(container) {
+            var span = document.createElement('span');
+            span.textContent = '...';
+            container.appendChild(span);
+        }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   
 
 </asp:Content>
