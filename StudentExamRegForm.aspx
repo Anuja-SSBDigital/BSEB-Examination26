@@ -148,7 +148,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3 form-group">
                                     <label for="dob" class="form-label required">Date of Birth:</label>
-                                    <asp:TextBox ID="txtDOB" runat="server" class="form-control datepicker" TextMode="Date" max="2015-12-31" />
+                                    <asp:TextBox ID="txtDOB" runat="server" class="form-control datepicker" TextMode="Date" max="2011-12-31" />
                                     <span id="txtDOBErr" style="display: none; color: red;">Please Enter DOB</span>
                                 </div>
                             </div>
@@ -503,7 +503,164 @@
  <script type="text/javascript">
 
      function validateStudentDetails() {
-         debugger;
+         const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
+         // District validation
+         var DistrictField = document.getElementById('<%= txtdistrict.ClientID %>');
+         var district = DistrictField.value.trim();
+         var txtdistrictErrSpan = document.getElementById('txtdistrictErr');
+
+         if (district === "") {
+             txtdistrictErrSpan.style.display = "inline";
+             txtdistrictErrSpan.textContent = "Please enter District.";
+             DistrictField.classList.add("is-invalid");
+             DistrictField.focus();
+             return false;
+         } else {
+             txtdistrictErrSpan.style.display = "none";
+             DistrictField.classList.remove("is-invalid");
+         }
+
+         // Division validation
+         var DivisionField = document.getElementById('<%= txtsubDivision.ClientID %>');
+         var division = DivisionField.value.trim();
+         var txtsubDivisionErrSpan = document.getElementById('txtsubDivisionErr');
+
+         if (division === "") {
+             txtsubDivisionErrSpan.style.display = "inline";
+             txtsubDivisionErrSpan.textContent = "Please enter Division.";
+             DivisionField.classList.add("is-invalid");
+             DivisionField.focus();
+             return false;
+         } else {
+             txtsubDivisionErrSpan.style.display = "none";
+             DivisionField.classList.remove("is-invalid");
+         }
+
+
+         if (examType == 2 || examType == 3 || examType == 4 || examType == 6)
+         {
+             var dobField = document.getElementById('<%= txtDOB.ClientID %>');
+             var dob = dobField.value.trim();
+             var txtDOBErrSpan = document.getElementById('txtDOBErr');
+
+             if (dob === "") {
+                 txtDOBErrSpan.style.display = "inline";
+                 txtDOBErrSpan.textContent = "Please enter Date of Birth.";
+                 dobField.classList.add("is-invalid");
+                 dobField.focus();
+                 return false;
+             } else {
+                 txtDOBErrSpan.style.display = "none";
+                 dobField.classList.remove("is-invalid");
+             }
+
+             // ✅ Matric Board Name
+                         var ddlMatrixBoard = document.getElementById('<%= ddlMatrixBoard.ClientID %>');
+                         var ddlMatrixBoardErr = document.getElementById('ddlMatrixBoardErr');
+                         if (ddlMatrixBoard.value === "" || ddlMatrixBoard.value === "0") {
+                             ddlMatrixBoardErr.style.display = "inline";
+                             ddlMatrixBoard.classList.add("is-invalid");
+                             ddlMatrixBoard.focus();
+                             return false;
+                         } else {
+                             ddlMatrixBoardErr.style.display = "none";
+                             ddlMatrixBoard.classList.remove("is-invalid");
+                         }
+
+                         // ✅ Matric Roll Code
+                         var rollCodeField = document.getElementById('<%= txtboardRollCode.ClientID %>');
+                         var rollCodeErr = document.getElementById('txtboardRollCodeErr');
+                         if (rollCodeField.value.trim() === "") {
+                             rollCodeErr.style.display = "inline";
+                             rollCodeErr.textContent = "Please enter Roll Code.";
+                             rollCodeField.classList.add("is-invalid");
+                             rollCodeField.focus();
+                             return false;
+                         } else {
+                             rollCodeErr.style.display = "none";
+                             rollCodeField.classList.remove("is-invalid");
+                         }
+
+                         // ✅ Roll Number
+                         var rollNumberField = document.getElementById('<%= txtrollNumber.ClientID %>');
+                         var rollNumberErr = document.getElementById('txtrollNumberErr');
+                         if (rollNumberField.value.trim() === "") {
+                             rollNumberErr.style.display = "inline";
+                             rollNumberErr.textContent = "Please enter Roll Number.";
+                             rollNumberField.classList.add("is-invalid");
+                             rollNumberField.focus();
+                             return false;
+                         } else {
+                             rollNumberErr.style.display = "none";
+                             rollNumberField.classList.remove("is-invalid");
+                         }
+
+                         // ✅ Passing Year
+                         var passingYearField = document.getElementById('<%= txtpassingYear.ClientID %>');
+                var passingYearErr = document.getElementById('txtpassingYearErr');
+                if (passingYearField.value.trim() === "") {
+                    passingYearErr.style.display = "inline";
+                    passingYearErr.textContent = "Please enter Passing Year.";
+                    passingYearField.classList.add("is-invalid");
+                    passingYearField.focus();
+                    return false;
+                } else {
+                    passingYearErr.style.display = "none";
+                    passingYearField.classList.remove("is-invalid");
+                }
+
+                // ✅ Gender
+                var ddlGender = document.getElementById('<%= ddlGender.ClientID %>');
+                var ddlGenderError = document.getElementById('ddlGenderError');
+                if (ddlGender.value === "" || ddlGender.value === "0") {
+                    ddlGenderError.style.display = "inline";
+                    ddlGender.classList.add("is-invalid");
+                    ddlGender.focus();
+                    return false;
+                } else {
+                    ddlGenderError.style.display = "none";
+                    ddlGender.classList.remove("is-invalid");
+                }
+
+                    // ✅ Caste Category
+                    var ddlCasteCategory = document.getElementById('<%= ddlCasteCategory.ClientID %>');
+                    var ddlCasteCategoryError = document.getElementById('ddlCasteCategoryError');
+                    if (ddlCasteCategory.value === "" || ddlCasteCategory.value === "0") {
+                        ddlCasteCategoryError.style.display = "inline";
+                        ddlCasteCategory.classList.add("is-invalid");
+                        ddlCasteCategory.focus();
+                        return false;
+                    } else {
+                        ddlCasteCategoryError.style.display = "none";
+                        ddlCasteCategory.classList.remove("is-invalid");
+                    }
+
+                    // ✅ Nationality
+                    var ddlNationality = document.getElementById('<%= ddlNationality.ClientID %>');
+                    var NationalityError = document.getElementById('NationalityError');
+                    if (ddlNationality.value === "" || ddlNationality.value === "0") {
+                        NationalityError.style.display = "inline";
+                        ddlNationality.classList.add("is-invalid");
+                        ddlNationality.focus();
+                        return false;
+                    } else {
+                        NationalityError.style.display = "none";
+                        ddlNationality.classList.remove("is-invalid");
+                    }
+
+                    // ✅ Religion
+                             var ddlReligion = document.getElementById('<%= ddlReligion.ClientID %>');
+                             var ReligionError = document.getElementById('ReligionError');
+                             if (ddlReligion.value === "" || ddlReligion.value === "0") {
+                                 ReligionError.style.display = "inline";
+                                 ddlReligion.classList.add("is-invalid");
+                                 ddlReligion.focus();
+                                 return false;
+                             } else {
+                                 ReligionError.style.display = "none";
+                                 ddlReligion.classList.remove("is-invalid");
+                             }
+         }
          // Mobile validation (as is)
          var mobileField = document.getElementById('<%= txtMobile.ClientID %>');
         var mobile = mobileField.value.trim();
@@ -696,12 +853,15 @@
             aadharFileExtension = fileUpload.files[0].name.split('.').pop().toLowerCase();
         }
 
-        // Call the server method with individual arguments
-        PageMethods.UpdateStudent(
-            document.getElementById('<%= hfStudentId.ClientID %>').value,
+         if (examType == 1 || examType == 5)
+         {
+             // Call the server method with individual arguments
+             PageMethods.UpdateStudent(
+                 document.getElementById('<%= hfStudentId.ClientID %>').value,
         document.getElementById('<%= hfFaculty.ClientID %>').value,
         mobile,
         email,
+
         document.getElementById('<%= txtAdress.ClientID %>').value,
         document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
         document.getElementById('<%= txtpincode.ClientID %>').value,
@@ -710,18 +870,75 @@
         document.getElementById('<%= txtBankACNo.ClientID %>').value,
         document.getElementById('<%= txtIdentification1.ClientID %>').value,
         document.getElementById('<%= txtIdentification2.ClientID %>').value,
-        document.getElementById('<%= ddlMedium.ClientID %>').value,
-        document.getElementById('<%= hnd_extype.ClientID %>').value,
-        document.getElementById('<%= txtcollegeCode.ClientID %>').value,
-        aadharValue,
-        aadharFileName,
-        aadharFileExtension,
-            function (response) {
-                if (response.status === "success") {
-                    debugger
-                    swal("Success", response.message, "success").then(() => {
-                        // Get the values from the form fields directly
-                        var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+    document.getElementById('<%= ddlMedium.ClientID %>').value,
+    document.getElementById('<%= hnd_extype.ClientID %>').value,
+    document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+    aadharValue,
+    aadharFileName,
+    aadharFileExtension,
+        document.getElementById('<%= txtdistrict.ClientID %>').value,
+        document.getElementById('<%= txtsubDivision.ClientID %>').value,
+        function (response) {
+            if (response.status === "success") {
+                debugger
+                swal("Success", response.message, "success").then(() => {
+                    // Get the values from the form fields directly
+                    var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+            var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
+            var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+                    var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+
+                    var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
+                        "&FacultyId=" + encodeURIComponent(facultyId) +
+                        "&ExamTypeId=" + encodeURIComponent(examTypeId) +
+                        "&collegeCode=" + encodeURIComponent(collegeCode);
+                    window.location.href = url;
+                });
+            } else {
+                swal("Error", response.message, "error");
+            }
+        },
+        function (err) {
+            swal("Error", "Server error: " + err.get_message(), "error");
+        }
+    );
+         }
+         else {
+             // Call the server method with individual arguments
+             PageMethods.UpdateStudentDetails(
+                 document.getElementById('<%= hfStudentId.ClientID %>').value,
+                 document.getElementById('<%= hfFaculty.ClientID %>').value,
+                 mobile,
+                 email,
+                 document.getElementById('<%= txtAdress.ClientID %>').value,
+                 document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
+                 document.getElementById('<%= txtpincode.ClientID %>').value,
+                 document.getElementById('<%= txtBranchName.ClientID %>').value,
+                 document.getElementById('<%= txtIFSCCode.ClientID %>').value,
+                 document.getElementById('<%= txtBankACNo.ClientID %>').value,
+                 document.getElementById('<%= txtIdentification1.ClientID %>').value,
+                 document.getElementById('<%= txtIdentification2.ClientID %>').value,
+                 document.getElementById('<%= ddlMedium.ClientID %>').value,
+                 document.getElementById('<%= hnd_extype.ClientID %>').value,
+                 document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+                 aadharValue,
+                 aadharFileName,
+                 aadharFileExtension,
+                 document.getElementById('<%= txtdistrict.ClientID %>').value,
+                document.getElementById('<%= txtsubDivision.ClientID %>').value,
+                document.getElementById('<%= ddlMatrixBoard.ClientID %>').value,       
+                document.getElementById('<%= txtboardRollCode.ClientID %>').value,     
+                document.getElementById('<%= txtrollNumber.ClientID %>').value,         
+                document.getElementById('<%= txtpassingYear.ClientID %>').value,        
+                document.getElementById('<%= ddlGender.ClientID %>').value,             
+                document.getElementById('<%= ddlCasteCategory.ClientID %>').value,      
+                document.getElementById('<%= ddlNationality.ClientID %>').value,        
+                document.getElementById('<%= ddlReligion.ClientID %>').value,           
+                document.getElementById('<%= txtDOB.ClientID %>').value,           
+    function (response) {
+        if (response.status === "success") {
+            swal("Success", response.message, "success").then(() => {
+                var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
                 var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
                 var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
                 var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
@@ -732,14 +949,16 @@
                     "&collegeCode=" + encodeURIComponent(collegeCode);
                 window.location.href = url;
             });
-                } else {
-                    swal("Error", response.message, "error");
-                }
-            },
-            function (err) {
-                swal("Error", "Server error: " + err.get_message(), "error");
-            }
-    );
+                     } else {
+                         swal("Error", response.message, "error");
+                     }
+                 },
+                 function (err) {
+                     swal("Error", "Server error: " + err.get_message(), "error");
+                 }
+             );
+
+         }
 
         return false; // Prevent default form submission
     }
@@ -748,8 +967,18 @@
      window.onload = function () {
          debugger;
          const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
+         const lockedFields = [
+            '<%= txtStudentName.ClientID %>',
+            '<%= txtfatherName.ClientID %>',
+            '<%= txtmotherName.ClientID %>',
+           <%-- '<%= txtDOB.ClientID %>',--%>
+            '<%= ddlFaculty.ClientID %>',
+            '<%= txtcollegeCode.ClientID %>'
+            // add more if needed:
+         ];
 
-      const regularPrivateFields = [
+         // ✅ Fields to enable when examType = 1 or 5
+         const regularPrivateFields = [
             '<%= txtMobile.ClientID %>',
             '<%= txtAdress.ClientID %>',
             '<%= txtEmail.ClientID %>',
@@ -766,18 +995,46 @@
             '<%= aadharNo.ClientID %>',
             '<%= txtAadharNumber.ClientID %>',
             '<%= aadharNoDiv.ClientID %>',
-            '<%= fuAadharFile.ClientID %>'
-         
+            '<%= fuAadharFile.ClientID %>',
+            '<%= txtdistrict.ClientID %>',
+            '<%= txtsubDivision.ClientID %>',
+          
         ];
 
-        const enableFieldIds = examType === "1" || examType === "5" || examType === "6" || examType === "4" || examType === "2" || examType === "3" ? regularPrivateFields : [];
-        const enableSet = new Set(enableFieldIds);
-        const allFields = document.querySelectorAll('input, select, textarea, button, div');
+        // ✅ Collect all inputs, selects, textareas, divs
+        const allFields = document.querySelectorAll('input, select, textarea, div');
 
-        allFields.forEach(function(field) {
-            if (field.id === 'btnUpdate') return;
-            field.disabled = !enableSet.has(field.id);
-        });
+        // --- CASE 1: ExamType = 1 or 5 (current logic) ---
+        if (examType === "1" || examType === "5") {
+            const enableSet = new Set(regularPrivateFields);
+            allFields.forEach(function (field) {
+                if (field.id === '<%= btnUpdate.ClientID %>') return; // skip update button
+                field.disabled = !enableSet.has(field.id);
+            });
+        }
+
+        // --- CASE 2: ExamType = 2,3,4,6 (open all except locked fields) ---
+         if (["2", "3", "4", "6"].includes(examType)) {
+             allFields.forEach(function (field) {
+                 if (field.id === '<%= btnUpdate.ClientID %>') return; // skip update button
+                 if (lockedFields.includes(field.id) && field.id !== '<%= txtDOB.ClientID %>')
+                 {
+            field.disabled = true;
+            } else {
+            field.disabled = false;
+        }
+    });
+         }
+
+
+        //const enableFieldIds = examType === "1" || examType === "5" ;
+        //const enableSet = new Set(enableFieldIds);
+        //const allFields = document.querySelectorAll('input, select, textarea, button, div');
+
+        //allFields.forEach(function(field) {
+        //    if (field.id === 'btnUpdate') return;
+        //    field.disabled = !enableSet.has(field.id);
+        //});
 
         const updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
         if (updateBtn) {
