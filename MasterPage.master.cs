@@ -27,6 +27,8 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 li_ExamDwnld.Visible = true;
                 li_PayExamFormFee.Visible = true;
                 li_collegemster.Visible = true;
+                li_studentsatus.Visible = true;
+                li_scheduler.Visible = true;
                 //liExmchallanrecall.Visible = true;
                 //li_Downloadadmitcard.Visible = true;
                 //li_DownloadPracticaladmitcard.Visible = true;

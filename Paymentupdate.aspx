@@ -8,10 +8,30 @@
         table { border-collapse: collapse !important; width: 100%; }
         table th, table td { border: 1px solid #333 !important; padding: 10px; font-size: 14px; vertical-align: middle; }
         table tr:nth-child(even) { background-color: #e9e9e9; }
-        .pagination { text-align: center; margin-top: 15px; justify-content: flex-end !important; }
-        .pagination a, .pagination span { display: inline-block; padding: 8px 16px; text-decoration: none; color: black; border: 1px solid #ddd; margin: 0 4px; }
-        .pagination a.active { background-color: #6777ef; color: white; border: 1px solid #6777ef; }
-        .pagination a:hover:not(.active) { background-color: #ddd; }
+        .pagination {
+      text-align: center;
+      margin-top: 15px;
+      justify-content: flex-end !important;
+  }
+
+      .pagination a, .pagination span {
+          display: inline-block;
+          padding: 8px 16px;
+          text-decoration: none;
+          color: black;
+          border: 1px solid #ddd;
+          margin: 0 4px;
+      }
+
+          .pagination a.active {
+              background-color: #6777ef;
+              color: white;
+              border: 1px solid #6777ef;
+          }
+
+          .pagination a:hover:not(.active) {
+              background-color: #ddd;
+          }
         .form-col { width: 50px; text-align: center; white-space: nowrap; padding: 2px 4px; }
     </style>
 </asp:Content>
@@ -47,12 +67,12 @@
                     </div>
 
                     <!-- 🔍 Search Box -->
-                    <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server">
+                    <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search by Registration No" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
                     </div>
 
                     <div class="table-responsive">
-                        <asp:Panel ID="pnlStudentTable" runat="server">
+                        <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
                              <div class="col-md-12 text-lg-right">
                                 <asp:Button ID="UpdateAllTransaction" runat="server" OnClick="UpdateAllTransaction_Click" Text="Update All Transaction" CssClass="btn btn-primary mb-2" />
                             </div>
@@ -103,9 +123,9 @@
                     </div>
 
                     <!-- Pagination Panel -->
-                    <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="false" ClientIDMode="Static">
-                        <div id="pagination"></div>
-                    </asp:Panel>
+                    <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="false">
+      <div id="pagination"></div>
+  </asp:Panel>
 
                 </div>
             </div>

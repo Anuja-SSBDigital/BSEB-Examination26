@@ -153,10 +153,10 @@ public partial class response : System.Web.UI.Page
 
 
                 int respayment = 0;
-                if (clientTxnId.StartsWith("EXM"))
-                {
+                //if (clientTxnId.StartsWith("EXM"))
+                //{
                     respayment = db.UpdateStudentPaymentDetails(clientTxnId, paidAmount, status, paymentMode, sabpaisaTxnId, bankTxnId, transDate, statusCode, sabpaisaMessage, challanNumber, sabpaisaErrorCode, bankMessage, bankErrorCode, "1");
-                }
+                //}
                
 
                 // Handle based on both DB update and payment status

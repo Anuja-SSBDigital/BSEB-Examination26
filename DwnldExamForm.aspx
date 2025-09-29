@@ -162,7 +162,7 @@
 
                     <!-- 🔍 Search Box -->
                     <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search by Student, Father, Mother Name or DOB" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by Registration No" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
                     </div>
 
                     <div class="table-responsive">

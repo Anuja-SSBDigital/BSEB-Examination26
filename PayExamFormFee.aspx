@@ -205,10 +205,40 @@
                                                 <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
                                                 <td style="text-align:center;"><%# Eval("CasteCategoryCode") %></td>
                                                 <td><%# Eval("ExamTypeName") %></td>
-                                                <td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
+                                               <td class="fee-amount"
+    data-amount='<%# 
+        Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
+            ? (
+                Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
+                    ? 1800
+                    : 1400
+              )
+            : (
+                Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null 
+                    ? Eval("ConcessionFee") 
+                    : Eval("BaseFee")
+              )
+    %>'>
+    <asp:Label ID="lblFee" runat="server"
+        Text='<%# 
+            Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
+                ? (
+                    Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
+                        ? 1800
+                        : 1400
+                  )
+                : (
+                    Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null 
+                        ? Eval("ConcessionFee") 
+                        : Eval("BaseFee")
+                  )
+        %>' />
+</td>
+
+                                                <%--<td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
                                                     <asp:Label ID="lblFee" runat="server"
                                                         Text='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>' />
-                                                </td>
+                                                </td>--%>
                                                 
                                             </tr>
                                         </ItemTemplate>
@@ -277,6 +307,8 @@
                                         </tr>
                                     </ItemTemplate>
                                 </asp:Repeater>
+
+                               
                             </tbody>
                         </table>
                     </div>

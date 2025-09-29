@@ -34,11 +34,19 @@ public partial class Paymentupdate : System.Web.UI.Page
         {
             rpt_getpayemnt.DataSource = result1.Tables[0];
             rpt_getpayemnt.DataBind();
+            pnlPager.Visible = true;
+            pnlStudentTable.Visible = true;
+            searchInputDIV.Visible = true;
         }
         else
         {
             rpt_getpayemnt.DataSource = null;
             rpt_getpayemnt.DataBind();
+            pnlPager.Visible = false;
+            pnlStudentTable.Visible = false;
+            searchInputDIV.Visible = false;
+
+
         }
     }
 
@@ -140,7 +148,6 @@ public partial class Paymentupdate : System.Web.UI.Page
             }
         }
 
-        // Remove trailing commas
         if (updatedTxns.EndsWith(", ")) updatedTxns = updatedTxns.Substring(0, updatedTxns.Length - 2);
         if (notUpdatedTxns.EndsWith(", ")) notUpdatedTxns = notUpdatedTxns.Substring(0, notUpdatedTxns.Length - 2);
         if (skippedTxns.EndsWith(", ")) skippedTxns = skippedTxns.Substring(0, skippedTxns.Length - 2);
@@ -148,16 +155,19 @@ public partial class Paymentupdate : System.Web.UI.Page
 
         // Build final message
         string finalMsg = "";
-        if (!string.IsNullOrEmpty(updatedTxns)) finalMsg += "Updated: " + updatedTxns + "\n";
-        if (!string.IsNullOrEmpty(notUpdatedTxns)) finalMsg += "Not Updated: " + notUpdatedTxns + "\n";
-        if (!string.IsNullOrEmpty(skippedTxns)) finalMsg += "Skipped: " + skippedTxns + "\n";
+        if (!string.IsNullOrEmpty(updatedTxns)) finalMsg += "Updated: " + updatedTxns + "\\n";
+        if (!string.IsNullOrEmpty(notUpdatedTxns)) finalMsg += "Not Updated: " + notUpdatedTxns + "\\n";
+        if (!string.IsNullOrEmpty(skippedTxns)) finalMsg += "Skipped: " + skippedTxns + "\\n";
         if (!string.IsNullOrEmpty(failedTxns)) finalMsg += "Failed/Aborted: " + failedTxns;
 
         // If final message is empty (no txn processed), show default message
         if (string.IsNullOrEmpty(finalMsg)) finalMsg = "No transactions processed.";
 
-        // Show SweetAlert popup
-        string script = "swal({ title: 'Process Completed', text: '" + finalMsg.Replace("'", "\\'") + "', icon: 'success', button: 'OK' });";
+        // Escape single quotes for JavaScript safety
+        finalMsg = finalMsg.Replace("'", "\\'");
+
+        // SweetAlert script
+        string script = "swal({ title: 'Process Completed', text: '" + finalMsg + "', icon: 'success', button: 'OK' });";
         ScriptManager.RegisterStartupScript(this, GetType(), "FinalTxnUpdateMsg", script, true);
 
 

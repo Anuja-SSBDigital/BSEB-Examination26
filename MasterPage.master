@@ -143,6 +143,12 @@
                                     <li runat="server" id="li_collegemster" visible="false">
                                         <a href="CollegeMaster.aspx" class="nav-link">College Master</a>
                                     </li>
+                                       <li runat="server" id="li_studentsatus" visible="false">
+       <a href="CollegeReport.aspx" class="nav-link">Student Status</a>
+   </li>
+                                                                        <li runat="server" id="li_scheduler" visible="false">
+    <a href="Paymentupdate.aspx" class="nav-link">Payment Scheduler</a>
+</li>
                                     <%-- <li runat="server" id="li_Downloadadmitcard">
                                         <a href="Downloadadmitcard.aspx" class="nav-link">Download Admit Card</a>
                                     </li>

@@ -74,8 +74,7 @@
             /* remove flex:1 so width is controlled only by Bootstrap col-7/col-5 */
             min-width: auto;
             max-width: 100%;
-                height: 37em;
- 
+            height: 37em;
         }
 
         .info-card, .right-section {
@@ -141,12 +140,12 @@
                     </div>
 
                 </div>
-                 <div class="col-lg-4">
+                <div class="col-lg-4">
                     <div class="small" style="line-height: 1.4;">
                         <div><span class="fw-lighter">Help Desk No.:</span> 0612-2230039<span style="color: #d32f2f;" class="fw-lighter"></span></div>
-                       <%-- <div class="fw-lighter">(10 AM to 6 PM)</div>--%>
+                        <%-- <div class="fw-lighter">(10 AM to 6 PM)</div>--%>
                         <div><span class="fw-lighter">Help Desk Email: <b>bsebinterhelpdesk@gmail.com</b></span> <%--<span style="color: #d32f2f;" class="fw-lighter"></span>--%></div>
-                 <%--       <div><span class="fw-lighter">Payment Help Desk No.:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>--%>
+                        <%--       <div><span class="fw-lighter">Payment Help Desk No.:</span> <span style="color: #d32f2f;" class="fw-lighter"></span></div>--%>
                     </div>
                 </div>
                 <!-- Right: Help Desk Info -->
@@ -182,8 +181,8 @@
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">5</div>
                     <small style="font-size: 12px;">Fill Examination Form</small>
                 </div>
-               <%-- <div class="step-line flex-grow-1"></div>--%>
-              <%--  <div class="step-item text-center">
+                <%-- <div class="step-line flex-grow-1"></div>--%>
+                <%--  <div class="step-item text-center">
                     <div class="circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-1" style="width: 28px; height: 28px; font-size: 13px;">6</div>
                     <small style="font-size: 12px;">Declaration Upload</small>
                 </div>--%>
@@ -207,19 +206,45 @@
                         <div class="right-section d-flex flex-column h-100">
                             <h4 class="mb-3 text-center">Information And Notifications</h4>
                             <hr>
-                           <%-- <p style="color: #e66000; font-weight: 500; font-size: 16px;">
+                            <%-- <p style="color: #e66000; font-weight: 500; font-size: 16px;">
                                 <i class="fas fa-home"></i>नोट: यहाँ पर आप महत्वपूर्ण सूचना देख सकते हैं।
                             </p>--%>
 
-                          <%--  <p class="mt-4" style="color:red; font-weight:bold;font-size: 30px">
+                            <%--  <p class="mt-4" style="color:red; font-weight:bold;font-size: 30px">
                                The website will remain closed for maintenance today from 9:00 PM to 10:30 PM.
                             </p>--%>
                             <a href="assets/Notifications/Vigyapti-for-Inter-Annual-Exam-2026.pdf"
                                 download="Vigyapti-for-Inter-Annual-Exam-2026.pdf"
-                                style="color: #3059c4; display: block; font-size:25px;"
+                                style="color: #3059c4; display: block; font-size: 25px;"
                                 class="mt-4">
                                 <i class="fas fa-file-download"></i>Click here to download vigyapti for Intermediate Annual Examination 2026 
                             </a>
+                            <a href="javascript:void(0);"
+                                onclick="downloadAllFiles()"
+                                style="color: #3059c4; display: block; font-size: 25px;"
+                                class="mt-4">
+                                <i class="fas fa-file-download"></i>Click here to download all Ex-student Exam Forms
+                            </a>
+
+                            <script>
+                                function downloadAllFiles() {
+                                    const files = [
+                                        "assets/Notifications/Vocational-Ex-Students.pdf",
+                                        "assets/Notifications/Art-Ex-Student's.pdf",
+                                        "assets/Notifications/Commerce-Ex-Student's.pdf",
+                                        "assets/Notifications/Science-Ex-Students.pdf"
+                                    ];
+
+                                    files.forEach(file => {
+                                        const a = document.createElement("a");
+                                        a.href = file;
+                                        a.download = file.split('/').pop(); // keep original filename
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                    });
+                                }
+                            </script>
 
                             <%--<a href="assets/Notifications/CommercePrivate.pdf"
                                 download="CommercePrivate.pdf"

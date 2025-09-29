@@ -111,17 +111,17 @@ public partial class PayExamFormFee : System.Web.UI.Page
                 if (result != null && result.Rows.Count > 0)
                 {
 
-
-
                     foreach (DataRow row in result.Rows)
                     {
                         string clientTxnId = row["ClientTxnId"].ToString();
-                        string rowStatus = row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : "";
+                        string rowStatus = row.Table.Columns.Contains("PaymentStatus") && row["PaymentStatus"] != DBNull.Value
+                   ? row["PaymentStatus"].ToString()
+                   : string.Empty;
 
-                        if (!string.IsNullOrEmpty(clientTxnId) &&
-                            (string.IsNullOrEmpty(rowStatus) ||
-                             rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
-                             rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase)))
+                        if (string.IsNullOrEmpty(rowStatus) ||
+       rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
+       rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) ||
+       rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase))
                         {
                             string clientCode = ConfigurationManager.AppSettings["Clientcode"];
                             string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
@@ -142,13 +142,40 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
                             if (txnNode != null)
                             {
-                                string apiStatus = txnNode.Attributes["status"].Value ?? "";
-                                string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"].Value ?? "";
-                                string bankTxnId = txnNode.Attributes["txnId"].Value ?? "";
-                                string paidAmount = txnNode.Attributes["payeeAmount"].Value ?? "";
-                                string paymentUpdateddate = txnNode.Attributes["transCompleteDate"].Value ?? "";
-                                string paymentmode = txnNode.Attributes["paymentMode"].Value ?? "";
-                                string errorcode = txnNode.Attributes["errorCode"].Value ?? "";
+                                string apiStatus = txnNode.Attributes["status"] != null
+                            ? txnNode.Attributes["status"].Value
+                            : "";
+
+                                string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
+                                                            ? txnNode.Attributes["sabPaisaRespCode"].Value
+                                                            : "";
+
+                                string bankTxnId = txnNode.Attributes["txnId"] != null
+                                                            ? txnNode.Attributes["txnId"].Value
+                                                            : "";
+
+                                string paidAmount = txnNode.Attributes["payeeAmount"] != null
+                                                            ? txnNode.Attributes["payeeAmount"].Value
+                                                            : "";
+
+                                string paymentUpdateddate = txnNode.Attributes["transCompleteDate"] != null
+                                                            ? txnNode.Attributes["transCompleteDate"].Value
+                                                            : "";
+
+                                string paymentmode = txnNode.Attributes["paymentMode"] != null
+                                                            ? txnNode.Attributes["paymentMode"].Value
+                                                            : "";
+
+                                string errorcode = txnNode.Attributes["errorCode"] != null
+                                                            ? txnNode.Attributes["errorCode"].Value
+                                                            : "";
+
+
+                                if (errorcode == "400")
+                                {
+                                    
+                                    continue; // go to next txnNode
+                                }
 
                                 // Update database
                                 db.UpdateChallanInquiry(clientTxnId, apiStatus, paymentStatusCode, bankTxnId, paidAmount, paymentmode, paymentUpdateddate);
@@ -169,18 +196,18 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                 }
 
                                 // Show alert only if errorCode exists AND is not 400
-                                if (!string.IsNullOrEmpty(errorcode) && errorcode != "400")
-                                {
-                                    string script = @"
-swal({{
-    title: 'Failed',
-    text: 'Transaction ID: {clientTxnId}\nError Code: {errorcode}',
-    icon: 'error',
-    button: 'Retry'
-}});";
-                                    ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
-                                    System.Diagnostics.Debug.WriteLine("Transaction error for " + clientTxnId + ": " + errorcode);
-                                }
+//                                if (!string.IsNullOrEmpty(errorcode) && errorcode != "400")
+//                                {
+//                                    string script = @"
+//swal({{
+//    title: 'Failed',
+//    text: 'Transaction ID: {clientTxnId}\nError Code: {errorcode}',
+//    icon: 'error',
+//    button: 'Retry'
+//}});";
+//                                    ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
+//                                    System.Diagnostics.Debug.WriteLine("Transaction error for " + clientTxnId + ": " + errorcode);
+//                                }
                             }
                             else
                             {
@@ -196,39 +223,41 @@ swal({{
                                 System.Diagnostics.Debug.WriteLine("No transaction data found for " + clientTxnId);
                             }
                         }
+
                     }
 
 
 
 
-                    // Rebind fresh data
-                    DataTable result1 = db.GetExamPaymentDetails(collegeid, collegecode, ExamId);
-                    if (result1 != null && result1.Rows.Count > 0)
-                    {
-                        rpt_getpayemnt.DataSource = result1;
-                        rpt_getpayemnt.DataBind();
-
-                        divpayment.Visible = true;
-                        divstudentdetails.Visible = false;
-                        divpnlNoRecords.Visible = false;
-                        pnlStudentTable.Visible = false;
-                    }
-                    else
-                    {
-                        rpt_getpayemnt.DataSource = null;
-                        rpt_getpayemnt.DataBind();
-                        divpnlNoRecords.Visible = true;
-                        pnlStudentTable.Visible = false;
-                    }
+                    
+                  
                 }
+                //else
+                //{
+                //    rpt_getpayemnt.DataSource = null;
+                //    rpt_getpayemnt.DataBind();
+                //    divpnlNoRecords.Visible = true;
+                //    divstudentdetails.Visible = false;
+                //    //pnlStudentTable.Visible = false;
+                //}
+                // Rebind fresh data
+                DataTable result1 = db.GetExamPaymentDetails(collegeid, collegecode, ExamId);
+                if (result1 != null && result1.Rows.Count > 0)
+                {
+                    rpt_getpayemnt.DataSource = result1;
+                    rpt_getpayemnt.DataBind();
 
+                    divpayment.Visible = true;
+                    divstudentdetails.Visible = false;
+                    divpnlNoRecords.Visible = false;
+                    pnlStudentTable.Visible = false;
+                }
                 else
                 {
                     rpt_getpayemnt.DataSource = null;
                     rpt_getpayemnt.DataBind();
                     divpnlNoRecords.Visible = true;
-                    divstudentdetails.Visible = false;
-                    //pnlStudentTable.Visible = false;
+                    pnlStudentTable.Visible = false;
                 }
 
             }
@@ -445,6 +474,7 @@ swal({{
             string channelid = ConfigurationManager.AppSettings["channelid"];
 
 
+
             string query = "";
             string address = "";
 
@@ -473,8 +503,8 @@ swal({{
             // Create an HTML form for submitting the request to the payment gateway
             string respString = "<html>" +
                               "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
-                                  "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                      // "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                 // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                       "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
                                       "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
                                       "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
                                       "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled

@@ -105,6 +105,7 @@ public partial class CollegeUserDetails : System.Web.UI.Page
         try
         {
             string userName = txtChangeUserName.Text.Trim();
+           
             string newPassword = txtNewPassword.Text.Trim();
 
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(newPassword))
