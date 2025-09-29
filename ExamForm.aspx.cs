@@ -94,12 +94,13 @@ public partial class ExamForm : System.Web.UI.Page
         {
 
             string studentId = ((Button)sender).CommandArgument;
+            string encryptedStudentId = CryptoHelper.Encrypt(studentId);
             //string RegistrationType = Request.Form["regType"];
             Button btnEdit = (Button)sender;
             RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
             HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
             string examTypeId = hfExamTypeid != null ? hfExamTypeid.Value : "";
-            string url = "ViewExamDetalis.aspx?studentId=" + Server.UrlEncode(studentId.ToString()) + "&examTypeId=" + Server.UrlEncode(examTypeId.ToString()) + "&from=ExamForm";
+            string url = "ViewExamDetalis.aspx?studentId=" + Server.UrlEncode(encryptedStudentId.ToString()) + "&examTypeId=" + Server.UrlEncode(examTypeId.ToString()) + "&from=ExamForm";
             Response.Redirect(url, false);
 
             // string url = "viewstudentregdetalis.aspx?studentId=" + Server.UrlEncode(studentId.ToString()) +
@@ -278,23 +279,23 @@ public partial class ExamForm : System.Web.UI.Page
 
 
 
-    protected void btnCorreaction_Click(object sender, EventArgs e)
-    {
+    //protected void btnCorreaction_Click(object sender, EventArgs e)
+    //{
        
-        Button btnEdit = (Button)sender;
-        RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
-        HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
-        string examTypeId = hfExamTypeid != null ? hfExamTypeid.Value : "";
+    //    Button btnEdit = (Button)sender;
+    //    RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
+    //    HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
+    //    string examTypeId = hfExamTypeid != null ? hfExamTypeid.Value : "";
 
-        string studentId = btnEdit.CommandArgument;
-        string encryptedStudentId = CryptoHelper.Encrypt(studentId);
-        //string registrationType = Request.Form["regType"];
+    //    string studentId = btnEdit.CommandArgument;
+    //    string encryptedStudentId = CryptoHelper.Encrypt(studentId);
+    //    //string registrationType = Request.Form["regType"];
 
-        string url = "ExamCorrectionForm.aspx?studentId=" + Server.UrlEncode(encryptedStudentId) + "&examTypeId=" + Server.UrlEncode(examTypeId);
-        //string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(studentId) + "&registrationType=" + Server.UrlEncode(registrationType) + "&examTypeId=" + Server.UrlEncode(examTypeId);
+    //    string url = "ExamCorrectionForm.aspx?studentId=" + Server.UrlEncode(encryptedStudentId) + "&examTypeId=" + Server.UrlEncode(examTypeId);
+    //    //string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(studentId) + "&registrationType=" + Server.UrlEncode(registrationType) + "&examTypeId=" + Server.UrlEncode(examTypeId);
 
-        Response.Redirect(url, false);
-    }
+    //    Response.Redirect(url, false);
+    //}
 
     protected void btnEdit_Click(object sender, EventArgs e)
     {

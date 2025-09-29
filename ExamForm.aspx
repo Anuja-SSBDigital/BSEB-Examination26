@@ -142,7 +142,7 @@
                                 <th>Father Name</th>
                                 <th>Mother Name</th>
                                 <th>TransactionId</th>
-                                <th>Correaction</th>
+                                <%--<th>Correaction</th>--%>
                                 <th>Edit</th>
                                 <th>View</th>
                                 <th>Status</th>
@@ -160,7 +160,7 @@
                                         <td><%# Eval("FatherName") %></td>
                                         <td><%# Eval("MotherName") %></td>
                                         <td><%# Eval("TransactionId") %></td>
-                                        <td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correaction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>
+                                        <%--<td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correaction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>--%>
 
                                         <td>
                                             <asp:HiddenField ID="hfExamFeeSubmit" runat="server" Value='<%# Eval("IsExamFeeSubmit") %>' />
