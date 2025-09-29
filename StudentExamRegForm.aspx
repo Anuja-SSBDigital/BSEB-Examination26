@@ -486,6 +486,7 @@
                         <div class="col-12 text-center">
                             <asp:HiddenField ID="hfStudentId" runat="server" />
                             <asp:HiddenField ID="hfFaculty" runat="server" />
+                            <asp:HiddenField ID="hfStudentIdEncrypted" runat="server" />
 
 
                             <asp:Button ID="btnUpdate" runat="server" Text="Update" CssClass="btn btn-primary" OnClientClick="return validateStudentDetails();" />
@@ -883,12 +884,13 @@
                 debugger
                 swal("Success", response.message, "success").then(() => {
                     // Get the values from the form fields directly
-                    var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+            <%--var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;--%>
+                    var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
             var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
             var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
                     var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
 
-                    var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
+                    var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
                         "&FacultyId=" + encodeURIComponent(facultyId) +
                         "&ExamTypeId=" + encodeURIComponent(examTypeId) +
                         "&collegeCode=" + encodeURIComponent(collegeCode);
@@ -938,12 +940,13 @@
     function (response) {
         if (response.status === "success") {
             swal("Success", response.message, "success").then(() => {
-                var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
+               <%--var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;--%>
+                var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
                 var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
                 var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
                 var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
 
-                var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentId) +
+                var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
                     "&FacultyId=" + encodeURIComponent(facultyId) +
                     "&ExamTypeId=" + encodeURIComponent(examTypeId) +
                     "&collegeCode=" + encodeURIComponent(collegeCode);
