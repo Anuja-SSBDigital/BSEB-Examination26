@@ -17,7 +17,9 @@ public partial class ViewExamDetalis : System.Web.UI.Page
             {
                 try
                 {
-                    string StudentId = Request.QueryString["studentId"];
+                    string encryptedStudentId = Request.QueryString["studentId"];
+                    string StudentId = CryptoHelper.Decrypt(encryptedStudentId);
+                    //string StudentId = Request.QueryString["studentId"];
                     //string CategoryType = Request.QueryString["CategoryType"];
                     //string RegistrationType = Request.QueryString["RegistrationType"];
                     string ExamTypeId = Request.QueryString["ExamTypeId"];
@@ -166,7 +168,9 @@ public partial class ViewExamDetalis : System.Web.UI.Page
     {
         try
         {
-            string studentId = Request.QueryString["studentId"];
+            //string studentId = Request.QueryString["studentId"];
+            string encryptedStudentId = Request.QueryString["studentId"];
+            string studentId = CryptoHelper.Decrypt(encryptedStudentId);
             string CategoryType = Request.QueryString["CategoryType"];
             if (string.IsNullOrEmpty(studentId))
             {
