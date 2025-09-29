@@ -20,8 +20,11 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 {
 
                     Binddropdown();
-                   // BindFacultydropdown();
-                    string StudentId = Request.QueryString["studentId"];
+                    // BindFacultydropdown();
+                    //string StudentId = Request.QueryString["studentId"];
+                    string encryptedStudentId = Request.QueryString["studentId"];
+                    string StudentId = CryptoHelper.Decrypt(encryptedStudentId);
+                    hfStudentIdEncrypted.Value = CryptoHelper.Encrypt(StudentId);
                     //string registrationType = Request.QueryString["registrationType"];
                     string examTypeId = Request.QueryString["examTypeId"];
                    
@@ -40,9 +43,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                     string aadharValue = txtAadharNumber.Text.Replace("'", "\\'").Trim();
 
                     // Use string concatenation instead of interpolated strings
-                    string script = "<script type='text/javascript'>\n" +
-                                    "window.aadharValue = '" + aadharValue + "';\n" +
-                                    "</script>";
+                    string script = "<script type='text/javascript'>\n" + "window.aadharValue = '" + aadharValue + "';\n" + "</script>";
 
                     ClientScript.RegisterStartupScript(this.GetType(), "aadharScript", script);
                 }
@@ -377,7 +378,8 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
             if (result > 0)
             {
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+                string encryptedStudentId = CryptoHelper.Encrypt(studentId);
+                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
                 return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
             }
             else
@@ -455,10 +457,8 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
             if (result > 0)
             {
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(studentId) +
-                                     "&FacultyId=" + HttpUtility.UrlEncode(facultyId) +
-                                     "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) +
-                                     "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+                string encryptedStudentId = CryptoHelper.Encrypt(studentId);
+                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
                 return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
             }
             else
