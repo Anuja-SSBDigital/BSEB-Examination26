@@ -91,35 +91,35 @@
                 color: white;
                 border: 1px solid #6777ef;
             }
-              /* ====== Marquee ====== */
-  marquee {
-      color: #2f8dd3;
-      font-weight: bold;
-      margin: 10px 0 15px;
-  }
+        /* ====== Marquee ====== */
+        marquee {
+            color: #2f8dd3;
+            font-weight: bold;
+            margin: 10px 0 15px;
+        }
 
-      marquee a {
-          color: #003399;
-          text-decoration: underline;
-      }
+            marquee a {
+                color: #003399;
+                text-decoration: underline;
+            }
     </style>
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
-   
-         <marquee behavior="scroll" direction="left" scrollamount="3">
-       <span style="color: red;">
-           <i class="fa fa-phone fa-flip-horizontal"></i>Bihar School Examination Board Helpline : 0612-2230039
-       </span>
-       &nbsp;&nbsp;&nbsp;
+
+    <marquee behavior="scroll" direction="left" scrollamount="3">
+        <span style="color: red;">
+            <i class="fa fa-phone fa-flip-horizontal"></i>Bihar School Examination Board Helpline : 0612-2230039
+        </span>
+        &nbsp;&nbsp;&nbsp;
        <span style="color: blue;">For any query related to Student's Registration please contact at
            <a href="mailto:bsebinterhelpdesk@gmail.com">
                <i class="fa fa-envelope"></i>bsebinterhelpdesk@gmail.com
            </a>
        </span>
-   </marquee>
-  
+    </marquee>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -234,12 +234,14 @@
                                             <th class="repeater-checkbox">
                                                 <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
                                                 <asp:HiddenField ID="hfSelectedIds" runat="server" />
+                                                <asp:HiddenField ID="hfSelectedStudentFees" runat="server" />
                                             </th>
+                                           
                                             <th>OFSS No.</th>
                                             <th>Name</th>
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
-                                            <th style="width: 80px;">DOB</th>
+                                            <th>DOB</th>
                                             <th>Board Name</th>
                                             <th>Category</th>
                                             <th>Fee Amount</th>
@@ -253,6 +255,9 @@
                                                     <td class="repeater-checkbox">
                                                         <asp:CheckBox ID="chkRowSelect" runat="server" AutoPostBack="false" OnClientClick="updateSelectAllState();" />
                                                         <asp:HiddenField ID="hfStudentID" runat="server" Value='<%# Eval("StudentID") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblRowNumber" Text='<%# Container.ItemIndex + 1 %>' runat="server" />
                                                     </td>
                                                     <td><%#Eval("OfssReferenceNo") %></td>
                                                     <td><%#Eval("Name") %></td>
@@ -296,7 +301,7 @@
                                         <th>+2 School/College Code</th>
                                         <th>Transaction ID</th>
                                         <th>Student No</th>
-                                        <th>Paid Amount</th>
+                                        <th>Payment Amount</th>
                                         <th>Payment Initiate Date</th>
                                         <th>Payment Updated Date</th>
                                         <th>Status</th>
@@ -313,29 +318,29 @@
                                                 <td><%# Eval("CollegeCode") %></td>
                                                 <td><%# Eval("ClientTxnId") %></td>
                                                 <td><%# Eval("StudentsPerTransaction") %></td>
-                                                <td><%# Eval("AmountPaid") %></td>
+                                                <td><%# Eval("PaymentAmount") %></td>
                                                 <td><%# Eval("PaymentInitiateDate", "{0:dd-MM-yyyy}") %></td>
                                                 <td><%# Eval("PaymentUpdatedDate", "{0:dd-MM-yyyy}") %></td>
                                                 <td><%# Eval("PaymentStatus") %></td>
                                                 <asp:HiddenField runat="server" ID="hf_status" Value='<%# Eval("PaymentStatus") %>' />
                                                 <td>
-                                                     <div style="display: inline-flex;">
-                                                    <!-- View Button -->
-                                                    <a href='viewpaymentdetails.aspx?id=<%# Eval("ClientTxnId") %>'
-                                                        class="btn btn-sm btn-primary me-2"
-                                                        target="_blank">View
-                                                    </a>
+                                                    <div style="display: inline-flex;">
+                                                        <!-- View Button -->
+                                                        <a href='viewpaymentdetails.aspx?id=<%# Eval("ClientTxnId") %>'
+                                                            class="btn btn-sm btn-primary me-2"
+                                                            target="_blank">View
+                                                        </a>
 
-                                                    <!-- Download Receipt Button -->
-                                                    <asp:LinkButton ID="lnkDownload"
-                                                        runat="server"
-                                                        CommandArgument='<%# Eval("PaymentReceiptPath") %>'
-                                                        OnCommand="DownloadReceipt"
-                                                        CssClass="btn btn-sm btn-primary"
-                                                        Visible='<%# !string.IsNullOrEmpty(Eval("PaymentReceiptPath").ToString()) %>'>
+                                                        <!-- Download Receipt Button -->
+                                                        <asp:LinkButton ID="lnkDownload"
+                                                            runat="server"
+                                                            CommandArgument='<%# Eval("PaymentReceiptPath") %>'
+                                                            OnCommand="DownloadReceipt"
+                                                            CssClass="btn btn-sm btn-primary"
+                                                            Visible='<%# !string.IsNullOrEmpty(Eval("PaymentReceiptPath").ToString()) %>'>
     Receipt
-                                                    </asp:LinkButton>
-                                                         </div>
+                                                        </asp:LinkButton>
+                                                    </div>
                                                 </td>
 
                                                 <td>
@@ -425,7 +430,42 @@
             updateTotalAmount();
         });
 
-        function getSelectedIds() {
+
+        function getSelectedData() {
+            var ids = [];
+            var fees = [];
+
+            document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+                var cb = row.querySelector("input[type=checkbox]");
+                var hf = row.querySelector("input[type=hidden][id$='hfStudentID']");
+                var feeCell = row.querySelector(".fee-amount");
+
+                if (cb && cb.checked && hf && feeCell) {
+                    var studentId = hf.value;
+                    var amount = parseFloat(feeCell.getAttribute("data-amount")) || 0;
+
+                    ids.push(studentId);
+                    fees.push(studentId + ":" + amount); // build mapping
+                }
+            });
+
+            return { ids: ids, fees: fees };
+        }
+
+        function updateHiddenField() {
+            var data = getSelectedData();
+
+            // already present hidden field for IDs
+            var hiddenIds = document.getElementById('<%= hfSelectedIds.ClientID %>');
+            hiddenIds.value = data.ids.join(',');
+
+            // new hidden field for ID:Fee mapping
+            var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
+            hiddenFees.value = data.fees.join(',');
+        }
+
+
+      <%--  function getSelectedIds() {
             var ids = [];
             document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
                 var cb = row.querySelector("input[type=checkbox]");
@@ -440,7 +480,7 @@
         function updateHiddenField() {
             var hiddenField = document.getElementById('<%= hfSelectedIds.ClientID %>');
             hiddenField.value = getSelectedIds().join(',');
-        }
+        }--%>
 
         function updateTotalAmount() {
             var total = 0;

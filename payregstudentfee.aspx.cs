@@ -17,11 +17,15 @@ using System.Net.Http;
 using System.Web.Script.Serialization;
 using System.Net;
 using System.Xml;
+using log4net;
+
 
 
 public partial class payregstudentfee : System.Web.UI.Page
 {
     DBHelper db = new DBHelper();
+    Encryption cs = new Encryption();
+    
 
 
 
@@ -399,13 +403,29 @@ public partial class payregstudentfee : System.Web.UI.Page
         string payerEmail = EmailId;
 
         string clientTxnId = "N/A";
+        string studentFeeMapping = hfSelectedStudentFees.Value;
+        decimal totalAmount = 0;
+
+        if (!string.IsNullOrEmpty(studentFeeMapping))
+        {
+            foreach (string item in studentFeeMapping.Split(','))
+            {
+                string[] parts = item.Split(':');
+                decimal fee;
+                if (parts.Length == 2 && decimal.TryParse(parts[1], out fee))
+                {
+                    totalAmount += fee;
+                }
+            }
+        }
+
 
         // ✅ Insert payment details into DB
         string message = db.InsertStudentPaymentDetails(
             collegeId,
             1, // PaymentTypeId (assumed)
             ddl_paymode.SelectedValue,
-            Convert.ToDecimal(hfTotalAmount.Value),
+           totalAmount,
             selectedStudentIds
         );
 
@@ -461,38 +481,82 @@ public partial class payregstudentfee : System.Web.UI.Page
         string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
         string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
         string callbackUrl = ConfigurationManager.AppSettings["callbackUrl"];
+        string mcc = ConfigurationManager.AppSettings["mcc"];
+        string AmountType = ConfigurationManager.AppSettings["AmountType"];
+        string channelid = ConfigurationManager.AppSettings["channelid"];
 
-        string encryptedData = forwardToSabPaisa(
-            clientCode,
-            transUserName,
-            transUserPassword,
-            authKey,
-            authIV,
-            payerName,
-            payerEmail,
-            payerMobile,
-            "",
-            clientTxnId,
-           hfTotalAmount.Value,
-            "INR",
-            "W",
-            "8795",
-            callbackUrl
-        );
+        string respString = "";
+        //string query = "";
 
-        string respString = "<html>" +
-            "<body onload='document.forms[\"sabPaisaForm\"].submit()'>" +
-              "<form name='sabPaisaForm' method='post' action='https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
-          //  "<form name='sabPaisaForm' method='post' action='https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
-            "<input type='hidden' name='encData' value='" + encryptedData + "' />" +
-            "<input type='hidden' name='clientCode' value='" + clientCode + "' />" +
-            "</form>" +
-            "</body>" +
-            "</html>";
+        //query = query + "payerName=" + payerName.Trim() + "";
+        //query = query + "&payerEmail=" + payerEmail.Trim() + "";
+        //query = query + "&payerMobile=" + payerMobile.Trim() + "";
+        //query = query + "&clientCode=" + clientCode.Trim() + "";
+        //query = query + "&transUserName=" + transUserName.Trim() + "";
+        //query = query + "&transUserPassword=" + transUserPassword.Trim() + "";
+        //query = query + "&payerAddress=" + "" + "";
+        //query = query + "&clientTxnId=" + clientTxnId.Trim() + "";
+        //query = query + "&amount=" + totalAmount.ToString() + "";
+        //query = query + "&amountType=" + AmountType.Trim() + "";
+        //query = query + "&channelId=" + channelid.Trim() + "";
+        //query = query + "&mcc=" + mcc.Trim() + "";
+        //query = query + "&callbackUrl=" + callbackUrl.Trim() + "";
 
-        Response.Clear();
+        //// Pass extra parameters in Udf1 to udf20 
+        ////query = query + "&udf1=" + Class.Trim() + "";
+        ////query = query + "&udf2=" + Roll.Trim() + "";
+        //Encryption enc = new Encryption();
+        //// Encrypting the query string
+        //string encdata = enc.EncryptString(authKey, authIV, query);
+
+        //// Create an HTML form for submitting the request to the payment gateway
+        //string respString = "<html>" +
+        //                    "<body>" +
+        //                        "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+        //                        "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
+        //                        "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
+        //                        "<input type=\"submit\" name=\"submit\" value=\"submit\" id=\"submitButton\">" +
+        //                        "</form>" +
+        //                    "</body>" +
+        //                    "</html>";
+
+        // For production Use this Url :- https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1
+        // For testing Use this Url :- https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1
+
+        // Write the form HTML to the response
         Response.Write(respString);
-        Response.End();
+
+        //string encryptedData = forwardToSabPaisa(
+        //    clientCode,
+        //    transUserName,
+        //    transUserPassword,
+        //    authKey,
+        //    authIV,
+        //    payerName,
+        //    payerEmail,
+        //    payerMobile,
+        //    "",
+        //    clientTxnId,
+        //  totalAmount.ToString(),
+        //    "INR",
+        //    "W",
+        //    "8795",
+        //    callbackUrl
+        //);
+
+        //string respString = "<html>" +
+        //    "<body onload='document.forms[\"sabPaisaForm\"].submit()'>" +
+        //      "<form name='sabPaisaForm' method='post' action='https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
+        //  //  "<form name='sabPaisaForm' method='post' action='https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1'>" +
+        //    "<input type='hidden' name='encData' value='" + encryptedData + "' />" +
+        //    "<input type='hidden' name='clientCode' value='" + clientCode + "' />" +
+        //    "</form>" +
+        //    "</body>" +
+        //    "</html>";
+
+        //Response.Clear();
+        //Response.Write(respString);
+        //Response.End();
 
     }
 
