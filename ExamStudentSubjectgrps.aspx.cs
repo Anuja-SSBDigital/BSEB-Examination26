@@ -18,7 +18,9 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
             {
                 if (Session["CollegeId"] != null)
                 {
-                    string studentId = Request.QueryString["studentId"];
+                    string encryptedStudentId = Request.QueryString["studentId"];
+                    string studentId = CryptoHelper.Decrypt(encryptedStudentId);
+                   // string studentId = Request.QueryString["studentId"];
                     string FacultyId = Request.QueryString["FacultyId"];
                     string ExamTypeId = Request.QueryString["ExamTypeId"];
                     hnd_extype.Value = ExamTypeId;
@@ -497,7 +499,9 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
     {
         try
         {
-            string studentId = Request.QueryString["studentId"];
+            //string studentId = Request.QueryString["studentId"];
+            string encryptedStudentId = Request.QueryString["studentId"];
+            string studentId = CryptoHelper.Decrypt(encryptedStudentId);
             string ExamTypeId = Request.QueryString["ExamTypeId"];
             string modifiedBy = Session["CollegeId"].ToString();
             string FacultyId = Request.QueryString["FacultyId"];
@@ -520,7 +524,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
             SaveSelectedSubjects(rptElectiveSubjects, studentId, modifiedBy, 3, Convert.ToInt32(ExamTypeId));
             SaveSelectedSubjects(rptAdditionalSubjects, studentId, modifiedBy, 4, Convert.ToInt32(ExamTypeId));
 
-
+            //string encryptedStudentId = CryptoHelper.Encrypt(studentId);
             string script = @"
                     <script>
                         Swal.fire({
@@ -530,7 +534,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = 'StudentPhotoAndsignatureDetails.aspx?studentId=" + Server.UrlEncode(studentId.ToString()) + "&ExamTypeId=" + Server.UrlEncode(ExamTypeId.ToString()) + @"';
+                                window.location.href = 'StudentPhotoAndsignatureDetails.aspx?studentId=" + Server.UrlEncode(encryptedStudentId.ToString()) + "&ExamTypeId=" + Server.UrlEncode(ExamTypeId.ToString()) + @"';
                             }
                         });
                     </script>";
