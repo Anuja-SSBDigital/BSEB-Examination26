@@ -18,7 +18,9 @@ public partial class StudentPhotoAndsignatureDetails : System.Web.UI.Page
             {
                 if (Session["CollegeId"] != null)
                 {
-                    string studentId = Request.QueryString["studentId"];
+                    string encryptedStudentId = Request.QueryString["studentId"];
+                    string studentId = CryptoHelper.Decrypt(encryptedStudentId);
+                    // string studentId = Request.QueryString["studentId"];
                     string ExamTypeId = Request.QueryString["ExamTypeId"];
 
                     if (!string.IsNullOrEmpty(studentId))
@@ -36,8 +38,6 @@ public partial class StudentPhotoAndsignatureDetails : System.Web.UI.Page
                             string dirPHOTOSPath = "~/Uploads/StudentsReg/Photos/";
                             hfFacultyId.Value = FacultyId;
                             hfCategoryType.Value = CategoryType;
-                           
-                         
                             if (!string.IsNullOrEmpty(studentPhotoPath))
                             {
                                 hfExistingPhotoPath.Value = dirPHOTOSPath + studentPhotoPath;
@@ -91,7 +91,9 @@ public partial class StudentPhotoAndsignatureDetails : System.Web.UI.Page
     {
         try
         {
-            string studentId = Request.QueryString["studentId"];
+            //string studentId = Request.QueryString["studentId"];
+            string encryptedStudentId = Request.QueryString["studentId"];
+            string studentId = CryptoHelper.Decrypt(encryptedStudentId);
             if (string.IsNullOrEmpty(studentId))
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Student ID missing.');", true);
@@ -186,7 +188,8 @@ public partial class StudentPhotoAndsignatureDetails : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(ExamTypeId))
             {
-                url = "ViewExamDetalis.aspx?studentId=" + Server.UrlEncode(studentId) +
+     
+                url = "ViewExamDetalis.aspx?studentId=" + Server.UrlEncode(encryptedStudentId) +
                       "&ExamTypeId=" + Server.UrlEncode(ExamTypeId);
             }
             else
