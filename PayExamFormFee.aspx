@@ -130,6 +130,7 @@
                         <label for="paymode">Pay Mode</label>
                         <asp:DropDownList runat="server" ID="ddl_paymode" CssClass="form-control form-select">
                             <asp:ListItem Value="Indian Bank">Indian Bank</asp:ListItem>
+                             <asp:ListItem Text="Axis Bank" Value="Axis Bank"></asp:ListItem>
                         </asp:DropDownList>
                     </div>
                 </div>

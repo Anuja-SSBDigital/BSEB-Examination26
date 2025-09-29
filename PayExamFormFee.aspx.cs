@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.IO;
@@ -93,6 +94,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
             string Collegename = Session["CollegeName"].ToString();
             int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
             int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
+          
             if (rdo_payemntstatus.Checked == true)
             {
                 int collegeid = 0;
@@ -114,100 +116,209 @@ public partial class PayExamFormFee : System.Web.UI.Page
                     foreach (DataRow row in result.Rows)
                     {
                         string clientTxnId = row["ClientTxnId"].ToString();
-                        string rowStatus = row.Table.Columns.Contains("PaymentStatus") && row["PaymentStatus"] != DBNull.Value
-                   ? row["PaymentStatus"].ToString()
-                   : string.Empty;
-
-                        if (string.IsNullOrEmpty(rowStatus) ||
-       rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) ||
-       rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) ||
-       rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase))
+                        string rowStatus = row.Table.Columns.Contains("PaymentStatus") && row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : string.Empty;
+                        string paymentGateway = row["BankGateway"].ToString();
+                        if (string.IsNullOrEmpty(rowStatus) || rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase))
                         {
-                            string clientCode = ConfigurationManager.AppSettings["Clientcode"];
-                            string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
-
-                            string responseString = "";
-                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                            request.Method = "GET";
-
-                            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                            if (paymentGateway.Equals("Indian Bank", StringComparison.OrdinalIgnoreCase))
                             {
-                                responseString = reader.ReadToEnd();
-                            }
+                                string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+                                string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
 
-                            XmlDocument xmlDoc = new XmlDocument();
-                            xmlDoc.LoadXml(responseString);
-                            XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
+                                string responseString = "";
+                                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                                request.Method = "GET";
 
-                            if (txnNode != null)
-                            {
-                                string apiStatus = txnNode.Attributes["status"] != null
-                            ? txnNode.Attributes["status"].Value
-                            : "";
-
-                                string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
-                                                            ? txnNode.Attributes["sabPaisaRespCode"].Value
-                                                            : "";
-
-                                string bankTxnId = txnNode.Attributes["txnId"] != null
-                                                            ? txnNode.Attributes["txnId"].Value
-                                                            : "";
-
-                                string paidAmount = txnNode.Attributes["payeeAmount"] != null
-                                                            ? txnNode.Attributes["payeeAmount"].Value
-                                                            : "";
-
-                                string paymentUpdateddate = txnNode.Attributes["transCompleteDate"] != null
-                                                            ? txnNode.Attributes["transCompleteDate"].Value
-                                                            : "";
-
-                                string paymentmode = txnNode.Attributes["paymentMode"] != null
-                                                            ? txnNode.Attributes["paymentMode"].Value
-                                                            : "";
-
-                                string errorcode = txnNode.Attributes["errorCode"] != null
-                                                            ? txnNode.Attributes["errorCode"].Value
-                                                            : "";
-
-
-                                if (errorcode == "400")
+                                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                                 {
-                                    
-                                    continue; // go to next txnNode
+                                    responseString = reader.ReadToEnd();
                                 }
 
-                                // Update database
-                                db.UpdateChallanInquiry(clientTxnId, apiStatus, paymentStatusCode, bankTxnId, paidAmount, paymentmode, paymentUpdateddate);
+                                XmlDocument xmlDoc = new XmlDocument();
+                                xmlDoc.LoadXml(responseString);
+                                XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
 
-                                // Update student fees if SUCCESS
-                                if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
+                                if (txnNode != null)
                                 {
-                                    DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
-                                    if (dsStudents != null && dsStudents.Tables.Count > 0)
+                                    string apiStatus = txnNode.Attributes["status"] != null  ? txnNode.Attributes["status"].Value : "";
+
+                                    string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
+                                                                ? txnNode.Attributes["sabPaisaRespCode"].Value
+                                                                : "";
+
+                                    string bankTxnId = txnNode.Attributes["txnId"] != null
+                                                                ? txnNode.Attributes["txnId"].Value
+                                                                : "";
+
+                                    string paidAmount = txnNode.Attributes["payeeAmount"] != null
+                                                                ? txnNode.Attributes["payeeAmount"].Value
+                                                                : "";
+
+                                    string paymentUpdateddate = txnNode.Attributes["transCompleteDate"] != null
+                                                                ? txnNode.Attributes["transCompleteDate"].Value
+                                                                : "";
+
+                                    string paymentmode = txnNode.Attributes["paymentMode"] != null
+                                                                ? txnNode.Attributes["paymentMode"].Value
+                                                                : "";
+
+                                    string errorcode = txnNode.Attributes["errorCode"] != null
+                                                                ? txnNode.Attributes["errorCode"].Value
+                                                                : "";
+
+
+                                    if (errorcode == "400")
                                     {
-                                        DataTable dtStudents = dsStudents.Tables[1];
-                                        foreach (DataRow rowst in dtStudents.Rows)
+
+                                        continue; // go to next txnNode
+                                    }
+
+                                    // Update database
+                                    db.UpdateChallanInquiry(clientTxnId, apiStatus, paymentStatusCode, bankTxnId, paidAmount, paymentmode, paymentUpdateddate);
+
+                                    // Update student fees if SUCCESS
+                                    if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
+                                        if (dsStudents != null && dsStudents.Tables.Count > 0)
                                         {
-                                            int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
-                                            db.UpdateStudentExamFeeSubmit(studentId);
+                                            DataTable dtStudents = dsStudents.Tables[1];
+                                            foreach (DataRow rowst in dtStudents.Rows)
+                                            {
+                                                int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                                db.UpdateStudentExamFeeSubmit(studentId);
+                                            }
+                                        }
+                                    }
+
+                                    // Show alert only if errorCode exists AND is not 400
+                                    //                                if (!string.IsNullOrEmpty(errorcode) && errorcode != "400")
+                                    //                                {
+                                    //                                    string script = @"
+                                    //swal({{
+                                    //    title: 'Failed',
+                                    //    text: 'Transaction ID: {clientTxnId}\nError Code: {errorcode}',
+                                    //    icon: 'error',
+                                    //    button: 'Retry'
+                                    //}});";
+                                    //                                    ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
+                                    //                                    System.Diagnostics.Debug.WriteLine("Transaction error for " + clientTxnId + ": " + errorcode);
+                                    //                                }
+                                }
+                            }
+                            else if (paymentGateway.Equals("Axis Bank", StringComparison.OrdinalIgnoreCase))
+                            {
+                                // 🔹 Axis Enquiry API
+                                string CID = ConfigurationManager.AppSettings["Axis_CID"];
+                                string RID = clientTxnId;
+                                string key = ConfigurationManager.AppSettings["Axis_ChecksumKey"];
+                                string ENCKEY = ConfigurationManager.AppSettings["Axis_ENCKEY"];
+                                string TYP = ConfigurationManager.AppSettings["Axis_TYP"];
+
+                                // Compute checksum
+                                string checksumInput = CID + RID + RID + key;
+                                string CKS = sha256_hash(checksumInput);
+
+                                string PlainText = "CID=" + CID + "&RID=" + clientTxnId +  "&CRN=" + RID + "&VER=1.0" + "&TYP=" + TYP + "&CKS=" + CKS;
+
+                                // Encrypt the request
+                                string encryptedRequest = Encrypt(PlainText, ENCKEY);
+
+                                // URL-encode the request before sending
+                                string enquiryUrl = "https://easypay.axisbank.co.in/index.php/api/enquiry?i=" + HttpUtility.UrlEncode(encryptedRequest);
+
+                                string encryptedResponse = "";
+                                using (WebClient wc = new WebClient())
+                                {
+                                    encryptedResponse = wc.DownloadString(enquiryUrl);
+                                }
+
+                                // Handle Axis Bank errors
+                                if (encryptedResponse.StartsWith("error=", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // Log the error and continue with next transaction
+
+                                    continue; // inside a loop
+                                }
+                                try
+                                {
+                                    // URL-decode the response first
+                                    string decodedResponse = HttpUtility.UrlDecode(encryptedResponse);
+
+                                    // Convert Base64 to byte array
+                                    byte[] encryptedBytes = Convert.FromBase64String(decodedResponse);
+
+                                    // Decrypt using AES128 ECB PKCS7
+                                    string plainResponse = "";
+                                    using (RijndaelManaged rij = new RijndaelManaged())
+                                    {
+                                        rij.Key = Encoding.UTF8.GetBytes(ENCKEY.PadRight(16, ' ')); // ensure 16 bytes
+                                        rij.Mode = CipherMode.ECB;
+                                        rij.Padding = PaddingMode.PKCS7;
+
+                                        ICryptoTransform decryptor = rij.CreateDecryptor();
+                                        byte[] decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+                                        plainResponse = Encoding.UTF8.GetString(decryptedBytes);
+                                    }
+
+                                    // Parse response into dictionary
+                                    var responseDict = plainResponse.Split('&')
+                                                                    .Select(part => part.Split('='))
+                                                                    .ToDictionary(split => split[0], split => split[1]);
+
+                                    string statusCode = responseDict["STC"];
+                                    string statusMsg = responseDict["RMK"];
+                                    string paidAmount = responseDict["AMT"];
+                                    string bankRef = responseDict["BRN"];
+                                    string txnId = responseDict["TRN"];
+                                    string paymentMode = responseDict["PMD"];
+                                    string paymentDate = responseDict["TET"];
+
+                                    // Update DB
+                                    db.UpdateChallanInquiry(RID, statusMsg, statusCode, txnId, paidAmount, paymentMode, paymentDate);
+                                 
+
+                                    if (statusCode == "000") // Success
+                                    {
+                                        DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(RID);
+                                        if (dsStudents != null && dsStudents.Tables.Count > 0)
+                                        {
+                                            DataTable dtStudents = dsStudents.Tables[1];
+                                            foreach (DataRow rowst in dtStudents.Rows)
+                                            {
+                                                int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                                db.UpdateStudentRegFeeSubmit(studentId);
+                                            }
                                         }
                                     }
                                 }
+                                catch (FormatException fe)
+                                {
+                                    string errorMessage = fe.Message.Replace("'", "\\'");
+                                    string script = @"
+        swal({{
+            title: 'Error',
+            text: 'Invalid Base64 response from Axis Bank: {errorMessage}',
+            icon: 'error',
+            button: 'Close'
+        }});";
+                                    ScriptManager.RegisterStartupScript(this, GetType(), "Base64Error", script, true);
+                                }
+                                catch (CryptographicException ce)
+                                {
+                                    string errorMessage = ce.Message.Replace("'", "\\'");
+                                    string script = @"
+        swal({{
+            title: 'Error',
+            text: 'AES Decryption failed for Axis Bank response: {errorMessage}',
+            icon: 'error',
+            button: 'Close'
+        }});";
+                                    ScriptManager.RegisterStartupScript(this, GetType(), "AESDecryptError", script, true);
+                                }
 
-                                // Show alert only if errorCode exists AND is not 400
-//                                if (!string.IsNullOrEmpty(errorcode) && errorcode != "400")
-//                                {
-//                                    string script = @"
-//swal({{
-//    title: 'Failed',
-//    text: 'Transaction ID: {clientTxnId}\nError Code: {errorcode}',
-//    icon: 'error',
-//    button: 'Retry'
-//}});";
-//                                    ScriptManager.RegisterStartupScript(this, GetType(), "PaymentFailedBank", script, true);
-//                                    System.Diagnostics.Debug.WriteLine("Transaction error for " + clientTxnId + ": " + errorcode);
-//                                }
+                                
                             }
                             else
                             {
@@ -462,59 +573,97 @@ swal({{
                 return;
             }
 
+            if (ddl_paymode.SelectedValue == "Axis Bank")
+            {
 
-            string clientCode = ConfigurationManager.AppSettings["Clientcode"];
-            string transUserName = ConfigurationManager.AppSettings["transUserName"];
-            string transUserPassword = ConfigurationManager.AppSettings["transUserPassword"];
-            string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
-            string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
-            string callbackUrl = ConfigurationManager.AppSettings["callbackUrl"];
-            string mcc = ConfigurationManager.AppSettings["mcc"];
-            string AmountType = ConfigurationManager.AppSettings["AmountType"];
-            string channelid = ConfigurationManager.AppSettings["channelid"];
+                // -------- AXIS Bank Gateway Logic --------
+                string CID = ConfigurationManager.AppSettings["Axis_CID"];
+                string RU = "https://biharboardexam.com/Reg25-27/responseAxis.aspx";
+                string ChecksumKey = ConfigurationManager.AppSettings["Axis_ChecksumKey"];
+                string TYP = ConfigurationManager.AppSettings["Axis_TYP"];
+                string ENCKEY = ConfigurationManager.AppSettings["Axis_ENCKEY"];
+
+                string safeEmail = string.IsNullOrWhiteSpace(payerEmail) ? "NA" : payerEmail;
+                string safeMobile = string.IsNullOrWhiteSpace(payerMobile) ? "0000000000" : payerMobile;
+
+                string PPI = collegeCode + "|" + collegeName + "|" + clientTxnId + "|" + safeEmail + "|" + safeMobile + "|" + totalAmount;
+
+                string TranUrl = "https://easypay.axisbank.co.in/index.php/api/payment";
+                string checksumInput = CID + clientTxnId + clientTxnId + totalAmount + ChecksumKey;
+                string Checksum = sha256_hash(checksumInput);
+                string PlainText = "CID=" + CID +
+                        "&RID=" + clientTxnId +
+                        "&CRN=" + clientTxnId +
+                        "&AMT=" + totalAmount +
+                        "&VER=1.0&TYP=" + TYP +
+                        "&CNY=INR&RTU=" + RU +
+                        "&PPI=" + PPI +
+                        "&RE1=MN&RE2=&RE3=&RE4=&RE5=&CKS=" + Checksum;
+
+                string encryptedstring = Encrypt(PlainText, ENCKEY);
 
 
+                NameValueCollection data = new NameValueCollection();
+                data.Add("i", encryptedstring);
+                RedirectAndPOST(this.Page, TranUrl, data);
 
-            string query = "";
-            string address = "";
 
-            query = query + "payerName=" + payerName.Trim() + "";
-            query = query + "&payerEmail=" + payerEmail.Trim() + "";
-            query = query + "&payerMobile=" + payerMobile.Trim() + "";
-            query = query + "&clientCode=" + clientCode.Trim() + "";
-            query = query + "&transUserName=" + transUserName.Trim() + "";
-            query = query + "&transUserPassword=" + transUserPassword.Trim() + "";
-            query = query + "&payerAddress=" + address + "";
-            query = query + "&clientTxnId=" + clientTxnId.Trim() + "";
-            query = query + "&amount=" + totalAmount.ToString() + "";
-
-            query = query + "&amountType=" + AmountType.Trim() + "";
-            query = query + "&channelId=" + channelid.Trim() + "";
-            query = query + "&mcc=" + mcc.Trim() + "";
-            query = query + "&callbackUrl=" + callbackUrl.Trim() + "";
-
-            // Pass extra parameters in Udf1 to udf20 
-            //query = query + "&udf1=" + Class.Trim() + "";
-            //query = query + "&udf2=" + Roll.Trim() + "";
-            Encryption enc = new Encryption();
-            // Encrypting the query string
-            string encdata = enc.EncryptString(authKey, authIV, query);
-
-            // Create an HTML form for submitting the request to the payment gateway
-            string respString = "<html>" +
-                              "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
-                                 // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                       "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                      "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
-                                      "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
-                                      "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled
-                                  "</form>" +
-                              "</body>" +
-                           "</html>";
+            }
+            else
+            {
+                string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+                string transUserName = ConfigurationManager.AppSettings["transUserName"];
+                string transUserPassword = ConfigurationManager.AppSettings["transUserPassword"];
+                string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+                string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
+                string callbackUrl = ConfigurationManager.AppSettings["callbackUrl"];
+                string mcc = ConfigurationManager.AppSettings["mcc"];
+                string AmountType = ConfigurationManager.AppSettings["AmountType"];
+                string channelid = ConfigurationManager.AppSettings["channelid"];
 
 
 
-            Response.Write(respString);
+                string query = "";
+                string address = "";
+
+                query = query + "payerName=" + payerName.Trim() + "";
+                query = query + "&payerEmail=" + payerEmail.Trim() + "";
+                query = query + "&payerMobile=" + payerMobile.Trim() + "";
+                query = query + "&clientCode=" + clientCode.Trim() + "";
+                query = query + "&transUserName=" + transUserName.Trim() + "";
+                query = query + "&transUserPassword=" + transUserPassword.Trim() + "";
+                query = query + "&payerAddress=" + address + "";
+                query = query + "&clientTxnId=" + clientTxnId.Trim() + "";
+                query = query + "&amount=" + totalAmount.ToString() + "";
+
+                query = query + "&amountType=" + AmountType.Trim() + "";
+                query = query + "&channelId=" + channelid.Trim() + "";
+                query = query + "&mcc=" + mcc.Trim() + "";
+                query = query + "&callbackUrl=" + callbackUrl.Trim() + "";
+
+                // Pass extra parameters in Udf1 to udf20 
+                //query = query + "&udf1=" + Class.Trim() + "";
+                //query = query + "&udf2=" + Roll.Trim() + "";
+                Encryption enc = new Encryption();
+                // Encrypting the query string
+                string encdata = enc.EncryptString(authKey, authIV, query);
+
+                // Create an HTML form for submitting the request to the payment gateway
+                string respString = "<html>" +
+                                  "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
+                                                                                   // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                           "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                          "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
+                                          "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
+                                          "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled
+                                      "</form>" +
+                                  "</body>" +
+                               "</html>";
+
+
+
+                Response.Write(respString);
+            }
         }
         catch (Exception ex)
         {
@@ -591,8 +740,107 @@ swal({{
         return csp.CreateDecryptor();
     }
 
+    public static String sha256_hash(String value)
+    {
+        StringBuilder Sb = new StringBuilder();
+        using (SHA256 hash = SHA256Managed.Create())
+        {
+            Encoding enc = Encoding.UTF8;
+            Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+            foreach (Byte b in result)
+                Sb.Append(b.ToString("x2"));
+        }
+        return Sb.ToString();
+    }
 
 
+    public string Encrypt(string input, string key)
+    {
+        byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
+        byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(input);
+        Aes kgen = Aes.Create("AES");
+        kgen.Mode = CipherMode.ECB;
+        //kgen.Padding = PaddingMode.None;
+        kgen.Key = keyArray;
+        ICryptoTransform cTransform = kgen.CreateEncryptor();
+        byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+        return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+    }
+
+    public static string Decrypt(string cipherText, string key)
+    {
+        byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+        byte[] ivBytes = new byte[16]; // must be same IV as used in Encrypt
+        byte[] cipherBytes = Convert.FromBase64String(cipherText);
+
+        using (Aes aes = Aes.Create())
+        {
+            aes.Key = keyBytes;
+            aes.IV = ivBytes;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+
+            using (var ms = new MemoryStream())
+            using (var cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+            {
+                cs.Write(cipherBytes, 0, cipherBytes.Length);
+                cs.FlushFinalBlock();
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
+        }
+    }
+
+    private void RedirectAndPOST(Page page, string TranUrl, NameValueCollection data)
+    {
+        try
+        {
+
+            //Prepare the Posting form
+            string strForm = PreparePOSTForm(TranUrl, data);
+            //Add a literal control the specified page holding the Post Form, this is to submit the Posting form with the request.
+            page.Controls.Add(new LiteralControl(strForm));
+
+
+
+        }
+        catch
+
+        { }
+    }
+
+    private static String PreparePOSTForm(string url, NameValueCollection data)
+    {
+        try
+        {
+            //Set a name for the form
+            string formID = "PostForm";
+
+            //Build the form using the specified data to be posted.
+            StringBuilder strForm = new StringBuilder();
+            strForm.Append("<form id=\"" + formID + "\" name=\"" + formID + "\" action=\"" + url + "\" method=\"POST\">");
+            foreach (string key in data)
+            {
+                strForm.Append("<input type=\"hidden\" name=\"" + key + "\" value=\"" + data[key] + "\">");
+            }
+            strForm.Append("</form>");
+
+            //Build the JavaScript which will do the Posting operation.
+            StringBuilder strScript = new StringBuilder();
+            strScript.Append("<script language='javascript'>");
+            strScript.Append("var v" + formID + " = document." + formID + ";");
+            strScript.Append("v" + formID + ".submit();");
+            strScript.Append("</script>");
+
+            //Return the form and the script concatenated. (The order is important, Form then JavaScript)
+            return strForm.ToString() + strScript.ToString();
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
     protected void rpt_getpayemnt_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         if (e.CommandName == "lnk_Delete")
