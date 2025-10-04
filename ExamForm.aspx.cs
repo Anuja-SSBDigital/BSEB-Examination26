@@ -28,7 +28,7 @@ public partial class ExamForm : System.Web.UI.Page
         {
             CollegeId = Convert.ToInt32(hfCollegeId.Value);
         }
-        DataTable dt = dl.GetCollegeWiseEXMSeatSummary(CollegeId, Convert.ToInt32(ddlFaculty.SelectedValue));
+        DataTable dt = dl.GetCollegeWiseEXMSeatSummary(CollegeId, Convert.ToInt32(ddlFaculty.SelectedValue), Convert.ToInt32(ddlExamcat.SelectedValue));
         if (dt != null && dt.Rows.Count > 0)
         {
 
