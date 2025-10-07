@@ -43,56 +43,57 @@
         .payment {
             display: ruby;
         }
-         .pagination {
-     text-align: center;
-     margin-top: 15px;
-     justify-content: flex-end !important;
- }
 
-     .pagination a, .pagination span {
-         display: inline-block;
-         padding: 8px 16px;
-         text-decoration: none;
-         color: black;
-         border: 1px solid #ddd;
-         margin: 0 4px;
-     }
+        .pagination {
+            text-align: center;
+            margin-top: 15px;
+            justify-content: flex-end !important;
+        }
 
-         .pagination a.active {
-             background-color: #6777ef;
-             color: white;
-             border: 1px solid #6777ef;
-         }
+            .pagination a, .pagination span {
+                display: inline-block;
+                padding: 8px 16px;
+                text-decoration: none;
+                color: black;
+                border: 1px solid #ddd;
+                margin: 0 4px;
+            }
 
-         .pagination a:hover:not(.active) {
-             background-color: #ddd;
-         }
+                .pagination a.active {
+                    background-color: #6777ef;
+                    color: white;
+                    border: 1px solid #6777ef;
+                }
+
+                .pagination a:hover:not(.active) {
+                    background-color: #ddd;
+                }
     </style>
     <!-- for eye icon -->
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Examination Payment</h4>
-            </div>
-            <div class="card-body">
-                <!-- ================= FORM SECTION ================= -->
-                <div class="form-row">
-                    <div class="form-group col-md-6" runat="server" id="txt_location">
-                        <label for="location">+2 School/College Code & Name <span class="text-danger">*</span></label>
-                        <asp:TextBox runat="server" ID="txt_collegename" CssClass="form-control" placeholder="Enter CollegeCode"></asp:TextBox>
-                        <span id="CollegeNameError" class="text-danger" style="display: none;">Please Enter College.</span>
-                    </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Examination Payment</h4>
+                </div>
+                <div class="card-body">
+                    <!-- ================= FORM SECTION ================= -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6" runat="server" id="txt_location">
+                            <label for="location">+2 School/College Code & Name <span class="text-danger">*</span></label>
+                            <asp:TextBox runat="server" ID="txt_collegename" CssClass="form-control" placeholder="Enter CollegeCode"></asp:TextBox>
+                            <span id="CollegeNameError" class="text-danger" style="display: none;">Please Enter College.</span>
+                        </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="faculty">Faculty<span class="text-danger">*</span></label>
-                        <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control form-select"></asp:DropDownList>
-                        <span id="facultyError" style="display: none; color: red;">Please Select Faculty</span>
-                    </div>
+                        <div class="form-group col-md-6">
+                            <label for="faculty">Faculty<span class="text-danger">*</span></label>
+                            <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control form-select"></asp:DropDownList>
+                            <span id="facultyError" style="display: none; color: red;">Please Select Faculty</span>
+                        </div>
 
-                   <%-- <div class="col-md-6" style="padding:0px !important;">
+                        <%-- <div class="col-md-6" style="padding:0px !important;">
                         <div class="form-group">
                             <label for="category">Student Category<span class="text-danger">*</span></label>
                             <asp:DropDownList runat="server" ID="ddl_category" CssClass="form-control select2">
@@ -104,110 +105,113 @@
                         </div>
                     </div>--%>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Exam Category <span class="text-danger">*</span></label>
-                            <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control form-select">
-                                
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Exam Category <span class="text-danger">*</span></label>
+                                <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control form-select">
+                                </asp:DropDownList>
+                                <span id="ExamCatError" style="display: none; color: red;">Please select a Exam Category.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6" style="display: grid;">
+                            <label>Payment Status Condition</label>
+                            <div class="payment">
+                                <div class="form-check">
+                                    <asp:RadioButton runat="server" ID="rdo_makepayment" CssClass="font-weight-bold ml-2 text-success" Text="&nbsp;&nbsp;Make Payment" GroupName="rdo" />
+                                </div>
+                                <div class="form-check">
+                                    <asp:RadioButton runat="server" ID="rdo_payemntstatus" CssClass="font-weight-bold ml-2 text-danger" Text="&nbsp;&nbsp;Payment Status" GroupName="rdo" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="paymode">Pay Mode<span class="text-danger">*</span></label>
+                            <asp:DropDownList runat="server" ID="ddl_paymode" CssClass="form-control form-select">
+                                <asp:ListItem Value="ALL">Select Bank</asp:ListItem>
+                                <asp:ListItem Value="Indian Bank">Indian Bank</asp:ListItem>
+                                <%--<asp:ListItem Text="Axis Bank" Value="Axis Bank"></asp:ListItem>--%>
                             </asp:DropDownList>
-                            <span id="ExamCatError" style="display: none; color: red;">Please select a Exam Category.</span>
+                            <span id="BankError" style="display: none; color: red;">Please Select Bank</span>
                         </div>
                     </div>
 
-                    <div class="form-group col-md-6" style="display:grid;">
-                        <label>Payment Status Condition</label>
-                        <div class="payment">
-                            <div class="form-check">
-                                <asp:RadioButton runat="server" ID="rdo_makepayment" CssClass="font-weight-bold ml-2 text-success" Text="&nbsp;&nbsp;Make Payment" GroupName="rdo" />
-                            </div>
-                            <div class="form-check">
-                                <asp:RadioButton runat="server" ID="rdo_payemntstatus" CssClass="font-weight-bold ml-2 text-danger" Text="&nbsp;&nbsp;Payment Status" GroupName="rdo" />
-                            </div>
+                    <!-- Buttons -->
+                    <div class="form-group mt-3">
+                        <asp:Button runat="server" ID="btn_getdetails" CssClass="btn btn-primary mr-2" Text="GET DETAILS" OnClick="btn_getdetails_Click" OnClientClick="return validateFaculty();" />
+                    </div>
+
+                    <div class="col-12" id="divpnlNoRecords" runat="server" visible="false">
+                        <asp:Panel ID="pnlNoRecords" runat="server" CssClass="alert alert-danger text-center mt-3">
+                            No student records found matching your criteria.
+                        </asp:Panel>
+                    </div>
+
+                    <hr />
+
+                    <!-- ================= STUDENT DETAILS SECTION ================= -->
+                    <div id="divstudentdetails" runat="server">
+                        <div class="section-title">
+                            <h6>Student Details</h6>
                         </div>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label for="paymode">Pay Mode</label>
-                        <asp:DropDownList runat="server" ID="ddl_paymode" CssClass="form-control form-select">
-                            <asp:ListItem Value="Indian Bank">Indian Bank</asp:ListItem>
-                             <asp:ListItem Text="Axis Bank" Value="Axis Bank"></asp:ListItem>
-                        </asp:DropDownList>
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="form-group mt-3">
-                    <asp:Button runat="server" ID="btn_getdetails" CssClass="btn btn-primary mr-2" Text="GET DETAILS" OnClick="btn_getdetails_Click" OnClientClick="return validateFaculty();" />
-                </div>
-
-                 <div class="col-12" id="divpnlNoRecords" runat="server" visible="false">
-      <asp:Panel ID="pnlNoRecords" runat="server" CssClass="alert alert-danger text-center mt-3">
-          No student records found matching your criteria.
-      </asp:Panel>
-  </div>
-
-                <hr />
-
-                <!-- ================= STUDENT DETAILS SECTION ================= -->
-                <div id="divstudentdetails" runat="server">
-                    <div class="section-title">
-                        <h6>Student Details</h6>
-                    </div>
-                  <%--  <div class="text-danger mt-3">
+                        <%--  <div class="text-danger mt-3">
                         <strong>नोट: Student Registration में उन्ही छात्रों का नाम दिखेगा जिनका शुल्क Success होगा।</strong>
                     </div>--%>
 
-                    <div class="h6 mt-3 text-center">
-                        <asp:HiddenField ID="hfTotalAmount" runat="server" />
-                        <strong>Total Selected Fee Amount: ₹ <span id="totalAmount">0</span></strong>
-                    </div>
+                        <div class="h6 mt-3 text-center">
+                            <asp:HiddenField ID="hfTotalAmount" runat="server" />
+                            <strong>Total Selected Fee Amount: ₹ <span id="totalAmount">0</span></strong>
+                        </div>
 
-                    <!-- 🔍 Search -->
-                    <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search by Registration No" style="width: 300px; display:inline-block;" onkeyup="filterAndPaginate();" />
-                    </div>
+                        <!-- 🔍 Search -->
+                        <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by Registration No" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
+                        </div>
 
-                    <!-- Student Table -->
-                    <div class="table-responsive" >
-                        <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
-                            <table class="table table-hover table-bordered dataTable" id="dataTable">
-                                <thead>
-                                    <tr>
-                                        <th class="repeater-checkbox">
-                                            <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
-                                            <asp:HiddenField ID="hfSelectedIds" runat="server" />
-                                             <asp:HiddenField ID="hfSelectedStudentFees" runat="server" />
-                                        </th>
-                                        <th>S. No.</th>
-                                        <th>Registration No</th>
-                                        <th>Student Name</th>
-                                        <th>Father Name</th>
-                                        <th>Mother Name</th>
-                                        <th style="width: 80px;">DOB</th>
-                                        <th >Caste Category</th>
-                                        <th>Exam Type</th>
-                                        <th>Fee Amount</th>
-                                       
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    <asp:Repeater runat="server" ID="rptStudents" EnableViewState="false" ClientIDMode="Static">
-                                        <ItemTemplate>
-                                            <tr data-visible="true">
-                                                <td class="repeater-checkbox">
-                                                    <asp:CheckBox ID="chkRowSelect" runat="server" AutoPostBack="false" OnClientClick="updateSelectAllState();" />
-                                                    <asp:HiddenField ID="hfStudentID" runat="server" Value='<%# Eval("StudentID") %>' />
-                                                </td>
-                                                <td><asp:Label ID="lblRowNumber" Text='<%# Container.ItemIndex + 1 %>' runat="server" /></td>
-                                                <td><%# Eval("RegistrationNo") %></td>
-                                                <td><%# Eval("Name") %></td>
-                                                <td><%# Eval("FatherName") %></td>
-                                                <td><%# Eval("MotherName") %></td>
-                                                <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
-                                                <td style="text-align:center;"><%# Eval("CasteCategoryCode") %></td>
-                                                <td><%# Eval("ExamTypeName") %></td>
-                                               <td class="fee-amount"
-    data-amount='<%# 
+                        <!-- Student Table -->
+                        <div class="table-responsive">
+                            <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
+                                <table class="table table-hover table-bordered dataTable" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="repeater-checkbox">
+                                                <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
+                                                <asp:HiddenField ID="hfSelectedIds" runat="server" />
+                                                <asp:HiddenField ID="hfSelectedStudentFees" runat="server" />
+                                            </th>
+                                            <th>S. No.</th>
+                                            <th>Registration No</th>
+                                            <th>Student Name</th>
+                                            <th>Father Name</th>
+                                            <th>Mother Name</th>
+                                            <th style="width: 80px;">DOB</th>
+                                            <th>Caste Category</th>
+                                            <th>Exam Type</th>
+                                            <th>Fee Amount</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                        <asp:Repeater runat="server" ID="rptStudents" EnableViewState="false" ClientIDMode="Static">
+                                            <itemtemplate>
+                                                <tr data-visible="true">
+                                                    <td class="repeater-checkbox">
+                                                        <asp:CheckBox ID="chkRowSelect" runat="server" AutoPostBack="false" OnClientClick="updateSelectAllState();" />
+                                                        <asp:HiddenField ID="hfStudentID" runat="server" Value='<%# Eval("StudentID") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblRowNumber" Text='<%# Container.ItemIndex + 1 %>' runat="server" />
+                                                    </td>
+                                                    <td><%# Eval("RegistrationNo") %></td>
+                                                    <td><%# Eval("Name") %></td>
+                                                    <td><%# Eval("FatherName") %></td>
+                                                    <td><%# Eval("MotherName") %></td>
+                                                    <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
+                                                    <td style="text-align: center;"><%# Eval("CasteCategoryCode") %></td>
+                                                    <td><%# Eval("ExamTypeName") %></td>
+                                                    <td class="fee-amount"
+                                                        data-amount='<%# 
         Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
             ? (
                 Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
@@ -220,8 +224,8 @@
                     : Eval("BaseFee")
               )
     %>'>
-    <asp:Label ID="lblFee" runat="server"
-        Text='<%# 
+                                                        <asp:Label ID="lblFee" runat="server"
+                                                            Text='<%# 
             Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
                 ? (
                     Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
@@ -234,91 +238,92 @@
                         : Eval("BaseFee")
                   )
         %>' />
-</td>
+                                                    </td>
 
-                                                <%--<td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
+                                                    <%--<td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
                                                     <asp:Label ID="lblFee" runat="server"
                                                         Text='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>' />
                                                 </td>--%>
-                                                
+                                                </tr>
+                                            </itemtemplate>
+                                        </asp:Repeater>
+                                    </tbody>
+                                </table>
+                                <asp:Label ID="lblEntriesCount" runat="server" CssClass="mt-2 d-block text-left"></asp:Label>
+                            </asp:Panel>
+
+                            <div class="text-center">
+                                <asp:Button runat="server" ID="btn_paynow" Text="Paynow" CssClass="btn btn-warning" OnClick="btn_paynow_Click" />
+                            </div>
+                        </div>
+
+                        <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="true">
+                            <div id="pagination"></div>
+                        </asp:Panel>
+                    </div>
+
+                    <hr />
+
+                    <!-- ================= TRANSACTION DETAILS SECTION ================= -->
+                    <div id="divpayment" runat="server">
+                        <div class="section-title">
+                            <h6>Transaction Details</h6>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="table-1">
+                                <thead>
+                                    <tr>
+                                        <th>S. No.</th>
+                                        <th>+2 School/College Code</th>
+                                        <th>Transaction ID</th>
+                                        <th>Student No</th>
+                                        <th>Payment Amount</th>
+                                        <th>Payment Initiate Date</th>
+                                        <th>Payment Updated Date</th>
+                                        <th>Status</th>
+                                        <th>View Details</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <asp:Repeater runat="server" ID="rpt_getpayemnt" OnItemCommand="rpt_getpayemnt_ItemCommand" OnItemDataBound="rpt_getpayemnt_ItemDataBound">
+                                        <itemtemplate>
+                                            <tr>
+                                                <td>
+                                                    <asp:Label ID="Label1" Text='<%# Container.ItemIndex + 1 %>' runat="server" />
+                                                </td>
+                                                <td><%# Eval("CollegeCode") %></td>
+                                                <td><%# Eval("ClientTxnId") %></td>
+                                                <td><%# Eval("StudentsPerTransaction") %></td>
+                                                <td><%# Eval("PaymentAmount") %></td>
+                                                <td><%# Eval("PaymentInitiateDate", "{0:dd-MM-yyyy}") %></td>
+                                                <td><%# Eval("PaymentUpdatedDate", "{0:dd-MM-yyyy}") %></td>
+                                                <td><%# Eval("PaymentStatus") %></td>
+                                                <asp:HiddenField runat="server" ID="hf_status" Value='<%# Eval("PaymentStatus") %>' />
+                                                <td>
+                                                    <a href='viewpaymentdetails.aspx?id=<%# Eval("ClientTxnId") %>' class="btn btn-sm btn-primary" target="_blank">View</a>
+                                                </td>
+                                                <td>
+                                                    <asp:LinkButton ID="lnkDelete" runat="server" CommandName="lnk_Delete" CommandArgument='<%# Eval("ClientTxnId") %>'
+                                                        CssClass="btn btn-danger btn-sm"
+                                                        OnClientClick="return confirm('Are you sure you want to delete this record?');">
+                                                        Delete
+                                                    </asp:LinkButton>
+                                                </td>
                                             </tr>
-                                        </ItemTemplate>
+                                        </itemtemplate>
                                     </asp:Repeater>
+
+
                                 </tbody>
                             </table>
-                            <asp:Label ID="lblEntriesCount" runat="server" CssClass="mt-2 d-block text-left"></asp:Label>
-                        </asp:Panel>
-
-                        <div class="text-center">
-                            <asp:Button runat="server" ID="btn_paynow" Text="Paynow" CssClass="btn btn-warning" OnClick="btn_paynow_Click" />
                         </div>
                     </div>
 
-                    <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="true">
-                        <div id="pagination"></div>
-                    </asp:Panel>
                 </div>
-
-                <hr />
-
-                <!-- ================= TRANSACTION DETAILS SECTION ================= -->
-                <div id="divpayment" runat="server">
-                    <div class="section-title">
-                        <h6>Transaction Details</h6>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered" id="table-1">
-                            <thead>
-                                <tr>
-                                    <th>S. No.</th>
-                                    <th>+2 School/College Code</th>
-                                    <th>Transaction ID</th>
-                                    <th>Student No</th>
-                                    <th>Payment Amount</th>
-                                    <th>Payment Initiate Date</th>
-                                    <th>Payment Updated Date</th>
-                                    <th>Status</th>
-                                    <th>View Details</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <asp:Repeater runat="server" ID="rpt_getpayemnt" OnItemCommand="rpt_getpayemnt_ItemCommand" OnItemDataBound="rpt_getpayemnt_ItemDataBound">
-                                    <ItemTemplate>
-                                        <tr>
-                                            <td><asp:Label ID="Label1" Text='<%# Container.ItemIndex + 1 %>' runat="server" /></td>
-                                            <td><%# Eval("CollegeCode") %></td>
-                                            <td><%# Eval("ClientTxnId") %></td>
-                                            <td><%# Eval("StudentsPerTransaction") %></td>
-                                            <td><%# Eval("PaymentAmount") %></td>
-                                            <td><%# Eval("PaymentInitiateDate", "{0:dd-MM-yyyy}") %></td>
-                                            <td><%# Eval("PaymentUpdatedDate", "{0:dd-MM-yyyy}") %></td>
-                                            <td><%# Eval("PaymentStatus") %></td>
-                                            <asp:HiddenField runat="server" ID="hf_status" Value='<%# Eval("PaymentStatus") %>' />
-                                            <td>
-                                                <a href='viewpaymentdetails.aspx?id=<%# Eval("ClientTxnId") %>' class="btn btn-sm btn-primary" target="_blank">View</a>
-                                            </td>
-                                            <td>
-                                                <asp:LinkButton ID="lnkDelete" runat="server" CommandName="lnk_Delete" CommandArgument='<%# Eval("ClientTxnId") %>'
-                                                    CssClass="btn btn-danger btn-sm"
-                                                    OnClientClick="return confirm('Are you sure you want to delete this record?');">
-                                                     Delete
-                                                </asp:LinkButton>
-                                            </td>
-                                        </tr>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-
-                               
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
-</div>
 
 
     <%--<script>
@@ -359,6 +364,10 @@
 
             var collegeNameInput = document.getElementById('<%= txt_collegename.ClientID %>');
             var collegeNameErrorSpan = document.getElementById('CollegeNameError');
+
+            var BankDropdown = document.getElementById('<%= ddl_paymode.ClientID %>');
+            var BankError = document.getElementById('BankError');
+
             if (collegeNameInput.value.trim() === "") {
                 collegeNameErrorSpan.style.display = "inline";
                 collegeNameInput.classList.add("is-invalid");
@@ -377,10 +386,10 @@
             } else {
                 errorSpan.style.display = "none";
                 facultyDropdown.classList.remove("is-invalid");
-               // return true;
+                // return true;
             }
-       
-            
+
+
             if (ExamCategoryDropdown.value === "0" || ExamCategoryDropdown.value === "") {
                 errorSpanCat.style.display = "inline";
                 ExamCategoryDropdown.classList.add("is-invalid");
@@ -388,6 +397,17 @@
                 return false;
             } else {
                 ExamCategoryDropdown.classList.remove("is-invalid");
+            }
+
+            if (BankDropdown.value === "ALL" || BankDropdown.value === "") {
+                BankError.style.display = "inline";
+
+                BankDropdown.focus();
+                return false;
+            } else {
+                BankError.style.display = "none";
+                BankDropdown.classList.remove("is-invalid");
+
             }
         }
 
@@ -430,10 +450,10 @@
 
             // already present hidden field for IDs
             var hiddenIds = document.getElementById('<%= hfSelectedIds.ClientID %>');
-        hiddenIds.value = data.ids.join(',');
+            hiddenIds.value = data.ids.join(',');
 
-        // new hidden field for ID:Fee mapping
-        var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
+            // new hidden field for ID:Fee mapping
+            var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
             hiddenFees.value = data.fees.join(',');
         }
 
@@ -509,26 +529,26 @@
     }--%>
         function setupSelectAll() {
             var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-        if (!master) return;
+            if (!master) return;
 
-        master.addEventListener('change', function () {
-            var checked = this.checked;
-            // ✅ Select only the rows currently shown (not hidden by pagination)
-            document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
-                if (row.style.display !== "none") {
-                    var cb = row.querySelector("input[type=checkbox]");
-                    if (cb) cb.checked = checked;
-                }
+            master.addEventListener('change', function () {
+                var checked = this.checked;
+                // ✅ Select only the rows currently shown (not hidden by pagination)
+                document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+                    if (row.style.display !== "none") {
+                        var cb = row.querySelector("input[type=checkbox]");
+                        if (cb) cb.checked = checked;
+                    }
+                });
+                updateSelectAllState();
+                updateTotalAmount();
             });
+
+
+            attachRowHandlers();
             updateSelectAllState();
             updateTotalAmount();
-        });
-
-
-        attachRowHandlers();
-        updateSelectAllState();
-        updateTotalAmount();
-    }
+        }
 
   <%--  function updateSelectAllState() {
         var master = document.getElementById('<%= chkSelectAll.ClientID %>');
@@ -554,88 +574,88 @@
         updateHiddenField();
     }--%>
 
-    function updateSelectAllState() {
-        var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-        var checkboxes = document.querySelectorAll('#dataTable tbody tr');
-        var visibleCheckboxes = [];
+        function updateSelectAllState() {
+            var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+            var checkboxes = document.querySelectorAll('#dataTable tbody tr');
+            var visibleCheckboxes = [];
 
-        checkboxes.forEach(function (row) {
-            if (row.style.display !== "none") {
-                var cb = row.querySelector("input[type=checkbox]");
-                if (cb) visibleCheckboxes.push(cb);
+            checkboxes.forEach(function (row) {
+                if (row.style.display !== "none") {
+                    var cb = row.querySelector("input[type=checkbox]");
+                    if (cb) visibleCheckboxes.push(cb);
+                }
+            });
+
+            var total = visibleCheckboxes.length;
+            var checkedCount = visibleCheckboxes.filter(cb => cb.checked).length;
+
+            if (checkedCount === 0) {
+                master.checked = false;
+                master.indeterminate = false;
+            } else if (checkedCount === total) {
+                master.checked = true;
+                master.indeterminate = false;
+            } else {
+                master.checked = false;
+                master.indeterminate = true;
             }
-        });
 
-        var total = visibleCheckboxes.length;
-        var checkedCount = visibleCheckboxes.filter(cb => cb.checked).length;
-
-        if (checkedCount === 0) {
-            master.checked = false;
-            master.indeterminate = false;
-        } else if (checkedCount === total) {
-            master.checked = true;
-            master.indeterminate = false;
-        } else {
-            master.checked = false;
-            master.indeterminate = true;
+            updateHiddenField();
         }
 
-        updateHiddenField();
-    }
+        function filterAndPaginate() {
+            var searchText = document.getElementById("searchInput").value.toLowerCase();
+            var rows = document.querySelectorAll("#dataTable tbody tr");
 
-    function filterAndPaginate() {
-        var searchText = document.getElementById("searchInput").value.toLowerCase();
-        var rows = document.querySelectorAll("#dataTable tbody tr");
+            rows.forEach(function (row) {
+                var RegistrationNo = row.cells[2].textContent.toLowerCase();
+                var studentName = row.cells[2].textContent.toLowerCase();
+                var fatherName = row.cells[3].textContent.toLowerCase();
+                var motherName = row.cells[4].textContent.toLowerCase();
+                var dob = row.cells[5].textContent.toLowerCase();
+                var BoardName = row.cells[6].textContent.toLowerCase();
+                var Category = row.cells[7].textContent.toLowerCase();
+                var FeeAmount = row.cells[8].textContent.toLowerCase();
 
-        rows.forEach(function (row) {
-            var RegistrationNo = row.cells[2].textContent.toLowerCase();
-            var studentName = row.cells[2].textContent.toLowerCase();
-            var fatherName = row.cells[3].textContent.toLowerCase();
-            var motherName = row.cells[4].textContent.toLowerCase();
-            var dob = row.cells[5].textContent.toLowerCase();
-            var BoardName = row.cells[6].textContent.toLowerCase();
-            var Category = row.cells[7].textContent.toLowerCase();
-            var FeeAmount = row.cells[8].textContent.toLowerCase();
+                var match = RegistrationNo.includes(searchText) || studentName.includes(searchText) ||
+                    fatherName.includes(searchText) || motherName.includes(searchText) ||
+                    dob.includes(searchText) || BoardName.includes(searchText) ||
+                    Category.includes(searchText) || FeeAmount.includes(searchText);
 
-            var match = RegistrationNo.includes(searchText) || studentName.includes(searchText) ||
-                fatherName.includes(searchText) || motherName.includes(searchText) ||
-                dob.includes(searchText) || BoardName.includes(searchText) ||
-                Category.includes(searchText) || FeeAmount.includes(searchText);
+                row.dataset.visible = match ? "true" : "false";
+            });
 
-            row.dataset.visible = match ? "true" : "false";
-        });
+            currentPage = 1;
+            paginateFilteredTable();
+        }
 
-        currentPage = 1;
-        paginateFilteredTable();
-    }
+        function paginateFilteredTable() {
+            var allRows = document.querySelectorAll("#dataTable tbody tr");
+            var visibleRows = Array.from(allRows).filter(function (row) {
+                return row.dataset.visible !== "false";
+            });
 
-    function paginateFilteredTable() {
-        var allRows = document.querySelectorAll("#dataTable tbody tr");
-        var visibleRows = Array.from(allRows).filter(function (row) {
-            return row.dataset.visible !== "false";
-        });
+            var totalRows = visibleRows.length;
+            var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
 
-        var totalRows = visibleRows.length;
-        var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
 
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
+            allRows.forEach(function (row) {
+                row.style.display = "none";
+            });
 
-        allRows.forEach(function (row) {
-            row.style.display = "none";
-        });
+            var start = (currentPage - 1) * rowsPerPage;
+            var end = start + rowsPerPage;
 
-        var start = (currentPage - 1) * rowsPerPage;
-        var end = start + rowsPerPage;
+            visibleRows.slice(start, end).forEach(function (row) {
+                row.style.display = "";
+            });
 
-        visibleRows.slice(start, end).forEach(function (row) {
-            row.style.display = "";
-        });
-
-        renderPagination(totalPages);
-        attachRowHandlers();
-        updateSelectAllState();
-        updateTotalAmount();
+            renderPagination(totalPages);
+            attachRowHandlers();
+            updateSelectAllState();
+            updateTotalAmount();
 
             var lblEntries = document.getElementById('<%= lblEntriesCount.ClientID %>');
             if (totalRows === 0) {
@@ -715,6 +735,6 @@
             container.appendChild(span);
         }
     </script>
-   
+
 
 </asp:Content>

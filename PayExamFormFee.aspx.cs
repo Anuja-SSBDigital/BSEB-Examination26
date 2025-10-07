@@ -33,6 +33,9 @@ public partial class PayExamFormFee : System.Web.UI.Page
                 if (Session["CollegeName"].ToString() == "Admin")
                 {
                     txt_collegename.Text = "";
+                   
+                    ddl_paymode.Items.Add(new ListItem("Axis Bank", "Axis Bank"));
+                    
                 }
                 else
                 {
@@ -49,6 +52,21 @@ public partial class PayExamFormFee : System.Web.UI.Page
     }
 
 
+    private void LogMessage(string message)
+    {
+        try
+        {
+            string logPath = Server.MapPath("~/Logs/PaymentLog.txt");
+            using (StreamWriter writer = new StreamWriter(logPath, true))
+            {
+                writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " - " + message);
+            }
+        }
+        catch
+        {
+            // Avoid throwing errors from logger itself
+        }
+    }
 
     public void Binddropdown()
     {
@@ -97,33 +115,45 @@ public partial class PayExamFormFee : System.Web.UI.Page
           
             if (rdo_payemntstatus.Checked == true)
             {
+                LogMessage("Payment status radio checked.");
                 int collegeid = 0;
                 string collegecode = "";
                 if (Collegename != "Admin")
                 {
                     collegeid = Convert.ToInt32(Session["CollegeId"]);
+                    LogMessage("CollegeId from session: " + collegeid);
                 }
                 else
                 {
                     collegecode = txt_collegename.Text;
+                    LogMessage("CollegeCode from textbox: " + collegecode);
                 }
                 // Force TLS 1.2 for secure API calls
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                LogMessage("TLS 1.2 enforced for API calls.");
                 DataTable result = db.GetExamPaymentDetails(collegeid, collegecode, ExamId);
+                LogMessage("Fetched " + (result != null ? result.Rows.Count.ToString() : "0") + " records from GetExamPaymentDetails.");
                 if (result != null && result.Rows.Count > 0)
                 {
 
                     foreach (DataRow row in result.Rows)
                     {
                         string clientTxnId = row["ClientTxnId"].ToString();
+                        LogMessage("Processing transaction: " + clientTxnId);
                         string rowStatus = row.Table.Columns.Contains("PaymentStatus") && row["PaymentStatus"] != DBNull.Value ? row["PaymentStatus"].ToString() : string.Empty;
+                        LogMessage("RowStatus: " + rowStatus);
+
                         string paymentGateway = row["BankGateway"].ToString();
-                        if (string.IsNullOrEmpty(rowStatus) || rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase))
+                        LogMessage("PaymentGateway: " + paymentGateway);
+
+                        if (string.IsNullOrEmpty(rowStatus) || rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("PENDING", StringComparison.OrdinalIgnoreCase) ||
+        rowStatus.Equals("FAILURE", StringComparison.OrdinalIgnoreCase))
                         {
                             if (paymentGateway.Equals("Indian Bank", StringComparison.OrdinalIgnoreCase))
                             {
                                 string clientCode = ConfigurationManager.AppSettings["Clientcode"];
                                 string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
+                                LogMessage("Indian Bank enquiry URL: " + url);
 
                                 string responseString = "";
                                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -134,7 +164,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                 {
                                     responseString = reader.ReadToEnd();
                                 }
-
+                                LogMessage("Indian Bank Response: " + responseString);
                                 XmlDocument xmlDoc = new XmlDocument();
                                 xmlDoc.LoadXml(responseString);
                                 XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
@@ -142,6 +172,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                 if (txnNode != null)
                                 {
                                     string apiStatus = txnNode.Attributes["status"] != null  ? txnNode.Attributes["status"].Value : "";
+                                    LogMessage("API Status: " + apiStatus);
 
                                     string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
                                                                 ? txnNode.Attributes["sabPaisaRespCode"].Value
@@ -166,12 +197,13 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                     string errorcode = txnNode.Attributes["errorCode"] != null
                                                                 ? txnNode.Attributes["errorCode"].Value
                                                                 : "";
-
+                                    LogMessage("ErrorCode: " + errorcode);
 
                                     if (errorcode == "400")
                                     {
 
                                         continue; // go to next txnNode
+                                        LogMessage("break: " + errorcode);
                                     }
 
                                     // Update database
@@ -180,7 +212,8 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                     // Update student fees if SUCCESS
                                     if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
+                                        DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId, ExamId);
+                                        LogMessage("Fetched dataset for txn " + clientTxnId + ", Tables: " + (dsStudents != null ? dsStudents.Tables.Count.ToString() : "0"));
                                         if (dsStudents != null && dsStudents.Tables.Count > 0)
                                         {
                                             DataTable dtStudents = dsStudents.Tables[1];
@@ -188,8 +221,10 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                             {
                                                 int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
                                                 db.UpdateStudentExamFeeSubmit(studentId);
+                                                LogMessage("Student fee updated: " + studentId);
                                             }
                                         }
+                                       
                                     }
 
                                     // Show alert only if errorCode exists AND is not 400
@@ -281,14 +316,14 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
                                     if (statusCode == "000") // Success
                                     {
-                                        DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(RID);
+                                        DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(RID, ExamId);
                                         if (dsStudents != null && dsStudents.Tables.Count > 0)
                                         {
                                             DataTable dtStudents = dsStudents.Tables[1];
                                             foreach (DataRow rowst in dtStudents.Rows)
                                             {
                                                 int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
-                                                db.UpdateStudentRegFeeSubmit(studentId);
+                                                db.UpdateStudentExamFeeSubmit(studentId);
                                             }
                                         }
                                     }
@@ -514,8 +549,10 @@ swal({{
             //}
 
             string payerName = collegeCode;
-            string payerMobile = Mobileno;
-            string payerEmail = EmailId;
+            string payerMobile = "";
+           // string payerMobile = Mobileno;
+            string payerEmail = "";
+            //string payerEmail = EmailId;
 
             string clientTxnId = "N/A";
             string studentFeeMapping = hfSelectedStudentFees.Value;
@@ -578,7 +615,7 @@ swal({{
 
                 // -------- AXIS Bank Gateway Logic --------
                 string CID = ConfigurationManager.AppSettings["Axis_CID"];
-                string RU = "https://biharboardexam.com/Reg25-27/responseAxis.aspx";
+                string RU = "https://intermediate.biharboardonline.com/Exam26/responseAxis.aspx";
                 string ChecksumKey = ConfigurationManager.AppSettings["Axis_ChecksumKey"];
                 string TYP = ConfigurationManager.AppSettings["Axis_TYP"];
                 string ENCKEY = ConfigurationManager.AppSettings["Axis_ENCKEY"];
@@ -651,15 +688,14 @@ swal({{
                 // Create an HTML form for submitting the request to the payment gateway
                 string respString = "<html>" +
                                   "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
-                                                                                   // "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                           "<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                  "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                           //"<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
                                           "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
                                           "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
                                           "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled
                                       "</form>" +
                                   "</body>" +
                                "</html>";
-
 
 
                 Response.Write(respString);
