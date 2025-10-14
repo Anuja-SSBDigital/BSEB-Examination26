@@ -486,10 +486,12 @@
                         <div class="col-12 text-center">
                             <asp:HiddenField ID="hfStudentId" runat="server" />
                             <asp:HiddenField ID="hfFaculty" runat="server" />
-                            <asp:HiddenField ID="hfOldStudentName" runat="server" />
+                            <asp:HiddenField ID="hfCollegeId" runat="server" />
+                            
+                        <%--    <asp:HiddenField ID="hfOldStudentName" runat="server" />
                             <asp:HiddenField ID="hfOldFatherName" runat="server" />
                             <asp:HiddenField ID="hfOldMotherName" runat="server" />
-                            <asp:HiddenField ID="hfOldDOB" runat="server" />
+                            <asp:HiddenField ID="hfOldDOB" runat="server" />--%>
                                <asp:HiddenField ID="hfStudentIdEncrypted" runat="server" />
 
                             <asp:Button ID="btnUpdate" runat="server" Text="Update" CssClass="btn btn-primary" OnClientClick="return validateStudentDetails();" />
@@ -568,7 +570,7 @@
                  dobField.classList.remove("is-invalid");
              }
 
-             var oldStudentName = document.getElementById('<%= hfOldStudentName.ClientID %>').value.trim();
+           <%--  var oldStudentName = document.getElementById('<%= hfOldStudentName.ClientID %>').value.trim();
              var oldFatherName = document.getElementById('<%= hfOldFatherName.ClientID %>').value.trim();
              var oldMotherName = document.getElementById('<%= hfOldMotherName.ClientID %>').value.trim();
              var oldDOB = document.getElementById('<%= hfOldDOB.ClientID %>').value.trim();
@@ -593,7 +595,7 @@
                      + changedFields.join(", "),
                      "error");
                  return false;
-             }
+             }--%>
 
              var DistrictField = document.getElementById('<%= txtdistrict.ClientID %>');
                 var district = DistrictField.value.trim();
@@ -951,6 +953,7 @@
                  document.getElementById('<%= txtStudentName.ClientID %>').value,
                  document.getElementById('<%= txtmotherName.ClientID %>').value,
                  document.getElementById('<%= txtfatherName.ClientID %>').value,
+                 document.getElementById('<%= hfCollegeId.ClientID %>').value,
                 
 function (response) {
 
