@@ -70,208 +70,7 @@ table {
          background-color: #ddd;
      }
     </style>
-    <script type="text/javascript">
-        function validateFaculty() {
-            var ddlFaculty = document.getElementById('<%= ddlFaculty.ClientID %>');
-            var facultyError = document.getElementById('facultyError');
 
-            var collegeNameInput = document.getElementById('<%= txt_CollegeName.ClientID %>');
-            var collegeNameErrorSpan = document.getElementById('CollegeNameError');
-            if (collegeNameInput.value.trim() === "") {
-                collegeNameErrorSpan.style.display = "inline";
-                collegeNameInput.classList.add("is-invalid");
-                collegeNameInput.focus();
-                return false;
-            } else {
-                collegeNameErrorSpan.style.display = "none";
-                collegeNameInput.classList.remove("is-invalid");
-            }
-
-            if (ddlFaculty.value === "0" || ddlFaculty.value === "") {
-                facultyError.style.display = 'block';
-                return false;
-            } else {
-                facultyError.style.display = 'none';
-                return true;
-            }
-        }
-
-        var currentPage = 1;
-        var rowsPerPage = 10;
-
-        document.addEventListener("DOMContentLoaded", function () {
-            setupSelectAll();
-            filterAndPaginate(); // Load initial table
-        });
-
-        function getSelectedIds() {
-            var ids = [];
-            document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
-                var cb = row.querySelector("input[type=checkbox]");
-                var hf = row.querySelector("input[type=hidden][id$='hfStudentID']");
-                if (cb && cb.checked && hf) {
-                    ids.push(hf.value);
-                }
-            });
-            return ids;
-        }
-
-        function updateHiddenField() {
-            var hiddenField = document.getElementById('<%= hfSelectedIds.ClientID %>');
-            hiddenField.value = getSelectedIds().join(',');
-        }
-
-        function setupSelectAll() {
-            var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-            if (!master) return;
-
-            master.addEventListener('change', function () {
-                var checked = this.checked;
-                document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
-                    if (row.dataset.visible !== "false") {
-                        var cb = row.querySelector("input[type=checkbox]");
-                        if (cb) cb.checked = checked;
-                    }
-                });
-                updateSelectAllState();
-            });
-
-            attachRowHandlers();
-            updateSelectAllState();
-        }
-
-        function attachRowHandlers() {
-            document.querySelectorAll("#dataTable tbody input[type=checkbox]").forEach(function (cb) {
-                cb.removeEventListener('change', updateSelectAllState);
-                cb.addEventListener('change', updateSelectAllState);
-            });
-        }
-
-        function updateSelectAllState() {
-            var master = document.getElementById('<%= chkSelectAll.ClientID %>');
-            var checkboxes = document.querySelectorAll('#dataTable tbody tr[data-visible="true"] input[type=checkbox]');
-            var total = checkboxes.length;
-            var checkedCount = 0;
-
-            checkboxes.forEach(function (cb) {
-                if (cb.checked) checkedCount++;
-            });
-
-            if (checkedCount === 0) {
-                master.checked = false;
-                master.indeterminate = false;
-            } else if (checkedCount === total) {
-                master.checked = true;
-                master.indeterminate = false;
-            } else {
-                master.checked = false;
-                master.indeterminate = true;
-            }
-
-            updateHiddenField();
-        }
-
-        // ====== 🔍 Filtering + Pagination ======
-        function filterAndPaginate() {
-            var searchText = document.getElementById("searchInput").value.toLowerCase();
-            var rows = document.querySelectorAll("#dataTable tbody tr");
-
-            rows.forEach(function (row) {
-                var studentName = row.cells[1].textContent.toLowerCase();
-                var fatherName = row.cells[2].textContent.toLowerCase();
-                var motherName = row.cells[3].textContent.toLowerCase();
-                var dob = row.cells[4].textContent.toLowerCase();
-
-                var match = studentName.includes(searchText) ||
-                    fatherName.includes(searchText) ||
-                    motherName.includes(searchText) ||
-                    dob.includes(searchText);
-
-                row.dataset.visible = match ? "true" : "false";
-            });
-
-            currentPage = 1;
-            paginateFilteredTable();
-        }
-
-        function paginateFilteredTable() {
-            var allRows = document.querySelectorAll("#dataTable tbody tr");
-            var visibleRows = Array.from(allRows).filter(function (row) {
-                return row.dataset.visible !== "false";
-            });
-
-            var totalRows = visibleRows.length;
-            var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
-
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
-            allRows.forEach(function (row) {
-                row.style.display = "none";
-            });
-
-            var start = (currentPage - 1) * rowsPerPage;
-            var end = start + rowsPerPage;
-
-            visibleRows.slice(start, end).forEach(function (row) {
-                row.style.display = "";
-            });
-
-            renderPagination(totalPages);
-            attachRowHandlers();
-            updateSelectAllState();
-            var lblEntries = document.getElementById('<%= lblEntriesCount.ClientID %>');
-            if (totalRows === 0) {
-                lblEntries.innerText = "No entries found";
-            } else {
-                lblEntries.innerText = `Showing ${start + 1} to ${Math.min(end, totalRows)} of ${totalRows} entries`;
-            }
-        }
-
-        function renderPagination(totalPages) {
-            var container = document.getElementById('pagination');
-            container.innerHTML = '';
-
-            if (totalPages <= 1) return;
-
-            var prev = document.createElement('a');
-            prev.textContent = 'Prev';
-            prev.href = 'javascript:void(0);';
-            prev.addEventListener('click', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    paginateFilteredTable();
-                }
-            });
-            container.appendChild(prev);
-
-            for (let i = 1; i <= totalPages; i++) {
-                var link = document.createElement('a');
-                link.textContent = i;
-                link.href = 'javascript:void(0);';
-                if (i === currentPage) link.classList.add('active');
-                link.addEventListener('click', (function (pageNum) {
-                    return function () {
-                        currentPage = pageNum;
-                        paginateFilteredTable();
-                    };
-                })(i));
-                container.appendChild(link);
-            }
-
-            var next = document.createElement('a');
-            next.textContent = 'Next';
-            next.href = 'javascript:void(0);';
-            next.addEventListener('click', function () {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    paginateFilteredTable();
-                }
-            });
-            container.appendChild(next);
-        }
-
-    </script>
 
  </asp:Content>
    
@@ -301,6 +100,14 @@ table {
                                     </asp:DropDownList>
                                     <span id="facultyError" class="text-danger" style="display: none;">Please select a Faculty.</span>
                                 </div>
+                            </div>
+                            <div class="col-md-6">
+                                 <div class="form-group">
+     <label>Exam Category <span class="text-danger">*</span></label>
+     <asp:DropDownList ID="ddlExamcat" runat="server" CssClass="form-control select2">
+     </asp:DropDownList>
+     <span id="ExamCatError" class="text-danger" style="display: none;">Please select a Exam Category.</span>
+ </div>
                             </div>
                         </div>
 
@@ -376,10 +183,13 @@ table {
             </div>
         </div>
       
-        <%-- <script type="text/javascript">
+         <script type="text/javascript">
              function validateFaculty() {
                  var ddlFaculty = document.getElementById('<%= ddlFaculty.ClientID %>');
             var facultyError = document.getElementById('facultyError');
+
+                 var examDropdown = document.getElementById('<%= ddlExamcat.ClientID %>');
+                 var examerror = document.getElementById('ExamCatError');
 
             var collegeNameInput = document.getElementById('<%= txt_CollegeName.ClientID %>');
                  var collegeNameErrorSpan = document.getElementById('CollegeNameError');
@@ -398,36 +208,229 @@ table {
                      return false;
                  } else {
                      facultyError.style.display = 'none';
-                     return true;
+                     //return true;
                  }
+
+                 if (examDropdown.value === "0" || examDropdown.value === "") {
+                     examerror.style.display = "inline";
+                     examDropdown.classList.add("is-invalid");
+                     examDropdown.focus();
+                     return false;
+                 } else {
+                     examDropdown.classList.remove("is-invalid");
+                 }
+
              }
 
-             function toggleDownloadButton() {
-                 var anyChecked = false;
-                 var checkboxes = document.querySelectorAll('input[type="checkbox"][id$="chkRowSelect"]');
-                 checkboxes.forEach(function (checkbox) {
-                     if (checkbox.checked) {
-                         anyChecked = true;
+             var currentPage = 1;
+             var rowsPerPage = 5;
+
+             document.addEventListener("DOMContentLoaded", function () {
+                 setupSelectAll();
+                 filterAndPaginate(); // Load initial table
+             });
+
+             function getSelectedIds() {
+                 var ids = [];
+                 document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+                     var cb = row.querySelector("input[type=checkbox]");
+                     var hf = row.querySelector("input[type=hidden][id$='hfStudentID']");
+                     if (cb && cb.checked && hf) {
+                         ids.push(hf.value);
                      }
                  });
+                 return ids;
+             }
 
-                 var btn = document.getElementById("btnDownloadPDF");
-                 if (btn) {
-                     btn.style.display = anyChecked ? "inline-block" : "none";
+             function updateHiddenField() {
+                 var hiddenField = document.getElementById('<%= hfSelectedIds.ClientID %>');
+                 hiddenField.value = getSelectedIds().join(',');
+             }
+
+
+
+             function attachRowHandlers() {
+                 document.querySelectorAll("#dataTable tbody input[type=checkbox]").forEach(function (cb) {
+                     cb.removeEventListener('change', updateSelectAllState);
+                     cb.addEventListener('change', updateSelectAllState);
+                 });
+             }
+
+             function setupSelectAll() {
+                 var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+    if (!master) return;
+
+    master.addEventListener('change', function () {
+        var checked = this.checked;
+
+        // ✅ Only select rows visible on current page
+        document.querySelectorAll("#dataTable tbody tr").forEach(function (row) {
+            if (row.style.display !== "none") {
+                var cb = row.querySelector("input[type=checkbox]");
+                if (cb) cb.checked = checked;
+            }
+        });
+        updateSelectAllState();
+    });
+
+    attachRowHandlers();
+    updateSelectAllState();
+}
+
+function updateSelectAllState() {
+    var master = document.getElementById('<%= chkSelectAll.ClientID %>');
+    // ✅ Only check visible rows (current page)
+    var checkboxes = document.querySelectorAll('#dataTable tbody tr[data-visible="true"]');
+    var visibleCheckboxes = Array.from(checkboxes).filter(function (row) {
+        return row.style.display !== "none";
+    }).map(function (row) {
+        return row.querySelector("input[type=checkbox]");
+    });
+
+    var total = visibleCheckboxes.length;
+    var checkedCount = visibleCheckboxes.filter(cb => cb && cb.checked).length;
+
+    if (checkedCount === 0) {
+        master.checked = false;
+        master.indeterminate = false;
+    } else if (checkedCount === total) {
+        master.checked = true;
+        master.indeterminate = false;
+    } else {
+        master.checked = false;
+        master.indeterminate = true;
+    }
+
+    updateHiddenField();
+}
+
+
+// ====== 🔍 Filtering + Pagination ======
+function filterAndPaginate() {
+    var searchText = document.getElementById("searchInput").value.toLowerCase();
+    var rows = document.querySelectorAll("#dataTable tbody tr");
+
+    rows.forEach(function (row) {
+        var studentName = row.cells[1].textContent.toLowerCase();
+        var fatherName = row.cells[2].textContent.toLowerCase();
+        var motherName = row.cells[3].textContent.toLowerCase();
+        var dob = row.cells[4].textContent.toLowerCase();
+
+        var match = studentName.includes(searchText) ||
+            fatherName.includes(searchText) ||
+            motherName.includes(searchText) ||
+            dob.includes(searchText);
+
+        row.dataset.visible = match ? "true" : "false";
+    });
+
+    currentPage = 1;
+    paginateFilteredTable();
+}
+
+function paginateFilteredTable() {
+    var allRows = document.querySelectorAll("#dataTable tbody tr");
+    var visibleRows = Array.from(allRows).filter(function (row) {
+        return row.dataset.visible !== "false";
+    });
+
+    var totalRows = visibleRows.length;
+    var totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
+
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    allRows.forEach(function (row) {
+        row.style.display = "none";
+    });
+
+    var start = (currentPage - 1) * rowsPerPage;
+    var end = start + rowsPerPage;
+
+    visibleRows.slice(start, end).forEach(function (row) {
+        row.style.display = "";
+    });
+
+    renderPagination(totalPages);
+    attachRowHandlers();
+    updateSelectAllState();
+                 var lblEntries = document.getElementById('<%= lblEntriesCount.ClientID %>');
+                 if (totalRows === 0) {
+                     lblEntries.innerText = "No entries found";
+                 } else {
+                     lblEntries.innerText = `Showing ${start + 1} to ${Math.min(end, totalRows)} of ${totalRows} entries`;
                  }
              }
+             function renderPagination(totalPages) {
+                 var container = document.getElementById('pagination');
+                 container.innerHTML = '';
 
-             function selectAllCheckboxes(source) {
-                 var checkboxes = document.querySelectorAll('input[type="checkbox"][id$="chkRowSelect"]');
-                 checkboxes.forEach(function (checkbox) {
-                     checkbox.checked = source.checked;
+                 if (totalPages <= 1) return;
+
+                 // === Prev button ===
+                 var prev = document.createElement('a');
+                 prev.textContent = 'Prev';
+                 prev.href = 'javascript:void(0);';
+                 if (currentPage === 1) prev.classList.add('disabled');
+                 prev.addEventListener('click', function () {
+                     if (currentPage > 1) {
+                         currentPage--;
+                         paginateFilteredTable();
+                     }
                  });
-                 toggleDownloadButton();
+                 container.appendChild(prev);
+
+                 // === Page numbers with ellipses ===
+                 var maxVisible = 1; // how many page links to show at once
+                 var startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                 var endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+                 if (startPage > 1) {
+                     addPageLink(container, 1);
+                     if (startPage > 2) addDots(container);
+                 }
+
+                 for (let i = startPage; i <= endPage; i++) {
+                     addPageLink(container, i, i === currentPage);
+                 }
+
+                 if (endPage < totalPages) {
+                     if (endPage < totalPages - 1) addDots(container);
+                     addPageLink(container, totalPages);
+                 }
+
+                 // === Next button ===
+                 var next = document.createElement('a');
+                 next.textContent = 'Next';
+                 next.href = 'javascript:void(0);';
+                 if (currentPage === totalPages) next.classList.add('disabled');
+                 next.addEventListener('click', function () {
+                     if (currentPage < totalPages) {
+                         currentPage++;
+                         paginateFilteredTable();
+                     }
+                 });
+                 container.appendChild(next);
              }
 
-             window.onload = function () {
-                 toggleDownloadButton();
-             };
+             function addPageLink(container, pageNum, isActive = false) {
+                 var link = document.createElement('a');
+                 link.textContent = pageNum;
+                 link.href = 'javascript:void(0);';
+                 if (isActive) link.classList.add('active');
+                 link.addEventListener('click', function () {
+                     currentPage = pageNum;
+                     paginateFilteredTable();
+                 });
+                 container.appendChild(link);
+             }
 
-         </script>--%>
+             function addDots(container) {
+                 var span = document.createElement('span');
+                 span.textContent = '...';
+                 container.appendChild(span);
+             }
+
+
+         </script>
     </asp:Content>
