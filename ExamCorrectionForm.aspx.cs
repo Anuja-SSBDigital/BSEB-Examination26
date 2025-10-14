@@ -344,13 +344,14 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 //signaturePreview.ImageUrl = !string.IsNullOrEmpty(studentSignaturePath) ? studentSignaturePath : "";
 
                 hfFaculty.Value = row["FacultyId"].ToString();
-                hfOldStudentName.Value = txtStudentName.Text;
-                hfOldFatherName.Value = txtfatherName.Text;
-                hfOldMotherName.Value = txtmotherName.Text;
-                hfOldDOB.Value = txtDOB.Text;
+                //hfOldStudentName.Value = txtStudentName.Text;
+                //hfOldFatherName.Value = txtfatherName.Text;
+                //hfOldMotherName.Value = txtmotherName.Text;
+                //hfOldDOB.Value = txtDOB.Text;
 
                 txtcollegeName.Text = row["CollegeName"].ToString();
                 txtcollegeCode.Text = row["CollegeCode"].ToString();
+                hfCollegeId.Value = row["CollegeId"].ToString();
                 //  hfCollegeCode.Value = txtcollegeCode.Text;
             }
 
@@ -371,8 +372,8 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
             // Call the update method in DB or other logic as required
             DBHelper dl = new DBHelper();
-            int result = dl.UpdateExamCorrectionForm(Convert.ToInt32(studentId), "", "", "", maritalStatus, "", "", "", "", "", "", "", Convert.ToInt32(examTypeId), "", "", "", "", "", "", "", "", Gender, CasteCategory, Nationality, Religion,
-                "","","","");
+            int result = dl.UpdateImpQueComExaminationForm(Convert.ToInt32(studentId), maritalStatus, Gender, CasteCategory, Nationality, Religion);
+                //"","","","");
             //int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2, medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
 
 
@@ -427,7 +428,8 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
     string DOB,
      string StudentName,
     string MotherName,
-    string FatherName)
+    string FatherName,
+    string hdnCollegeId)
     {
         try
         {
@@ -451,20 +453,34 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
             }
 
             DBHelper dl = new DBHelper();
-            int result = dl.UpdateExamCorrectionForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2,
-                medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB, StudentName, MotherName, FatherName);
+
+            //string result1 = dl.AddOrUpdateCorrectionHistory(Convert.ToInt32(studentId),Convert.ToInt32(hdnCollegeId),StudentName.Trim(),FatherName.Trim(),MotherName.Trim(),collegeCode);
+
+            string correctionResult = dl.AddOrUpdateCorrectionHistory(Convert.ToInt32(studentId), Convert.ToInt32(hdnCollegeId),StudentName.Trim(), FatherName.Trim(), MotherName.Trim(), collegeCode, mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2,
+                medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
+
+            // Check for error in the correction history result
+            if (correctionResult.IndexOf("successfully", StringComparison.OrdinalIgnoreCase) == -1)
+            {
+                return new { status = "error", message =correctionResult };
+            }
+            return new { status = "success", message = "Student updated successfully." };
+
+            //int result = dl.UpdateExamCorrectionForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2,
+            //    medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
+            //    //medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB, StudentName, MotherName, FatherName);
 
 
-            if (result > 0)
-            {
-                string encryptedStudentId = CryptoHelper.Encrypt(studentId);
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
-                return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
-            }
-            else
-            {
-                return new { status = "error", message = "Update failed. Please try again." };
-            }
+                //if (result > 0)
+                //{
+                //    string encryptedStudentId = CryptoHelper.Encrypt(studentId);
+                //    string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+                //    return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
+                //}
+            //else
+            //{
+            //    return new { status = "error", message = "Update failed. Please try again." };
+            //}
         }
         catch (Exception ex)
         {
