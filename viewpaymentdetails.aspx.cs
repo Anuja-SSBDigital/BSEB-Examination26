@@ -23,7 +23,7 @@ public partial class viewpaymentdetails : System.Web.UI.Page
         string clientTxnId = Request.QueryString["id"].ToString();
         if(clientTxnId.StartsWith("EXM"))
         {
-            DataSet result = db.GetExmPaymntDetailsTxnIdwise(clientTxnId);
+            DataSet result = db.GetExmPaymntDetailsTxnIdwise(clientTxnId,0);
             if (result != null && result.Tables.Count > 0)
             {
                 rpt_getpayemnt.DataSource = result.Tables[1];

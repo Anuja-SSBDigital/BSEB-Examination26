@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -14,6 +16,7 @@ using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using System.Xml;
 
 public partial class ChallanRecall : System.Web.UI.Page
 {
@@ -21,7 +24,7 @@ public partial class ChallanRecall : System.Web.UI.Page
 
     public void getchallandetails()
     {
-        DataTable result = db.getChallanDetailsbasedonTxnId(txt_CollegeCode.Text,1);
+        DataTable result = db.getChallanDetailsbasedonTxnId(txt_CollegeCode.Text,2);
         if (result != null && result.Rows.Count > 0)
         {
             rptransactiondetails.DataSource = result;
@@ -79,136 +82,362 @@ public partial class ChallanRecall : System.Web.UI.Page
 
     protected async void rptransactiondetails_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
+
         if (e.CommandName == "lnk_Restore")
         {
-            HiddenField hf_ClientTxnId = (HiddenField)e.Item.FindControl("hf_ClientTxnId");
-            string clientTxnId = hf_ClientTxnId.Value.Trim();
-
-            string clientCode = ConfigurationManager.AppSettings["Clientcode"];
-            string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
-            string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
-
-
-            string plainData = "clientCode=" + clientCode + "&clientTxnId=" + clientTxnId;
-
-            string encryptedData = EncryptData(plainData, authIV, authKey);
-
-            var requestBody = new
+            try
             {
-                clientCode = clientCode,
-                statusTransEncData = encryptedData
-            };
+                HiddenField hf_ClientTxnId = (HiddenField)e.Item.FindControl("hf_ClientTxnId");
+                HiddenField hf_PaymentId = (HiddenField)e.Item.FindControl("hf_PaymentId");
+                HiddenField hf_bankgateway = (HiddenField)e.Item.FindControl("hf_bankgateway");
 
-            string jsonPayload = new JavaScriptSerializer().Serialize(requestBody);
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+                string clientTxnId = hf_ClientTxnId.Value.Trim();
+                string PaymentId = hf_PaymentId.Value.Trim();
+                string bankGateway = hf_bankgateway.Value.Trim();
 
-                //live url
-                //HttpResponseMessage response = await client.PostAsync("https://gateway.sabpaisa.in/sabpaisa/refund", content);
-                HttpResponseMessage response = await client.PostAsync("https://stage-txnenquiry.sabpaisa.in/SPTxtnEnquiry/getTxnStatusByClientxnId", content);
-                string responseString = await response.Content.ReadAsStringAsync();
-
-                //System.Diagnostics.Debug.WriteLine("🔒 Raw Response = " + responseString);
-
-                var responseObj = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(responseString);
-
-                if (responseObj != null && responseObj.ContainsKey("statusResponseData"))
+                if (bankGateway.Equals("Indian Bank", StringComparison.OrdinalIgnoreCase))
                 {
-                    string encryptedResponse = responseObj["statusResponseData"].ToString();
+                    // 🔹 Call SabPaisa API
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+                    string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode=" + clientCode + "&clientXtnId=" + clientTxnId;
+                    string responseString = "";
 
-                    string decrypted = DecryptString(encryptedResponse, authIV, authKey);
-                    System.Diagnostics.Debug.WriteLine("🔓 Decrypted Response = " + decrypted);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
 
-                    string[] pairs = decrypted.Split('&');
-                    Dictionary<string, string> data = new Dictionary<string, string>();
-
-                    foreach (string pair in pairs)
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                     {
-                        string[] parts = pair.Split('=');
-                        if (parts.Length == 2)
+                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
-                            data[parts[0]] = parts[1];
+                            responseString = reader.ReadToEnd();
                         }
                     }
 
-                    //sabPaisaRespdict.ContainsKey("paidAmount") ? sabPaisaRespdict["paidAmount"] : "";
-                    //sabPaisaRespdict.ContainsKey("paymentMode") ? sabPaisaRespdict["paymentMode"] : "";
-                    //bPaisaRespdict.ContainsKey("bankName") ? sabPaisaRespdict["bankName"] : "";
-                    //sabPaisaRespdict.ContainsKey("amountType") ? sabPaisaRespdict["amountType"] : "";
-                    //aisaRespdict.ContainsKey("status") ? sabPaisaRespdict["status"] : "";
-                    //sabPaisaRespdict.ContainsKey("statusCode") ? sabPaisaRespdict["statusCode"] : "";
-                    // = sabPaisaRespdict.ContainsKey("challanNumber") ? sabPaisaRespdict["challanNumber"] : "";
-                    // = sabPaisaRespdict.ContainsKey("sabpaisaTxnId") ? sabPaisaRespdict["sabpaisaTxnId"] : "";
-                    //ge = sabPaisaRespdict.ContainsKey("sabpaisaMessage") ? sabPaisaRespdict["sabpaisaMessage"] : "";
-                    //sabPaisaRespdict.ContainsKey("bankMessage") ? sabPaisaRespdict["bankMessage"] : "";
-                    // = sabPaisaRespdict.ContainsKey("bankErrorCode") ? sabPaisaRespdict["bankErrorCode"] : "";
-                    //Code = sabPaisaRespdict.ContainsKey("sabpaisaErrorCode") ? sabPaisaRespdict["sabpaisaErrorCode"]
+                    // Parse XML response
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(responseString);
+                    XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
 
-
-                    //abPaisaRespdict.ContainsKey("bankTxnId") ? sabPaisaRespdict["bankTxnId"] : "";
-                    //abPaisaRespdict.ContainsKey("transDate") ? sabPaisaRespdict["transDate"] : "";
-
-
-
-                    string status = data.ContainsKey("status") ? data["status"] : "";
-                    string paymentStatusCode = data.ContainsKey("statusCode") ? data["statusCode"] : "";
-                    string gatewayMessage = data.ContainsKey("sabpaisaMessage") ? data["sabpaisaMessage"] : "";
-                    string gatewayErrorCode = data.ContainsKey("sabpaisaErrorCode") ? data["sabpaisaErrorCode"] : "";
-                    string bankMessage = data.ContainsKey("bankMessage") ? data["bankMessage"] : "";
-                    string bankErrorCode = data.ContainsKey("bankErrorCode") ? data["bankErrorCode"] : "";
-                   
-                    string gatewayTxnId = data.ContainsKey("sabpaisaTxnId") ? data["sabpaisaTxnId"] : "";
-                    string bankTxnId = data.ContainsKey("bankTxnId") ? data["bankTxnId"] : "";
-                    string paidAmount = data.ContainsKey("paidAmount") ? data["paidAmount"] : "";
-
-                    //              string clientTxnId,
-                    //string paymentStatus,
-                    //string paymentStatusCode,
-                    //string gatewayMessage,
-                    //string gatewayErrorCode,
-                    //string bankMessage,
-                    //string bankErrorCode,
-                    //string challanNumber,
-                    //string gatewayTxnId,
-                    //string bankTxnId,
-                    //decimal? paidAmount,
-
-                    if (status == "SUCCESS")
+                    if (txnNode != null)
                     {
-                        int result =  db.UpdateChallanRecall(clientTxnId, status, paymentStatusCode, gatewayMessage, gatewayErrorCode, bankMessage, bankErrorCode, gatewayTxnId, bankTxnId, paidAmount);
-                        if (result == 0)
+                        string apiStatus = txnNode.Attributes["status"] != null
+                             ? txnNode.Attributes["status"].Value
+                             : "";
+
+                        string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
+                                                    ? txnNode.Attributes["sabPaisaRespCode"].Value
+                                                    : "";
+
+                        string bankTxnId = txnNode.Attributes["txnId"] != null
+                                                    ? txnNode.Attributes["txnId"].Value
+                                                    : "";
+
+                        string paidAmount = txnNode.Attributes["payeeAmount"] != null
+                                                    ? txnNode.Attributes["payeeAmount"].Value
+                                                    : "";
+
+                        string paymentUpdateddate = txnNode.Attributes["transCompleteDate"] != null
+                                                    ? txnNode.Attributes["transCompleteDate"].Value
+                                                    : "";
+
+                        string paymentmode = txnNode.Attributes["paymentMode"] != null
+                                                    ? txnNode.Attributes["paymentMode"].Value
+                                                    : "";
+
+                        string errorcode = txnNode.Attributes["errorCode"] != null
+                                                    ? txnNode.Attributes["errorCode"].Value
+                                                    : "";
+
+                        if (errorcode == "400")
                         {
-                           
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "alertBox", "alert('✅ Challan restored successfully.');", true);
+                            return; // Skip this transaction
                         }
-                        else if (result == 2)
+
+                        // Update DB
+                        db.UpdateChallanInquiry(clientTxnId, apiStatus, paymentStatusCode, bankTxnId, paidAmount, paymentmode, paymentUpdateddate);
+
+                        // Restore payment record
+                        db.RestorePaymentAndStudentPayment(Convert.ToInt32(PaymentId));
+
+                        if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
                         {
-                            
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "alertBox", "alert('❌ Failed: Transaction ID not found.');", true);
+                            DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId,0);
+                            if (dsStudents != null && dsStudents.Tables.Count > 0)
+                            {
+                                DataTable dtStudents = dsStudents.Tables[1];
+                                foreach (DataRow rowst in dtStudents.Rows)
+                                {
+                                    int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                    db.UpdateStudentExamFeeSubmit(studentId);
+                                }
+                            }
+
+                            ScriptManager.RegisterStartupScript(this, GetType(), "RestoreSuccess",
+                                "swal({ title: 'Success', text: 'Transaction restored successfully!', icon: 'success' });", true);
                         }
                         else
                         {
-                           
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "alertBox", "alert('❌ Restore failed. Please try again.');", true);
+                            ScriptManager.RegisterStartupScript(
+    this,
+    GetType(),
+    "RestoreFailed",
+    "swal({ title: 'Failed', text: 'Transaction status: " + apiStatus + "', icon: 'error' });",
+    true
+);
                         }
                     }
                     else
                     {
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "alertBox", "alert('❌ Restore Failed. Status: " + status + "');", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "NoData",
+                            "swal({ title: 'Error', text: 'No transaction data found.', icon: 'warning' });", true);
+                    }
+                }
+                else if (bankGateway.Equals("Axis Bank", StringComparison.OrdinalIgnoreCase))
+                {
+                   
+                    // 🔹 Axis Enquiry API
+                    string CID = ConfigurationManager.AppSettings["Axis_CID"];
+                    string RID = clientTxnId;
+                    string key = ConfigurationManager.AppSettings["Axis_ChecksumKey"];
+                    string ENCKEY = ConfigurationManager.AppSettings["Axis_ENCKEY"];
+                    string TYP = ConfigurationManager.AppSettings["Axis_TYP"];
+
+                    // Compute checksum
+                    string checksumInput = CID + RID + RID + key;
+                    string CKS = sha256_hash(checksumInput);
+
+                    string PlainText = "CID=" + CID +
+                                          "&RID=" + clientTxnId +
+                                           "&CRN=" + RID +
+                                           "&VER=1.0" +
+                                           "&TYP=" + TYP +
+                                           "&CKS=" + CKS;
+
+                    // Encrypt the request
+                    string encryptedRequest = Encrypt(PlainText, ENCKEY);
+
+                    // URL-encode the request before sending
+                    string enquiryUrl = "https://easypay.axisbank.co.in/index.php/api/enquiry?i=" + HttpUtility.UrlEncode(encryptedRequest);
+
+                    string encryptedResponse = "";
+                    using (WebClient wc = new WebClient())
+                    {
+                        encryptedResponse = wc.DownloadString(enquiryUrl);
                     }
 
-                }
-                else
-                {
-                    // Handle error/log
-                    System.Diagnostics.Debug.WriteLine("❗ Encrypted field 'statusResponseData' not found.");
-                }
+                    if (encryptedResponse.StartsWith("error=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Log the error and continue with next transaction
 
+                        return; // inside a loop
+                    }
+
+                    string decodedResponse = HttpUtility.UrlDecode(encryptedResponse);
+
+                    // Convert Base64 to byte array
+                    byte[] encryptedBytes = Convert.FromBase64String(decodedResponse);
+
+                    // Decrypt using AES128 ECB PKCS7
+                    string plainResponse = "";
+                    using (RijndaelManaged rij = new RijndaelManaged())
+                    {
+                        rij.Key = Encoding.UTF8.GetBytes(ENCKEY.PadRight(16, ' ')); // ensure 16 bytes
+                        rij.Mode = CipherMode.ECB;
+                        rij.Padding = PaddingMode.PKCS7;
+
+                        ICryptoTransform decryptor = rij.CreateDecryptor();
+                        byte[] decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+                        plainResponse = Encoding.UTF8.GetString(decryptedBytes);
+                    }
+
+                    // Parse response into dictionary
+                    var responseDict = plainResponse.Split('&')
+                                                    .Select(part => part.Split('='))
+                                                    .ToDictionary(split => split[0], split => split[1]);
+
+                    string statusCode = responseDict["STC"];
+                    string statusMsg = responseDict["RMK"];
+                    string paidAmount = responseDict["AMT"];
+                    string bankRef = responseDict["BRN"];
+                    string txnId = responseDict["TRN"];
+                    string paymentMode = responseDict["PMD"];
+                    string paymentDate = responseDict["TET"];
+
+                  
+
+                    db.UpdateChallanInquiry(clientTxnId, statusMsg, statusCode, txnId, paidAmount, paymentMode, paymentDate);
+
+                    if (statusCode == "000")
+                    {
+                        DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId,0);
+                        if (dsStudents != null && dsStudents.Tables.Count > 0)
+                        {
+                            DataTable dtStudents = dsStudents.Tables[1];
+                            foreach (DataRow rowst in dtStudents.Rows)
+                            {
+                                int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                db.UpdateStudentExamFeeSubmit(studentId);
+                            }
+                        }
+
+                        ScriptManager.RegisterStartupScript(this, GetType(), "RestoreSuccess",
+                            "swal({ title: 'Success', text: 'Transaction restored successfully!', icon: 'success' });", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "RestoreFailed",
+                            "swal({{ title: 'Failed', text: 'Transaction status: {statusMsg}', icon: 'error' }});", true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "RestoreError",
+                    "swal({{ title: 'Error', text: 'Restore failed: {ex.Message}', icon: 'error' }});", true);
             }
         }
+
+        //if (e.CommandName == "lnk_Restore")
+        //{
+        //    try
+        //    {
+        //        HiddenField hf_ClientTxnId = (HiddenField)e.Item.FindControl("hf_ClientTxnId");
+        //        HiddenField hf_PaymentId = (HiddenField)e.Item.FindControl("hf_PaymentId");
+        //        HiddenField hf_bankgateway = (HiddenField)e.Item.FindControl("hf_bankgateway");
+        //        string clientTxnId = hf_ClientTxnId.Value.Trim();
+        //        string PaymentId = hf_PaymentId.Value.Trim();
+
+        //        string clientCode = ConfigurationManager.AppSettings["Clientcode"];
+        //        string authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+        //        string authIV = ConfigurationManager.AppSettings["AuthenticationIV"];
+
+        //        string url = "https://txnenquiry.sabpaisa.in/SPTxtnEnquiry/TransactionEnquiryServlet?clientCode="
+        //                     + clientCode + "&clientXtnId=" + clientTxnId;
+
+        //        string responseString = "";
+
+        //        // 🔹 Make request
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        //        request.Method = "GET";
+
+        //        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        //        {
+        //            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+        //            {
+        //                responseString = reader.ReadToEnd();
+        //            }
+        //        }
+
+        //        // 🔹 Parse XML
+        //        XmlDocument xmlDoc = new XmlDocument();
+        //        xmlDoc.LoadXml(responseString);
+        //        XmlNode txnNode = xmlDoc.SelectSingleNode("/transaction");
+
+        //        if (txnNode != null)
+        //        {
+        //            string apiStatus = txnNode.Attributes["status"] != null ? txnNode.Attributes["status"].Value: "";
+
+        //            string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null ? txnNode.Attributes["sabPaisaRespCode"].Value : "";
+
+        //            string bankTxnId = txnNode.Attributes["txnId"] != null ? txnNode.Attributes["txnId"].Value: "";
+
+        //            string paidAmount = txnNode.Attributes["payeeAmount"] != null ? txnNode.Attributes["payeeAmount"].Value: "";
+
+        //            string paymentUpdateddate = txnNode.Attributes["transCompleteDate"] != null  ? txnNode.Attributes["transCompleteDate"].Value : "";
+
+        //            string paymentmode = txnNode.Attributes["paymentMode"] != null ? txnNode.Attributes["paymentMode"].Value : "";
+
+        //            string errorcode = txnNode.Attributes["errorCode"] != null ? txnNode.Attributes["errorCode"].Value : "";
+
+
+        //            if (errorcode == "400")
+        //            {
+
+        //                return; // go to next txnNode
+
+        //            }
+
+        //            // 🔹 Update DB with transaction details
+        //            db.UpdateChallanInquiry(
+        //                clientTxnId,
+        //                apiStatus,
+        //                paymentStatusCode,
+        //                bankTxnId,
+        //                paidAmount,
+        //                paymentmode,
+        //                paymentUpdateddate
+        //            );
+
+        //            // 🔹 Restore payment record
+        //            db.RestorePaymentAndStudentPayment(Convert.ToInt32(PaymentId));
+        //            //db.UpdatePaymentIsDeletedZero(clientTxnId);
+
+        //            if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                DataSet dsStudents = db.GetStdntPaymntDetailsTxnIdwise(clientTxnId);
+
+        //                if (dsStudents != null && dsStudents.Tables.Count > 0)
+        //                {
+        //                    DataTable dtStudents = dsStudents.Tables[1];
+
+        //                    foreach (DataRow rowst in dtStudents.Rows)
+        //                    {
+        //                        int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+        //                        db.UpdateStudentRegFeeSubmit(studentId);
+        //                    }
+        //                }
+
+        //                // ✅ Show success message
+        //                ScriptManager.RegisterStartupScript(
+        //                    this,
+        //                    GetType(),
+        //                    "RestoreSuccess",
+        //                    "swal({ title: 'Success', text: 'Transaction restored successfully!', icon: 'success' });",
+        //                    true
+        //                );
+        //            }
+        //            else
+        //            {
+        //                // ❌ Transaction not successful
+        //                ScriptManager.RegisterStartupScript(
+        //                    this,
+        //                    GetType(),
+        //                    "RestoreFailed",
+        //                    "swal({{ title: 'Failed', text: 'Transaction status: {apiStatus}', icon: 'error' }});",
+        //                    true
+        //                );
+        //            }
+        //        }
+        //        else
+        //        {
+        //            System.Diagnostics.Debug.WriteLine("No transaction data found for " + clientTxnId);
+        //            ScriptManager.RegisterStartupScript(
+        //                this,
+        //                GetType(),
+        //                "NoData",
+        //                "swal({ title: 'Error', text: 'No transaction data found.', icon: 'warning' });",
+        //                true
+        //            );
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // 🔥 Log exception
+        //        System.Diagnostics.Debug.WriteLine("Restore Error: " + ex.Message);
+
+        //        // ❌ Show error message
+        //        ScriptManager.RegisterStartupScript(
+        //            this,
+        //            GetType(),
+        //            "RestoreError",
+        //            "swal({{ title: 'Error', text: 'Restore failed: {ex.Message}', icon: 'error' }});",
+        //            true
+        //        );
+        //    }
+        //}
+
+
     }
 
     public static string EncryptData(string plainText, string iv, string key)
@@ -245,6 +474,19 @@ public partial class ChallanRecall : System.Web.UI.Page
         }
     }
 
+    public static String sha256_hash(String value)
+    {
+        StringBuilder Sb = new StringBuilder();
+        using (SHA256 hash = SHA256Managed.Create())
+        {
+            Encoding enc = Encoding.UTF8;
+            Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+            foreach (Byte b in result)
+                Sb.Append(b.ToString("x2"));
+        }
+        return Sb.ToString();
+    }
+
     public ICryptoTransform GetCryptoTransform(AesCryptoServiceProvider csp, bool encrypting, string iv, string key)
     {
         csp.Mode = CipherMode.CBC;
@@ -253,5 +495,18 @@ public partial class ChallanRecall : System.Web.UI.Page
         csp.IV = Encoding.UTF8.GetBytes(iv);
 
         return encrypting ? csp.CreateEncryptor() : csp.CreateDecryptor();
+    }
+
+    public string Encrypt(string input, string key)
+    {
+        byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
+        byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(input);
+        Aes kgen = Aes.Create("AES");
+        kgen.Mode = CipherMode.ECB;
+        //kgen.Padding = PaddingMode.None;
+        kgen.Key = keyArray;
+        ICryptoTransform cTransform = kgen.CreateEncryptor();
+        byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+        return Convert.ToBase64String(resultArray, 0, resultArray.Length);
     }
 }

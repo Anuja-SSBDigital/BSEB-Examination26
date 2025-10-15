@@ -99,16 +99,13 @@
                                                 <td><%# Eval("PaymentUpdatedDate", "{0:dd-MM-yyyy}") %></td>
                                                 <td><%# Eval("PaymentStatus") %></td>
                                                 <asp:HiddenField runat="server" ID="hf_status" Value='<%# Eval("PaymentStatus") %>' />
+                                                <asp:HiddenField runat="server" ID="hf_bankgateway" Value='<%# Eval("BankGateway") %>' />
                                               
                                                 <td>
                                                    <asp:HiddenField runat="server" ID="hf_ClientTxnId" Value='<%# Eval("ClientTxnId") %>'/>
+                                                   <asp:HiddenField runat="server" ID="hf_PaymentId" Value='<%# Eval("Pk_PaymentId") %>'/>
                                                     <asp:HiddenField runat="server" ID="hf_Isdeleted" Value='<%# Eval("IsDeleted") %>' />
-                                                    <asp:LinkButton
-                                                        ID="lnkrestore"
-                                                        runat="server"
-                                                        CommandName="lnk_Restore"
-                                                        CommandArgument='<%# Eval("Pk_PaymentId") %>'
-                                                        CssClass="btn btn-danger btn-sm">Restore
+                                                    <asp:LinkButton ID="lnkrestore" runat="server" CommandName="lnk_Restore" CommandArgument='<%# Eval("Pk_PaymentId") %>' CssClass="btn btn-danger btn-sm">Restore
                                                     </asp:LinkButton>
                                                 </td>
                                             </tr>
