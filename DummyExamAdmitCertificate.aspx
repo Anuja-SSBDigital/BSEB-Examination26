@@ -93,7 +93,6 @@
         }
 
         .section-title {
-            font-weight: bold;
             text-align: center;
             margin-bottom: 5px;
         }
@@ -219,13 +218,13 @@
                         </div>
                     </div>
                     <div class="borderline">
-                        <table style="width: 100%; border-collapse: collapse;">
+                        <table style="width: 100%;font-family: system-ui;border-collapse: collapse;">
                             <tr>
                                 <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
                                   <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
                                 <td style="width: 85%; vertical-align: top; padding-right: 10px;">
 
-                                    <table style="width: 100%; font-size: 17px; border-collapse: collapse;">
+                                    <table style="width: 100%;font-size: 17px;line-height: revert;border-collapse: collapse;font-weight: 500;">
                                         <tr>
                                             <td>BSEB UNIQUE Id:</td>
                                             <td><%# Eval("UniqueNo") %></td>
@@ -293,7 +292,7 @@
                             </tr>
                         </table>
 
-                        <table class="subjects-table">
+                        <table class="subjects-table" style="width: 100%;font-family: system-ui;border-collapse: collapse;">
                             <thead>
                                 <tr>
                                     <th colspan="3">अनिवार्य विषय<br>
@@ -327,10 +326,10 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><b>भाषा विषय-1</b></td>
+                                    <td>भाषा विषय-1</td>
                                     <td><%# Eval("CompulsorySubject1Code") %></td>
                                     <td><%# Eval("CompulsorySubject1Name") %></td>
-                                    <td><b>ऐच्छिक विषय-1</b></td>
+                                    <td>ऐच्छिक विषय-1</td>
                                     <td><%# Eval("ElectiveSubject1Code") %></td>
                                     <td><%# Eval("ElectiveSubject1Name") %></td>
                                     <td rowspan="3"><%# Eval("AdditionalSubjectCode") %></td>
@@ -346,10 +345,10 @@
 
                                 </tr>
                                 <tr>
-                                    <td><b>भाषा विषय-2</b></td>
+                                    <td>भाषा विषय-2</td>
                                     <td><%# Eval("CompulsorySubject2Code") %></td>
                                     <td><%# Eval("CompulsorySubject2Name") %></td>
-                                    <td><b>ऐच्छिक विषय-2</b></td>
+                                    <td>ऐच्छिक विषय-2</td>
                                     <td><%# Eval("ElectiveSubject2Code") %></td>
                                     <td><%# Eval("ElectiveSubject2Name") %></td>
                                 </tr>
@@ -358,7 +357,7 @@
                                     <td colspan="3"></td>
                                     <%-- <td><%# Eval("CompulsorySubject3Code") %></td>
                                 <td><%# Eval("CompulsorySubject3Name") %></td>--%>
-                                    <td><b>ऐच्छिक विषय-3</b></td>
+                                    <td>ऐच्छिक विषय-3</td>
                                     <td><%# Eval("ElectiveSubject3Code") %></td>
                                     <td><%# Eval("ElectiveSubject3Name") %></td>
                                 </tr>
