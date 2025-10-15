@@ -78,6 +78,23 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                                     {
                                         if (finalStudentData.Columns.Contains(col.ColumnName))
                                         {
+                                            if (col.ColumnName == "StudentPhotoPath")
+                                            {
+                                                string photoFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
+
+                                                combinedRow["StudentPhotoPath"] = string.IsNullOrEmpty(photoFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Photos/" + photoFileName;
+                                            }
+                                            else if (col.ColumnName == "StudentSignaturePath")
+                                            {
+                                                string signatureFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
+
+                                                combinedRow["StudentSignaturePath"] = string.IsNullOrEmpty(signatureFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Signatures/" + signatureFileName;
+                                            }
+                                            else
+                                            {
+
+                                                combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
+                                            }
                                             //if (col.ColumnName == "DOB")
                                             //{
                                             //    if (studentRow[col] != DBNull.Value)
@@ -93,8 +110,8 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                                             //}
                                             //else
                                             //{
-                                                combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
-                                           //}
+                                            //   combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
+                                            //}
                                         }
                                     }
 
