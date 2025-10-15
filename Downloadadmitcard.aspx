@@ -223,7 +223,7 @@ table {
              }
 
              var currentPage = 1;
-             var rowsPerPage = 5;
+             var rowsPerPage = 25;
 
              document.addEventListener("DOMContentLoaded", function () {
                  setupSelectAll();
