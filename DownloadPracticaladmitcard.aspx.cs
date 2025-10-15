@@ -67,6 +67,22 @@ public partial class DownloadPracticaladmitcard : System.Web.UI.Page
                 ddlFaculty.Items.Clear();
                 ddlFaculty.Items.Insert(0, new ListItem("Select Faculty", "0"));
             }
+            DataTable dtExamcat = dl.getExamCatfordropdown();
+            var filtered = dtExamcat.AsEnumerable().Where(row => row.Field<int>("Pk_ExamTypeId") != 5);
+
+            if (filtered.Any())
+            {
+                ddlExamcat.DataSource = filtered.CopyToDataTable();
+                ddlExamcat.DataTextField = "ExamTypeName";
+                ddlExamcat.DataValueField = "Pk_ExamTypeId";
+                ddlExamcat.DataBind();
+            }
+            else
+            {
+                ddlExamcat.Items.Clear();
+            }
+
+            ddlExamcat.Items.Insert(0, new ListItem("Select Exam Category", "0"));
         }
         catch (Exception ex)
         {
@@ -81,6 +97,7 @@ public partial class DownloadPracticaladmitcard : System.Web.UI.Page
         try
         {
             string facultyId = ddlFaculty.SelectedValue;
+            int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
             string CollegeId = "";
             if (Session["CollegeName"] != null && Session["CollegeName"].ToString() == "Admin")
             {
@@ -103,7 +120,7 @@ public partial class DownloadPracticaladmitcard : System.Web.UI.Page
             }
 
 
-            DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId);
+            DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
             if (result != null && result.Rows.Count > 0)
             {
                 rptStudents.DataSource = result;
