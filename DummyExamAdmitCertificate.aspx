@@ -70,7 +70,7 @@
                 text-align: center;
             }
 
-          
+
 
             .subjects-table .hindi {
                 font-family: 'Noto Serif Devanagari', sans-serif;
@@ -181,7 +181,7 @@
 <body>
     <form runat="server" id="form1">
         <div class="text-center mt-4 mb-5">
-             <a href="Downloadadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
+            <a href="Downloadadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
             <button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>
             <%--   <button onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>--%>
         </div>
@@ -213,18 +213,18 @@
                                     <br />
                                 </asp:PlaceHolder>
                                 <label style="margin-left: 37px;"><strong>FACULTY:</strong> <%# Eval("FacultyName") %></label>
-                                 <asp:HiddenField ID="hfFacultyName" runat="server" Value='<%# Eval("FacultyName") %>' />
+                                <asp:HiddenField ID="hfFacultyName" runat="server" Value='<%# Eval("FacultyName") %>' />
                             </div>
                         </div>
                     </div>
                     <div class="borderline">
-                        <table style="width: 100%;font-family: system-ui;border-collapse: collapse;">
+                        <table style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <tr>
                                 <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
-                                  <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
+                                <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
                                 <td style="width: 85%; vertical-align: top; padding-right: 10px;">
 
-                                    <table style="width: 100%;font-size: 17px;line-height: revert;border-collapse: collapse;font-weight: 500;">
+                                    <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 500;">
                                         <tr>
                                             <td>BSEB UNIQUE Id:</td>
                                             <td><%# Eval("UniqueNo") %></td>
@@ -292,7 +292,7 @@
                             </tr>
                         </table>
 
-                        <table class="subjects-table" style="width: 100%;font-family: system-ui;border-collapse: collapse;">
+                        <table class="subjects-table" style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <thead>
                                 <tr>
                                     <th colspan="3">अनिवार्य विषय<br>
@@ -327,18 +327,18 @@
                             <tbody>
                                 <tr>
                                     <td>भाषा विषय-1</td>
-                                    <td><%# Eval("CompulsorySubject1Code") %></td>
-                                    <td><%# Eval("CompulsorySubject1Name") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("CompulsorySubject1Code") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("CompulsorySubject1Name") %></td>
                                     <td>ऐच्छिक विषय-1</td>
-                                    <td><%# Eval("ElectiveSubject1Code") %></td>
-                                    <td><%# Eval("ElectiveSubject1Name") %></td>
-                                    <td rowspan="3"><%# Eval("AdditionalSubjectCode") %></td>
-                                    <td rowspan="3"><%# Eval("AdditionalSubjectName") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject1Code") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject1Name") %></td>
+                                    <td rowspan="3" style="font-weight: bold;"><%# Eval("AdditionalSubjectCode") %></td>
+                                    <td rowspan="3" style="font-weight: bold;"><%# Eval("AdditionalSubjectName") %></td>
                                     <%--    <td rowspan="3"><%# Eval("VocationalSubjectCode1Code") %></td>
                                 <td rowspan="3"><%# Eval("VocationalSubjectName1Name") %></td>--%>
                                     <asp:PlaceHolder ID="phVocational" runat="server" Visible='<%# Convert.ToBoolean(Eval("HasVocationalSubjects")) %>'>
-                                        <td rowspan="3"><%# Eval("VocationalSubjectCode1Code") %></td>
-                                        <td rowspan="3"><%# Eval("VocationalSubjectName1Name") %></td>
+                                        <td rowspan="3"  style="font-weight: bold;"><%# Eval("VocationalSubjectCode1Code") %></td>
+                                        <td rowspan="3" style="font-weight: bold;"><%# Eval("VocationalSubjectName1Name") %></td>
 
                                     </asp:PlaceHolder>
 
@@ -346,11 +346,11 @@
                                 </tr>
                                 <tr>
                                     <td>भाषा विषय-2</td>
-                                    <td><%# Eval("CompulsorySubject2Code") %></td>
-                                    <td><%# Eval("CompulsorySubject2Name") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("CompulsorySubject2Code") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("CompulsorySubject2Name") %></td>
                                     <td>ऐच्छिक विषय-2</td>
-                                    <td><%# Eval("ElectiveSubject2Code") %></td>
-                                    <td><%# Eval("ElectiveSubject2Name") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject2Code") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject2Name") %></td>
                                 </tr>
 
                                 <tr>
@@ -358,8 +358,8 @@
                                     <%-- <td><%# Eval("CompulsorySubject3Code") %></td>
                                 <td><%# Eval("CompulsorySubject3Name") %></td>--%>
                                     <td>ऐच्छिक विषय-3</td>
-                                    <td><%# Eval("ElectiveSubject3Code") %></td>
-                                    <td><%# Eval("ElectiveSubject3Name") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject3Code") %></td>
+                                    <td style="font-weight: bold;"><%# Eval("ElectiveSubject3Name") %></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -367,16 +367,17 @@
 
                             <!-- Signature block -->
                             <div class="mb-3 row" style="margin-top: 80px;">
-                                     <div class="col-md-6">
+                                <div class="col-md-6">
 
-                                          <strong><asp:Label ID="lblExamSchoolHindi" runat="server" /><br>
-                                             </strong>
-                                     </div>
-                                     <div class="col-md-6 text-end">
+                                    <strong>
+                                        <asp:Label ID="lblExamSchoolHindi" runat="server" /><br>
+                                    </strong>
+                                </div>
+                                <div class="col-md-6 text-end">
 
-                                         <strong>परीक्षा नियंत्रक (उ0मा)</strong>
-                                     </div>
-                                 </div>
+                                    <strong>परीक्षा नियंत्रक (उ0मा)</strong>
+                                </div>
+                            </div>
                             <%--<hr style="border-top:var(--bs-border-width) solid black;opacity: 1;border: 2px;" />--%>
                             <hr style="font-size: 16px; border: 2px solid black !important; opacity: 1.25 !important;" />
                             <!-- Heading -->
@@ -404,7 +405,7 @@
 
                         </div>
                         <hr style="font-size: 16px; border: 2px solid black !important; opacity: 1.25 !important;" />
-                        
+
 
 
                     </div>
@@ -424,54 +425,54 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-       <script>
-           async function generatePDF() {
-               const { jsPDF } = window.jspdf;
-               const pdf = new jsPDF('p', 'mm', 'a4');
-               const elements = document.querySelectorAll('.container');
+        <script>
+            async function generatePDF() {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const elements = document.querySelectorAll('.container');
 
-               // Format current date/time
-               const now = new Date();
-               const options = {
-                   weekday: 'long',
-                   year: 'numeric',
-                   month: 'long',
-                   day: 'numeric',
-                   hour: 'numeric',
-                   minute: '2-digit',
-                   second: '2-digit',
-                   hour12: true
-               };
-               const formattedDate = now.toLocaleString('en-US', options);
+                // Format current date/time
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                };
+                const formattedDate = now.toLocaleString('en-US', options);
 
-               for (let i = 0; i < elements.length; i++) {
-                   const element = elements[i];
-                   const canvas = await html2canvas(element, {
-                       scale: 2,
-                       useCORS: true
-                   });
+                for (let i = 0; i < elements.length; i++) {
+                    const element = elements[i];
+                    const canvas = await html2canvas(element, {
+                        scale: 2,
+                        useCORS: true
+                    });
 
-                   const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                   const imgProps = pdf.getImageProperties(imgData);
-                   const pdfWidth = pdf.internal.pageSize.getWidth();
-                   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-                   if (i > 0) {
-                       pdf.addPage();
-                   }
+                    if (i > 0) {
+                        pdf.addPage();
+                    }
 
-                   // Add the image content
-                   pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    // Add the image content
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
-                   // Add footer (date-time and page number)
-                   pdf.setFontSize(10);
-                   pdf.setTextColor(0, 0, 0);
-                   pdf.text(`${formattedDate}    Page ${i + 1} of ${elements.length}`, 10, 290); // 10 = x, 290 = y (bottom)
-               }
+                    // Add footer (date-time and page number)
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(0, 0, 0);
+                    pdf.text(`${formattedDate}    Page ${i + 1} of ${elements.length}`, 10, 290); // 10 = x, 290 = y (bottom)
+                }
 
-               pdf.save('AdmitCards.pdf');
-           }
-       </script>
+                pdf.save('AdmitCards.pdf');
+            }
+        </script>
 
     </form>
 
