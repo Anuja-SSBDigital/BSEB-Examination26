@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 public partial class TheoryAdmitCertificate : System.Web.UI.Page
@@ -164,6 +165,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             Label lblExamTitleHindi = (Label)e.Item.FindControl("lblExamTitleHindi");
             Label lblExamSubjectHindi = (Label)e.Item.FindControl("lblExamSubjectHindi");
             Label lblExamSchoolHindi = (Label)e.Item.FindControl("lblExamSchoolHindi");
+            HtmlTableRow trVocational = (HtmlTableRow)e.Item.FindControl("trVocational");
             // Get FacultyName
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
@@ -192,6 +194,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा, 2025";
                 lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निश्चित परीक्षा कार्यक्रम सहित)";
                     lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                trVocational.Visible = false;
             }
             else
             {
