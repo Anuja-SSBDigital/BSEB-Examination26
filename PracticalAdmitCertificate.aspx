@@ -333,51 +333,51 @@
                                     <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
 
                                     <tr>
-                                        <td>* BSEB UNIQUE Id:</td>
+                                        <td>* BSEB UNIQUE Id</td>
                                         <td><%# Eval("UniqueNo") %></td>
                                     </tr>
                                     <tr>
-                                        <td>कॉलेज/+2 स्कूल का नाम:</td>
+                                        <td>+2 स्कूल का नाम</td>
                                         <td><%# Eval("CollegeName") %></td>
                                     </tr>
                                     <tr>
-                                        <td>परीक्षार्थी का नाम:</td>
+                                        <td>परीक्षार्थी का नाम</td>
                                         <td><%# Eval("StudentName") %></td>
                                     </tr>
                                     <tr>
-                                        <td>माता का नाम:</td>
+                                        <td>माता का नाम</td>
                                         <td><%# Eval("MotherName") %></td>
                                     </tr>
                                     <tr>
-                                        <td>पिता का नाम:</td>
+                                        <td>पिता का नाम</td>
                                         <td><%# Eval("FatherName") %></td>
                                     </tr>
                                     <tr>
-                                        <td>वैवाहिक स्थिति:</td>
+                                        <td>वैवाहिक स्थिति</td>
                                         <td><%# Eval("MaritalStatus") %></td>
                                     </tr>
                                     <tr>
-                                        <td>परीक्षार्थी का आधार नं:</td>
+                                        <td>परीक्षार्थी का आधार नं० </td>
                                         <td><%# Eval("AadharNo") %></td>
-                                        <td>दिव्यांग कोटि:</td>
+                                        <td>दिव्यांग कोटि</td>
                                         <td><%# Eval("Disability") != DBNull.Value && Convert.ToBoolean(Eval("Disability")) ? "YES" : "NO" %></td>
                                     </tr>
                                     <tr>
-                                        <td>सूचीकरण संख्या/वर्ष:</td>
+                                        <td>सूचीकरण संख्या/वर्ष</td>
                                         <td><%# Eval("RegistrationNo") %></td>
-                                        <td>परीक्षार्थी की कोटि:</td>
+                                        <td>परीक्षार्थी की कोटि</td>
                                         <td><%# Eval("ExamTypeName") %></td>
                                     </tr>
                                     <tr>
-                                        <td>रौल कोड:</td>
+                                        <td>रौल कोड</td>
                                         <td><%# Eval("RollCode") %></td>
-                                        <td>रौल क्रमांक:</td>
+                                        <td>रौल क्रमांक</td>
                                         <td><%# Eval("RollNumber") %></td>
-                                        <td>लिंग:</td>
+                                        <td>लिंग</td>
                                         <td><%# Eval("Gender") %></td>
                                     </tr>
                                     <tr>
-                                        <td>परीक्षा केंद्र का नाम:</td>
+                                        <td>परीक्षा केंद्र का नाम</td>
                                         <td colspan="5"><%# Eval("PracticalExamCenterName") %></td>
                                     </tr>
                                 </table>
