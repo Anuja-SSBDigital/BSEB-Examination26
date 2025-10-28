@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 public partial class DummyExamAdmitCertificate : System.Web.UI.Page
@@ -27,7 +28,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 string encodedStudentData = Request.QueryString["studentData"];
                 string Studentname = Request.QueryString["Studentname"];
                 string Collegecode = Request.QueryString["Collegecode"];
-                string FacultyId = Request.QueryString["FacultyId"];
+                string FacultyId = Request.QueryString["faculty"];
                 string DOB = Request.QueryString["Dob"];
                 string fromPage = Request.QueryString["from"];
                 //string examtypid = Request.QueryString["examTypeId"];
@@ -191,9 +192,16 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 Label lblExamTitle = e.Item.FindControl("lblExamTitle") as Label;
                 Label lblExamTitleHindi = e.Item.FindControl("lblExamTitleHindi") as Label;
                 Label lblExamSchoolHindi = e.Item.FindControl("lblExamSchoolHindi") as Label;
-
+                Label lblFacultyName = e.Item.FindControl("lblFacultyName") as Label;
+                HiddenField hfFacultyId = e.Item.FindControl("hfFacultyId") as HiddenField;
+                string FacultyId = hfFacultyId.Value;
                 string facultyName = "";
                 bool hasVocationalSubjects = false;
+                HtmlTableCell trVocational = (HtmlTableCell)e.Item.FindControl("trVocational");
+                HtmlTableCell trVocationalVishay1 = (HtmlTableCell)e.Item.FindControl("trVocationalVishay1");
+                HtmlTableCell trVocationalVishay2 = (HtmlTableCell)e.Item.FindControl("trVocationalVishay2");
+                HtmlTableCell trVocationalCode = (HtmlTableCell)e.Item.FindControl("trVocationalCode");
+                HtmlTableCell trVocationalCode1 = (HtmlTableCell)e.Item.FindControl("trVocationalCode1");
 
                 if (hfFacultyName != null)
                     facultyName = hfFacultyName.Value.Trim().ToUpper();
@@ -215,7 +223,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                         break;
                 }
 
-                if (facultyName == "VOCATIONAL")
+                if (FacultyId == "4")
                 {
                     if (phFaculty != null)
                         phFaculty.Visible = false;
@@ -225,6 +233,13 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                  lblFacultyName.Visible = false;
+                    trVocational.Visible = false;
+                    trVocationalVishay1.Visible = false;
+                    trVocationalVishay2.Visible = false;
+                    trVocationalCode.Visible = false;
+                    trVocationalCode1.Visible = false;
+                 
                 }
                 else
                 {
@@ -402,8 +417,20 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 targetRow["VocationalSubjectName1Name"] = name;
             }
 
+            //bool isVocationalFaculty = (facultyId == 4);
+            //targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0 || isVocationalFaculty;
             bool isVocationalFaculty = (facultyId == 4);
-            targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0 || isVocationalFaculty;
+
+            // Hide vocational portion if FacultyId = 4 (Vocational Faculty)
+            if (isVocationalFaculty)
+            {
+                targetRow["HasVocationalSubjects"] = false; // explicitly hide vocational section
+            }
+            else
+            {
+                targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0;
+            }
+
 
             log.Debug(string.Format("Subjects categorized: Compulsory={0}, Elective={1}, Additional={2}, Vocational={3}", 3, electiveSubjects.Count, additionalSubjects.Count, vocationalSubjects.Count));
         }
