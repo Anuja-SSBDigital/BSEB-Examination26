@@ -376,8 +376,8 @@
                             <td><%# Eval("AdditionalSubjectShift") %></td>
                             <td><%# Eval("AdditionalSubjectTime") %></td>
                         </tr>
-                        <tr>
-                            <asp:PlaceHolder ID="phVocationalHeader" runat="server" Visible='<%# Eval("HasVocationalSubjects") %>'>
+                        <tr runat="server" id="trVocational">
+                            <%--<asp:PlaceHolder ID="phVocationalHeader" runat="server" Visible='<%# Eval("HasVocationalSubjects") %>'>--%>
                                 <td colspan="2">व्यावसायिक ट्रेड<br>
                                     (Vocational Trade)</td>
                                 <%--<td></td>--%>
@@ -387,7 +387,7 @@
                                 <td><%# Eval("VocationalSubjectShift") %></td>
                                 <td><%# Eval("VocationalSubjectTime") %></td>
 
-                            </asp:PlaceHolder>
+                            <%--</asp:PlaceHolder>--%>
                         </tr>
                     </tbody>
                 </table>
