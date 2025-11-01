@@ -130,7 +130,9 @@
                             <label for="paymode">Pay Mode<span class="text-danger">*</span></label>
                             <asp:DropDownList runat="server" ID="ddl_paymode" CssClass="form-control form-select">
                                 <asp:ListItem Value="ALL">Select Bank</asp:ListItem>
+                                   <asp:ListItem Text="HDFC Bank" Value="HDFC Bank"></asp:ListItem>
                                 <asp:ListItem Value="Indian Bank">Indian Bank</asp:ListItem>
+                                <%-- <asp:ListItem Text="HDFC Bank" Value="HDFC Bank"></asp:ListItem>--%>
                                 <%--<asp:ListItem Text="Axis Bank" Value="Axis Bank"></asp:ListItem>--%>
                             </asp:DropDownList>
                             <span id="BankError" style="display: none; color: red;">Please Select Bank</span>
@@ -210,7 +212,44 @@
                                                     <td class="repeater-col"><%# Eval("Dob") != DBNull.Value ? string.Format("{0:dd-MM-yyyy}", Eval("Dob")) : "" %></td>
                                                     <td style="text-align: center;"><%# Eval("CasteCategoryCode") %></td>
                                                     <td><%# Eval("ExamTypeName") %></td>
+
+                                         <%--Delay Fees with adding of 150--%>
                                                     <td class="fee-amount"
+    data-amount='<%# 
+        (
+            Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
+                ? (
+                    Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
+                        ? 1800
+                        : 1400
+                  )
+                : (
+                    Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null 
+                        ? Convert.ToDecimal(Eval("ConcessionFee"))
+                        : Convert.ToDecimal(Eval("BaseFee"))
+                  )
+        ) + 150
+%>'>
+    <asp:Label ID="lblFee" runat="server"
+        Text='<%# 
+            (
+                Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
+                    ? (
+                        Eval("Faculty") != DBNull.Value && Eval("Faculty").ToString().Equals("Vocational", StringComparison.OrdinalIgnoreCase)
+                            ? 1800
+                            : 1400
+                      )
+                    : (
+                        Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null 
+                            ? Convert.ToDecimal(Eval("ConcessionFee"))
+                            : Convert.ToDecimal(Eval("BaseFee"))
+                      )
+            ) + 150
+        %>' />
+</td>
+                                                   <%-- Without Delay Fees--%>
+
+                                                  <%--  <td class="fee-amount"
                                                         data-amount='<%# 
         Eval("IsFirstExam") != DBNull.Value && Convert.ToInt32(Eval("IsFirstExam")) == 1
             ? (
@@ -238,7 +277,7 @@
                         : Eval("BaseFee")
                   )
         %>' />
-                                                    </td>
+                                                    </td>--%>
 
                                                     <%--<td class="fee-amount" data-amount='<%# Eval("ConcessionFee") != DBNull.Value && Eval("ConcessionFee") != null ? Eval("ConcessionFee") : Eval("BaseFee") %>'>
                                                     <asp:Label ID="lblFee" runat="server"
@@ -349,7 +388,7 @@
         });
     });
 </script>--%>
-
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
 
@@ -453,8 +492,8 @@
             hiddenIds.value = data.ids.join(',');
 
             // new hidden field for ID:Fee mapping
-            var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
-            hiddenFees.value = data.fees.join(',');
+         <%--   var hiddenFees = document.getElementById('<%= hfSelectedStudentFees.ClientID %>');
+            hiddenFees.value = data.fees.join(',');--%>
         }
 
 

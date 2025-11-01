@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -12,6 +14,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
+using Razorpay.Api;
+using System.Globalization;
+using System.IdentityModel.Protocols.WSTrust;
+using log4net.Core;
+using Razorpay.Api.Errors;
+
+
 
 public partial class PayExamFormFee : System.Web.UI.Page
 {
@@ -33,9 +42,10 @@ public partial class PayExamFormFee : System.Web.UI.Page
                 if (Session["CollegeName"].ToString() == "Admin")
                 {
                     txt_collegename.Text = "";
-                   
+
                     ddl_paymode.Items.Add(new ListItem("Axis Bank", "Axis Bank"));
-                    
+                   
+
                 }
                 else
                 {
@@ -112,7 +122,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
             string Collegename = Session["CollegeName"].ToString();
             int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
             int ExamId = Convert.ToInt32(ddlExamcat.SelectedValue);
-          
+
             if (rdo_payemntstatus.Checked == true)
             {
                 LogMessage("Payment status radio checked.");
@@ -147,7 +157,8 @@ public partial class PayExamFormFee : System.Web.UI.Page
                         LogMessage("PaymentGateway: " + paymentGateway);
 
                         if (string.IsNullOrEmpty(rowStatus) || rowStatus.Equals("FAILED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("INITIATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("CHALLAN_GENERATED", StringComparison.OrdinalIgnoreCase) || rowStatus.Equals("PENDING", StringComparison.OrdinalIgnoreCase) ||
-        rowStatus.Equals("FAILURE", StringComparison.OrdinalIgnoreCase))
+        rowStatus.Equals("FAILURE", StringComparison.OrdinalIgnoreCase) ||
+        rowStatus.Equals("payment_authorization", StringComparison.OrdinalIgnoreCase))
                         {
                             if (paymentGateway.Equals("Indian Bank", StringComparison.OrdinalIgnoreCase))
                             {
@@ -171,7 +182,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
                                 if (txnNode != null)
                                 {
-                                    string apiStatus = txnNode.Attributes["status"] != null  ? txnNode.Attributes["status"].Value : "";
+                                    string apiStatus = txnNode.Attributes["status"] != null ? txnNode.Attributes["status"].Value : "";
                                     LogMessage("API Status: " + apiStatus);
 
                                     string paymentStatusCode = txnNode.Attributes["sabPaisaRespCode"] != null
@@ -220,11 +231,12 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                             foreach (DataRow rowst in dtStudents.Rows)
                                             {
                                                 int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+
                                                 db.UpdateStudentExamFeeSubmit(studentId);
                                                 LogMessage("Student fee updated: " + studentId);
                                             }
                                         }
-                                       
+
                                     }
 
                                     // Show alert only if errorCode exists AND is not 400
@@ -255,7 +267,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                 string checksumInput = CID + RID + RID + key;
                                 string CKS = sha256_hash(checksumInput);
 
-                                string PlainText = "CID=" + CID + "&RID=" + clientTxnId +  "&CRN=" + RID + "&VER=1.0" + "&TYP=" + TYP + "&CKS=" + CKS;
+                                string PlainText = "CID=" + CID + "&RID=" + clientTxnId + "&CRN=" + RID + "&VER=1.0" + "&TYP=" + TYP + "&CKS=" + CKS;
 
                                 // Encrypt the request
                                 string encryptedRequest = Encrypt(PlainText, ENCKEY);
@@ -280,9 +292,16 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                 {
                                     // URL-decode the response first
                                     string decodedResponse = HttpUtility.UrlDecode(encryptedResponse);
+                                   
+
+                                    decodedResponse = decodedResponse.Replace(" ", "+").Replace("\r", "").Replace("\n", "").Trim();
+                                    decodedResponse = System.Text.RegularExpressions.Regex.Replace(decodedResponse, @"[^A-Za-z0-9\+/=]", "");
+
+                                   
 
                                     // Convert Base64 to byte array
                                     byte[] encryptedBytes = Convert.FromBase64String(decodedResponse);
+                                
 
                                     // Decrypt using AES128 ECB PKCS7
                                     string plainResponse = "";
@@ -312,7 +331,7 @@ public partial class PayExamFormFee : System.Web.UI.Page
 
                                     // Update DB
                                     db.UpdateChallanInquiry(RID, statusMsg, statusCode, txnId, paidAmount, paymentMode, paymentDate);
-                                 
+
 
                                     if (statusCode == "000") // Success
                                     {
@@ -353,7 +372,135 @@ public partial class PayExamFormFee : System.Web.UI.Page
                                     ScriptManager.RegisterStartupScript(this, GetType(), "AESDecryptError", script, true);
                                 }
 
-                                
+
+                            }
+                            else if (paymentGateway.Equals("HDFC Bank", StringComparison.OrdinalIgnoreCase))
+                            {
+                                try
+                                {
+                                    string paymentId = row["GatewayTxnId"].ToString();
+                                    if (!string.IsNullOrEmpty(paymentId))
+                                    {
+
+                                        var keySecret = "1S8pjORn6ii2M4gOAVq2QhoC";
+                                        var keyId = "rzp_live_Ra4140tIQFMO9O";
+
+                                        // Prepare Basic Auth
+                                        string authInfo = Convert.ToBase64String(Encoding.ASCII.GetBytes(keyId + ":" + keySecret));
+                                        string url = "https://api.razorpay.com/v1/payments/" + paymentId;
+
+                                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                                        request.Method = "GET";
+                                        request.Headers.Add("Authorization", "Basic " + authInfo);
+
+                                        string jsonResponse = "";
+                                        using (var response = (HttpWebResponse)request.GetResponse())
+                                        using (var reader = new StreamReader(response.GetResponseStream()))
+                                        {
+                                            jsonResponse = reader.ReadToEnd();
+                                        }
+
+                                        LogMessage("Razorpay Response: " + jsonResponse);
+
+                                        if (!string.IsNullOrEmpty(jsonResponse))
+                                        {
+                                            var paymentResponse = JObject.Parse(jsonResponse);
+
+                                            string statusdb = "";
+                                            string apiStatus = paymentResponse["status"].ToString();
+                                            if (apiStatus == "captured")
+                                            {
+                                                statusdb = "SUCCESS";
+
+                                            }
+                                            else if (apiStatus == "failure")
+                                            {
+                                                statusdb = "FAILED";
+                                            }
+                                            else if (apiStatus == "authorized")
+                                            {
+                                                statusdb = "AUTHORIZED";
+                                            }
+
+                                            string bankTxnId = null;
+
+                                            //// First, try to get UPI transaction ID
+                                            //if (paymentResponse["acquirer_data"] != null && paymentResponse["acquirer_data"]["upi_transaction_id"] != null)
+                                            //{
+                                            //    bankTxnId = paymentResponse["acquirer_data"]["upi_transaction_id"].ToString();
+                                            //}
+
+                                            // Fallback to payment ID if UPI txn ID is null
+                                            if (string.IsNullOrEmpty(bankTxnId) && paymentResponse["order_id"] != null)
+                                            {
+                                                bankTxnId = paymentResponse["order_id"].ToString();
+                                            }
+
+                                            // Get the amount in paise
+                                      
+                                            decimal paidAmount = 0;
+                                            string amountStr = paymentResponse["amount"].ToString();
+
+                                            try
+                                            {
+                                                // Parse the amount (Razorpay sends it in paise)
+                                                paidAmount = decimal.Parse(amountStr ?? "0", CultureInfo.InvariantCulture);
+
+                                                // Convert paise to rupees
+                                                paidAmount = paidAmount / 100;
+                                            }
+                                            catch
+                                            {
+                                                paidAmount = 0; // fallback in case of invalid value
+                                            }
+
+                                            string paymentMode = paymentResponse["method"].ToString() ?? "";
+                                            string paymentUpdatedDate = paymentResponse["created_at"].ToString();
+                                            string errorCode = null;
+
+                                            if (paymentResponse["error"] != null && paymentResponse["error"]["code"] != null)
+                                            {
+                                                errorCode = paymentResponse["error"]["code"].ToString();
+                                            }
+
+                                            // Now check the value
+                                            if (errorCode == "BAD_REQUEST_ERROR")
+                                            {
+                                                // Skip or continue
+                                                continue;
+                                            }
+
+
+                                            // Update database
+                                            db.UpdateChallanInquiry(clientTxnId, statusdb, "", bankTxnId, paidAmount.ToString(), paymentMode, "");
+
+                                            // Update student fees if payment successful
+                                            if (statusdb == "SUCCESS")
+                                            {
+                                                DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId, ExamId);
+                                                if (dsStudents != null && dsStudents.Tables.Count > 1)
+                                                {
+                                                    DataTable dtStudents = dsStudents.Tables[1];
+                                                    foreach (DataRow rowst in dtStudents.Rows)
+                                                    {
+                                                        int studentId = Convert.ToInt32(rowst["Fk_StudentId"]);
+                                                        db.UpdateStudentExamFeeSubmit(studentId);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (WebException wex)
+                                {
+                                    LogMessage("Razorpay WebException for " + row["GatewayTxnId"].ToString() + ": " + wex.Message);
+                                }
+                                catch (Exception ex)
+                                {
+                                    LogMessage("Error processing payment " + row["GatewayTxnId"].ToString() + ": " + ex.Message);
+                                }
+
+
                             }
                             else
                             {
@@ -375,8 +522,8 @@ swal({{
 
 
 
-                    
-                  
+
+
                 }
                 //else
                 //{
@@ -549,27 +696,34 @@ swal({{
             //}
 
             string payerName = collegeCode;
-            string payerMobile = "";
-           // string payerMobile = Mobileno;
-            string payerEmail = "";
-            //string payerEmail = EmailId;
-
-            string clientTxnId = "N/A";
-            string studentFeeMapping = hfSelectedStudentFees.Value;
+           // string payerMobile = "";
+             string payerMobile = Mobileno;
+           // string payerEmail = "";
+            string payerEmail = EmailId;
             decimal totalAmount = 0;
+            string clientTxnId = "N/A";
+            //string studentFeeMapping = hfSelectedStudentFees.Value;
 
-            if (!string.IsNullOrEmpty(studentFeeMapping))
-            {
-                foreach (string item in studentFeeMapping.Split(','))
-                {
-                    string[] parts = item.Split(':');
-                    decimal fee;
-                    if (parts.Length == 2 && decimal.TryParse(parts[1], out fee))
-                    {
-                        totalAmount += fee;
-                    }
-                }
-            }
+            decimal totalFee = db.GetTotalStudentFee(selectedStudentIds);
+
+            //Delay Fees by adding 150
+            decimal additionalFee = 150;
+            totalAmount = totalFee + additionalFee;
+            //without delay fees
+           // totalAmount = totalFee;
+
+            //if (!string.IsNullOrEmpty(studentFeeMapping))
+            //{
+            //    foreach (string item in studentFeeMapping.Split(','))
+            //    {
+            //        string[] parts = item.Split(':');
+            //        decimal fee;
+            //        if (parts.Length == 2 && decimal.TryParse(parts[1], out fee))
+            //        {
+            //            totalAmount += fee;
+            //        }
+            //    }
+            //}
 
             // ✅ Insert payment details into DB
             string message = db.InsertExamStudentPayment(
@@ -646,6 +800,152 @@ swal({{
 
 
             }
+            else if (ddl_paymode.SelectedValue == "HDFC Bank")
+            {
+                //var keyId = ConfigurationManager.AppSettings["RazorpayKeyId"];
+                //var keySecret = ConfigurationManager.AppSettings["RazorpayKeySecret"];
+
+                var keySecret = "1S8pjORn6ii2M4gOAVq2QhoC";
+                var keyId = "rzp_live_Ra4140tIQFMO9O";
+
+                string currency = "INR";
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                // Razorpay order creation
+                RazorpayClient client = new RazorpayClient(keyId, keySecret);
+
+                decimal totalAmountDecimal = Convert.ToDecimal(totalAmount); // e.g., 1400.50
+                long amountInPaise = (long)Math.Round(totalAmountDecimal * 100); // multiply by 100
+
+                Dictionary<string, object> options = new Dictionary<string, object>();
+                options.Add("amount", amountInPaise); // amount in the smallest currency unit (paise)
+                options.Add("currency", currency);
+                options.Add("receipt", clientTxnId);
+                options.Add("payment_capture", 1); // auto capture enabled
+
+                //  Create Razorpay order
+                Order order = client.Order.Create(options);
+
+                //  Retrieve generated orderId
+                string orderId = order["id"].ToString();
+
+                db.UpdateOrderidofrazorpay(clientTxnId, orderId);
+
+                // Generate embedded Razorpay checkout script
+                string formHtml =
+     "<form id='razorpayForm' method='POST' action='https://api.razorpay.com/v1/checkout/embedded'>" +
+     "<input type='hidden' name='key_id' value='" + keyId + "'/>" +
+     "<input type='hidden' name='amount' value='" + amountInPaise + "'/>" +
+     "<input type='hidden' name='currency' value='INR'/>" +
+     "<input type='hidden' name='order_id' value='" + orderId + "'/>" +
+     "<input type='hidden' name='name' value='INTERMEDIATE ANNUAL EXAM SESSION 2026'/>" +
+     "<input type='hidden' name='description' value='Payment Transaction'/>" +
+     "<input type='hidden' name='callback_url' value='https://intermediate.biharboardonline.com/Exam26/responseHDFC.aspx'/>" +
+     "<input type='hidden' name='cancel_url' value='https://intermediate.biharboardonline.com/Exam26/responseHDFC.aspx'/>" +
+     "<button type='submit'>Pay Now</button>" +
+     "</form>" +
+     "<script>document.getElementById('razorpayForm').submit();</script>";
+
+                Response.Write(formHtml);
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+
+
+
+
+                // Register the script for client-side execution
+                ClientScript.RegisterStartupScript(this.GetType(), "razorpayForm", "document.write('" + formHtml.Replace("'", "\\'") + "');", true);
+            }
+
+            //        else if (ddl_paymode.SelectedValue == "HDFC Bank")
+            //        {
+            //            var keyId = ConfigurationManager.AppSettings["RazorpayKeyId"];
+            //            var keySecret = ConfigurationManager.AppSettings["RazorpayKeySecret"];
+
+            //            var client = new RazorpayClient(keyId, keySecret);
+            //            var orderData = new JObject
+            //           {
+            //               { "amount", totalAmount },
+            //               { "currency", "INR" },
+            //               { "receipt", clientTxnId },
+            //               { "notes", new JObject { { "clientTxnId", clientTxnId }, { "purpose", "Online Payment" } } }
+            //           };
+            //            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            //            string url = "https://api.razorpay.com/v1/checkout/embedded";
+
+            //            // 🔧 Web request setup
+            //            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //            request.Method = "POST";
+            //            request.ContentType = "application/json";
+
+            //            string auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(keyId + ":" + keySecret));
+
+            //            request.Headers["Authorization"] = "Basic " + auth;
+
+            //            // ✍️ Write JSON to request body
+            //            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            //            {
+            //                streamWriter.Write(orderData.ToString());
+            //            }
+
+            //            // 📥 Get response
+            //            string responseText;
+            //            using (var response = (HttpWebResponse)request.GetResponse())
+            //            using (var reader = new StreamReader(response.GetResponseStream()))
+            //            {
+            //                responseText = reader.ReadToEnd();
+            //            }
+
+            //            // 🔍 Parse JSON
+            //            JObject jsonResponse = JObject.Parse(responseText);
+            //            string orderId = jsonResponse["id"].ToString();
+
+            //            //   lblMessage.Text = "✅ Order Created! Txn ID: " + clientTxnId + "<br/>Order ID: " + orderId;
+
+            //            string script = "<script>" +
+
+            //"var options = {" +
+
+            //"'key': '" + keyId + "'," +
+
+            //"'amount': " + totalAmount + "," +
+
+            //"'currency': 'INR'," +
+
+            //"'name': 'INTERMEDIATE ANNUAL EXAM SESSION 2026'," +
+
+            //"'description': 'Payment Transaction'," +
+
+            //"'order_id': '" + orderId + "'," +
+
+            //"'handler': function (response) {" +
+
+            //"window.location.href = 'responseHDFC.aspx?pid=' + response.razorpay_payment_id + " +
+
+            //"'&oid=' + response.razorpay_order_id + " +
+
+            // "'&signature=' + response.razorpay_signature + " + // <-- CORRECTED LINE
+
+            //    "'&txnid=" + clientTxnId + "';" +
+
+            //"}," +
+
+            //"'theme': { 'color': '#3399cc' }" +
+
+            //"};" +
+
+            //"var rzp1 = new Razorpay(options);" +
+
+            //"rzp1.open();" +
+
+            //"</script>";
+
+
+            //            // 🧠 Register the script on postback
+            //            ClientScript.RegisterStartupScript(this.GetType(), "razorpayScript", script);
+
+            //        }
             else
             {
                 string clientCode = ConfigurationManager.AppSettings["Clientcode"];
@@ -657,7 +957,6 @@ swal({{
                 string mcc = ConfigurationManager.AppSettings["mcc"];
                 string AmountType = ConfigurationManager.AppSettings["AmountType"];
                 string channelid = ConfigurationManager.AppSettings["channelid"];
-
 
 
                 string query = "";
@@ -689,7 +988,7 @@ swal({{
                 string respString = "<html>" +
                                   "<body onload='document.forms[0].submit()'>" +   // Auto-submit on load
                                   "<form action=\"https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
-                                           //"<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
+                                          //"<form action=\"https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1\" method=\"post\">" +
                                           "<input type=\"hidden\" name=\"encData\" value=\"" + encdata + "\" id=\"frm1\">" +
                                           "<input type=\"hidden\" name=\"clientCode\" value=\"" + clientCode + "\" id=\"frm2\">" +
                                           "<noscript><input type=\"submit\" value=\"Click here to continue\"></noscript>" + // fallback if JS is disabled

@@ -147,6 +147,11 @@
                         <td>
                             <asp:Label ID="lblClientTransId" runat="server"></asp:Label></td>
                     </tr>
+                     <%-- <tr>
+      <td>Order ID:</td>
+      <td>
+          <asp:Label ID="lbl_orderid" runat="server"></asp:Label></td>
+  </tr>--%>
                     <tr>
                         <td>Bank Transaction ID:</td>
                         <td>
@@ -172,7 +177,7 @@
 
 
                 <div style="text-align: center; margin-top: 20px;">
-                    <asp:Button runat="server" CssClass="submitBtn btn-primary" ID="btn_back" Text="Back To Page"  />
+                    <asp:Button runat="server" CssClass="submitBtn btn-primary" ID="btn_back" OnClick="btn_back_Click" Text="Back To Page"  />
                 </div>
 
                 <div style="text-align: center; margin-top: 20px;">

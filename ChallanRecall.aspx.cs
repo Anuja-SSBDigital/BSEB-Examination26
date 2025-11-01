@@ -162,7 +162,7 @@ public partial class ChallanRecall : System.Web.UI.Page
 
                         if (apiStatus.Equals("SUCCESS", StringComparison.OrdinalIgnoreCase))
                         {
-                            DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId,0);
+                            DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId, 0);
                             if (dsStudents != null && dsStudents.Tables.Count > 0)
                             {
                                 DataTable dtStudents = dsStudents.Tables[1];
@@ -195,7 +195,7 @@ public partial class ChallanRecall : System.Web.UI.Page
                 }
                 else if (bankGateway.Equals("Axis Bank", StringComparison.OrdinalIgnoreCase))
                 {
-                   
+
                     // 🔹 Axis Enquiry API
                     string CID = ConfigurationManager.AppSettings["Axis_CID"];
                     string RID = clientTxnId;
@@ -264,13 +264,13 @@ public partial class ChallanRecall : System.Web.UI.Page
                     string paymentMode = responseDict["PMD"];
                     string paymentDate = responseDict["TET"];
 
-                  
+
 
                     db.UpdateChallanInquiry(clientTxnId, statusMsg, statusCode, txnId, paidAmount, paymentMode, paymentDate);
 
                     if (statusCode == "000")
                     {
-                        DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId,0);
+                        DataSet dsStudents = db.GetExmPaymntDetailsTxnIdwise(clientTxnId, 0);
                         if (dsStudents != null && dsStudents.Tables.Count > 0)
                         {
                             DataTable dtStudents = dsStudents.Tables[1];
@@ -289,6 +289,11 @@ public partial class ChallanRecall : System.Web.UI.Page
                         ScriptManager.RegisterStartupScript(this, GetType(), "RestoreFailed",
                             "swal({{ title: 'Failed', text: 'Transaction status: {statusMsg}', icon: 'error' }});", true);
                     }
+                }
+
+                else if (bankGateway.Equals("HDFC Bank", StringComparison.OrdinalIgnoreCase))
+                {
+
                 }
             }
             catch (Exception ex)
