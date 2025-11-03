@@ -64,8 +64,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label required">College Name</label>
-                                <asp:TextBox ID="txtcollegeName" runat="server" CssClass="form-control" ReadOnly="true" />
-                                <small id="txtcollegeNameErr" class="text-danger d-none">Please Enter College Name</small>
+                                <asp:TextBox ID="txtcollegeName" runat="server" CssClass="form-control"/>
+                          <small id="txtcollegeNameErr" class="text-danger" style="display:none;">Please Enter College Name</small>
+
                             </div>
                         </div>
 
@@ -135,6 +136,19 @@
 
   <script type="text/javascript">
       function validateForm() {
+
+          debugger
+          var collegeName = document.getElementById('<%= txtcollegeName.ClientID %>');
+          var collegeNameErr = document.getElementById('txtcollegeNameErr');
+          if (!collegeName.value.trim()) {
+              collegeNameErr.style.display = 'inline';
+              collegeName.classList.add("is-invalid");
+              collegeName.focus();
+              return false;
+          } else {
+              collegeNameErr.style.display = 'none';
+              collegeName.classList.remove("is-invalid");
+          }
           // Principal Name Validation
           var nameInput = document.getElementById('<%= txtPrincipalName.ClientID %>');
         var nameErr = document.getElementById('txtPrincipalNameErr');
