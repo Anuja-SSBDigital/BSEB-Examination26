@@ -61,13 +61,14 @@ public partial class CollegeUserDetails : System.Web.UI.Page
     {
         try
         {
+            string CollegeName = txtcollegeName.Text.Trim();
             int collegeId = int.Parse(hdnCollegeId.Value);
             string principalName = txtPrincipalName.Text.Trim();
             string principalMobile = txtPrincipalConNo.Text.Trim();
             string email = txtEmailId.Text.Trim();
 
 
-            bool isUpdated = dl.UpdateCollegeDetails(collegeId, principalName, principalMobile, email);
+            bool isUpdated = dl.UpdateCollegeDetails(collegeId, principalName, principalMobile, email, CollegeName);
 
             if (isUpdated)
             {
