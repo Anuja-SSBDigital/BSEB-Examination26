@@ -169,6 +169,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             // Get FacultyName
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
+            bool hasVocational = drv["HasVocationalSubjects"] != DBNull.Value && Convert.ToBoolean(drv["HasVocationalSubjects"]);
 
             // Map to Hindi
             string hindiFaculty = string.Empty;
@@ -194,7 +195,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा, 2025";
                 lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निश्चित परीक्षा कार्यक्रम सहित)";
                     lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
-                trVocational.Visible = false;
+                trVocational.Visible = hasVocational;
             }
             else
             {
@@ -204,6 +205,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2025";
                 lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक परीक्षा के विषय (निश्चित परीक्षा कार्यक्रम सहित)";
                 lblExamSchoolHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                trVocational.Visible = hasVocational;
             }
         }
     }
