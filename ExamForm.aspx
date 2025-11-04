@@ -143,7 +143,7 @@
                                 <th>Mother Name</th>
                                 <th>TransactionId</th>
                                 <%--<th>Correaction</th>--%>
-                                <th>Edit</th>
+                                <%--<th>Edit</th>--%>
                                 <th>View</th>
                                 <th>Status</th>
                             </tr>
@@ -161,13 +161,13 @@
                                         <td><%# Eval("MotherName") %></td>
                                         <td><%# Eval("TransactionId") %></td>
                                         <%--<td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correaction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>--%>
-
-                                        <td>
-                                            <asp:HiddenField ID="hfExamFeeSubmit" runat="server" Value='<%# Eval("IsExamFeeSubmit") %>' />
-                                            <asp:HiddenField ID="hfExamFormSubmit" runat="server" Value='<%# Eval("IsExamFormSubmit") %>' />
-                                            <asp:HiddenField ID="hfExamTypeid" runat="server" Value='<%# Eval("ExamTypeid") %>' />
+                                         <asp:HiddenField ID="hfExamFeeSubmit" runat="server" Value='<%# Eval("IsExamFeeSubmit") %>' />
+ <asp:HiddenField ID="hfExamFormSubmit" runat="server" Value='<%# Eval("IsExamFormSubmit") %>' />
+ <asp:HiddenField ID="hfExamTypeid" runat="server" Value='<%# Eval("ExamTypeid") %>' />
+                                        <%--<td>
+                                           
                                             <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-sm btn-info" Text="Edit" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnEdit_Click" />
-                                        </td>
+                                        </td>--%>
                                         <td>
                                             <asp:Button ID="btnView" runat="server" CssClass="btn btn-sm btn-primary" Text="View" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnView_Click" />
                                         </td>

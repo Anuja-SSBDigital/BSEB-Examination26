@@ -185,13 +185,42 @@ public partial class ExamForm : System.Web.UI.Page
             //string CategoryName = ddl_category.SelectedValue;
 
             DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, StudentName);
-            //DataTable result = dl.GetExamStudentRegiListData(Convert.ToInt32(CollegeId), facultyId, ExamId, RegistrationType, StudentName);
+
             bool hasRecords = result != null && result.Rows.Count > 0;
             pnlNoRecords.Visible = !hasRecords;
             pnlStudentTable.Visible = hasRecords;
 
-            rptStudentList.DataSource = hasRecords ? result : null;
+            if (hasRecords)
+            {
+                // Create a computed "StatusOrder" column
+                result.Columns.Add("StatusOrder", typeof(int));
+
+                foreach (DataRow row in result.Rows)
+                {
+                    bool examFeeSubmit = row["IsExamFeeSubmit"] != DBNull.Value && Convert.ToBoolean(row["IsExamFeeSubmit"]);
+                    bool examFormSubmit = row["IsExamFormSubmit"] != DBNull.Value && Convert.ToBoolean(row["IsExamFormSubmit"]);
+
+                    // Pending first, Submitted later
+                    if (examFeeSubmit && examFormSubmit)
+                        row["StatusOrder"] = 2; // Submit
+                    else
+                        row["StatusOrder"] = 1; // Pending
+                }
+
+                // Sort by StatusOrder ascending (Pending first)
+                DataView dv = result.DefaultView;
+                dv.Sort = "StatusOrder ASC";
+
+                rptStudentList.DataSource = dv;
+            }
+            else
+            {
+                rptStudentList.DataSource = null;
+            }
+
             rptStudentList.DataBind();
+
+
 
         }
         catch (Exception ex)
@@ -223,65 +252,110 @@ public partial class ExamForm : System.Web.UI.Page
     {
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
-            Button btnRegister = (Button)e.Item.FindControl("btnRegister");
             Button btnView = (Button)e.Item.FindControl("btnView");
+            //Button btnCorrection = (Button)e.Item.FindControl("Button1"); // Correction button
             HiddenField hfExamFeeSubmit = (HiddenField)e.Item.FindControl("hfExamFeeSubmit");
             HiddenField hfExamFormSubmit = (HiddenField)e.Item.FindControl("hfExamFormSubmit");
             Label lblStatus = (Label)e.Item.FindControl("lblStatus");
-
-            //string registrationMode = Request.Form["regType"];
 
             bool examFeeSubmit = false;
             bool examFormSubmit = false;
             bool.TryParse(hfExamFeeSubmit.Value, out examFeeSubmit);
             bool.TryParse(hfExamFormSubmit.Value, out examFormSubmit);
 
-            // Status logic
+            // Default: hide all
+            btnView.Visible = false;
+            //btnCorrection.Visible = false;
+
+            // Now apply visibility & status logic
             if (examFeeSubmit && examFormSubmit)
             {
-                btnRegister.Visible = false;
-                lblStatus.Text = "Submit";
+                lblStatus.Text = "Submitted";
                 lblStatus.CssClass = "badge badge-success";
+                btnView.Visible = true;          // show View button
+                //btnCorrection.Visible = true;    // allow correction if required
+                //btnCorrection.Visible = false;    // allow correction if required it's not availbl to open 
             }
             else if (examFeeSubmit && !examFormSubmit)
             {
-                btnRegister.Visible = true;
                 lblStatus.Text = "Pending";
                 lblStatus.CssClass = "badge badge-warning";
-                btnView.Visible = (examFeeSubmit && examFormSubmit);
+                btnView.Visible = false;         // hide View (form not submitted)
+                //btnCorrection.Visible = false;   // hide Correction until submitted
             }
-            //else
-            //{
-            //    lblStatus.Text = "Pending";
-            //    lblStatus.CssClass = "badge badge-warning";
-            //    btnRegister.Visible = false;
-            //    btnView.Visible = false;
-            //}
-
-            // Edit/View logic based on registrationMode
-            //if (registrationMode == "Regular" || registrationMode == "Private")
-            //{
-            //    btnRegister.Visible = true;
-            //    btnView.Visible = (examFeeSubmit && examFormSubmit);
-            //}
-            //else if (registrationMode == "Private")
-            //{
-            //    btnRegister.Visible = false;
-            //    btnView.Visible = (examFeeSubmit && examFormSubmit);
-            //}
-            //else
-            //{
-            //    btnRegister.Visible = false;
-            //    btnView.Visible = false;
-            //}
+            else
+            {
+                lblStatus.Text = "Not Paid";
+                lblStatus.CssClass = "badge badge-secondary";
+                btnView.Visible = false;
+                //btnCorrection.Visible = false;
+            }
         }
     }
+
+    //protected void rptStudentList_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    //{
+    //    if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+    //    {
+    //        //Button btnRegister = (Button)e.Item.FindControl("btnRegister");
+    //        Button btnView = (Button)e.Item.FindControl("btnView");
+    //        HiddenField hfExamFeeSubmit = (HiddenField)e.Item.FindControl("hfExamFeeSubmit");
+    //        HiddenField hfExamFormSubmit = (HiddenField)e.Item.FindControl("hfExamFormSubmit");
+    //        Label lblStatus = (Label)e.Item.FindControl("lblStatus");
+
+    //        //string registrationMode = Request.Form["regType"];
+
+    //        bool examFeeSubmit = false;
+    //        bool examFormSubmit = false;
+    //        bool.TryParse(hfExamFeeSubmit.Value, out examFeeSubmit);
+    //        bool.TryParse(hfExamFormSubmit.Value, out examFormSubmit);
+
+    //        // Status logic
+    //        if (examFeeSubmit && examFormSubmit)
+    //        {
+    //            //btnRegister.Visible = false;
+    //            lblStatus.Text = "Submit";
+    //            lblStatus.CssClass = "badge badge-success";
+    //        }
+    //        else if (examFeeSubmit && !examFormSubmit)
+    //        {
+    //            //btnRegister.Visible = true;
+    //            lblStatus.Text = "Pending";
+    //            lblStatus.CssClass = "badge badge-warning";
+    //            btnView.Visible = (examFeeSubmit && examFormSubmit);
+    //        }
+    //        //else
+    //        //{
+    //        //    lblStatus.Text = "Pending";
+    //        //    lblStatus.CssClass = "badge badge-warning";
+    //        //    btnRegister.Visible = false;
+    //        //    btnView.Visible = false;
+    //        //}
+
+    //        // Edit/View logic based on registrationMode
+    //        //if (registrationMode == "Regular" || registrationMode == "Private")
+    //        //{
+    //        //    btnRegister.Visible = true;
+    //        //    btnView.Visible = (examFeeSubmit && examFormSubmit);
+    //        //}
+    //        //else if (registrationMode == "Private")
+    //        //{
+    //        //    btnRegister.Visible = false;
+    //        //    btnView.Visible = (examFeeSubmit && examFormSubmit);
+    //        //}
+    //        //else
+    //        //{
+    //        //    btnRegister.Visible = false;
+    //        //    btnView.Visible = false;
+    //        //}
+    //    }
+    //}
 
 
 
     //protected void btnCorreaction_Click(object sender, EventArgs e)
     //{
-       
+
     //    Button btnEdit = (Button)sender;
     //    RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
     //    HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
@@ -297,23 +371,23 @@ public partial class ExamForm : System.Web.UI.Page
     //    Response.Redirect(url, false);
     //}
 
-    protected void btnEdit_Click(object sender, EventArgs e)
-    {
+    //protected void btnEdit_Click(object sender, EventArgs e)
+    //{
        
-        Button btnEdit = (Button)sender;
-        RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
-        HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
-        string examTypeId = hfExamTypeid != null ? hfExamTypeid.Value : "";
+    //    Button btnEdit = (Button)sender;
+    //    RepeaterItem item = (RepeaterItem)btnEdit.NamingContainer;
+    //    HiddenField hfExamTypeid = (HiddenField)item.FindControl("hfExamTypeid");
+    //    string examTypeId = hfExamTypeid != null ? hfExamTypeid.Value : "";
 
-        string studentId = btnEdit.CommandArgument;
-         string encryptedStudentId = CryptoHelper.Encrypt(studentId);
-        //string registrationType = Request.Form["regType"];
+    //    string studentId = btnEdit.CommandArgument;
+    //     string encryptedStudentId = CryptoHelper.Encrypt(studentId);
+    //    //string registrationType = Request.Form["regType"];
 
-        string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(encryptedStudentId) + "&examTypeId=" + Server.UrlEncode(examTypeId);
-        //string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(studentId) + "&registrationType=" + Server.UrlEncode(registrationType) + "&examTypeId=" + Server.UrlEncode(examTypeId);
+    //    string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(encryptedStudentId) + "&examTypeId=" + Server.UrlEncode(examTypeId);
+    //    //string url = "StudentExamRegForm.aspx?studentId=" + Server.UrlEncode(studentId) + "&registrationType=" + Server.UrlEncode(registrationType) + "&examTypeId=" + Server.UrlEncode(examTypeId);
 
-        Response.Redirect(url, false);
-    }
+    //    Response.Redirect(url, false);
+    //}
 
 
 
