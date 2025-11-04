@@ -219,62 +219,77 @@
                     </div>
                     <div class="borderline">
                         <table style="width: 100%; font-family: system-ui; border-collapse: collapse;">
-                            <tr>
+                            <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
+                            <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
+
+                            <%--<tr>
                                 <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
                                 <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
                                 <td colspan="3" style="width: 100%;">
                                     <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 600">
                                         <tr>
-                                            <td style="width: 25%; font-weight: bold;">BSEB UNIQUE Id:</td>
-                                            <td style="width: 61%; word-break: break-word;"><%# Eval("UniqueNo") %></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight: bold;">कॉलेज/+2 स्कूल का नाम:</td>
-                                            <td style="word-break: break-word; white-space: normal; width: 61%"><%# Eval("CollegeName") %></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 85%; vertical-align: top; padding-right: 10px;">
-
-                                    <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 600;">
-                                       <%-- <tr>
                                             <td>BSEB UNIQUE Id:</td>
                                             <td><%# Eval("UniqueNo") %></td>
                                         </tr>
                                         <tr>
                                             <td>कॉलेज/+2 स्कूल का नाम:</td>
                                             <td><%# Eval("CollegeName") %></td>
-                                        </tr>--%>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>--%>
+                            <tr>
+                                <td style="width: 85%; vertical-align: top; padding-right: 10px;">
+
+                                    <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 600;">
+                                        <colgroup>
+                                            <col style="width: 25%;">
+                                            <col style="width: 25%;">
+                                            <col style="width: 25%;">
+                                            <col style="width: 25%;">
+                                        </colgroup>
+
+                                        <tr>
+                                            <td>BSEB UNIQUE Id:</td>
+                                            <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("UniqueNo") %></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>कॉलेज/+2 स्कूल का नाम:</td>
+                                            <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
+                                        </tr>
+
                                         <tr>
                                             <td>परीक्षार्थी का नाम:</td>
-                                            <td><%# Eval("StudentName") %></td>
+                                            <td colspan="3"><%# Eval("StudentName") %></td>
                                         </tr>
                                         <tr>
                                             <td>माता का नाम:</td>
-                                            <td><%# Eval("MotherName") %></td>
+                                            <td colspan="3"><%# Eval("MotherName") %></td>
                                         </tr>
                                         <tr>
                                             <td>पिता का नाम:</td>
-                                            <td><%# Eval("FatherName") %></td>
+                                            <td colspan="3"><%# Eval("FatherName") %></td>
                                         </tr>
                                         <tr>
                                             <td>वैवाहिक स्थिति:</td>
-                                            <td><%# Eval("MaritalStatus") %></td>
+                                            <td colspan="3"><%# Eval("MaritalStatus") %></td>
                                         </tr>
+
                                         <tr>
                                             <td>परीक्षार्थी का आधार नं:</td>
                                             <td><%# Eval("AadharNo") %></td>
                                             <td>दिव्यांग कोटि:</td>
                                             <td><%# Eval("Disability") != DBNull.Value && Convert.ToBoolean(Eval("Disability")) ? "YES" : "NO" %></td>
                                         </tr>
+
                                         <tr>
                                             <td>सूचीकरण संख्या/वर्ष:</td>
                                             <td><%# Eval("RegistrationNo") %></td>
                                             <td>परीक्षार्थी की कोटि:</td>
                                             <td><%# Eval("ExamTypeName") %></td>
                                         </tr>
+
                                         <tr>
                                             <td>रौल कोड:</td>
                                             <td><%# Eval("RollCode") %></td>
@@ -287,10 +302,7 @@
                                             <td>परीक्षा केंद्र का नाम:</td>
                                             <td colspan="5"><%# Eval("TheoryExamCenterName") %></td>
                                         </tr>
-                                        <tr>
-                                            <td>सैद्धान्तिक वार्षिक परीक्षा के विषय:</td>
-                                            <td colspan="5"></td>
-                                        </tr>
+                                        
                                     </table>
 
                                 </td>
@@ -305,7 +317,7 @@
                                 </td>
                             </tr>
                         </table>
-
+                        <p style="font-size: 17px;font-weight: 600;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
                         <table class="subjects-table" style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <thead>
                                 <tr>
