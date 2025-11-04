@@ -222,17 +222,31 @@
                             <tr>
                                 <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
                                 <asp:HiddenField ID="hfHasVocationalSubjects" runat="server" Value='<%# Eval("HasVocationalSubjects") %>' />
+                                <td colspan="3" style="width: 100%;">
+                                    <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 600">
+                                        <tr>
+                                            <td style="width: 25%; font-weight: bold;">BSEB UNIQUE Id:</td>
+                                            <td style="width: 61%; word-break: break-word;"><%# Eval("UniqueNo") %></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">कॉलेज/+2 स्कूल का नाम:</td>
+                                            <td style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td style="width: 85%; vertical-align: top; padding-right: 10px;">
 
                                     <table style="width: 100%; font-size: 17px; line-height: revert; border-collapse: collapse; font-weight: 600;">
-                                        <tr>
+                                       <%-- <tr>
                                             <td>BSEB UNIQUE Id:</td>
                                             <td><%# Eval("UniqueNo") %></td>
                                         </tr>
                                         <tr>
                                             <td>कॉलेज/+2 स्कूल का नाम:</td>
                                             <td><%# Eval("CollegeName") %></td>
-                                        </tr>
+                                        </tr>--%>
                                         <tr>
                                             <td>परीक्षार्थी का नाम:</td>
                                             <td><%# Eval("StudentName") %></td>
@@ -327,18 +341,18 @@
                             <tbody>
                                 <tr>
                                     <td>भाषा विषय-1</td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("CompulsorySubject1Code") %></td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("CompulsorySubject1Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Code") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Name") %></td>
                                     <td>ऐच्छिक विषय-1</td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject1Name") %></td>
-                                    <td rowspan="3" style="font-weight: 500;font-size: larger;"><%# Eval("AdditionalSubjectCode") %></td>
-                                    <td rowspan="3" style="font-weight: 500;font-size: larger;"><%# Eval("AdditionalSubjectName") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Name") %></td>
+                                    <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("AdditionalSubjectCode") %></td>
+                                    <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("AdditionalSubjectName") %></td>
                                     <%--    <td rowspan="3"><%# Eval("VocationalSubjectCode1Code") %></td>
                                 <td rowspan="3"><%# Eval("VocationalSubjectName1Name") %></td>--%>
                                     <asp:PlaceHolder ID="phVocational" runat="server" Visible='<%# Convert.ToBoolean(Eval("HasVocationalSubjects")) %>'>
-                                        <td rowspan="3"  style="font-weight: 500;font-size: larger;"><%# Eval("VocationalSubjectCode1Code") %></td>
-                                        <td rowspan="3" style="font-weight: 500;font-size: larger;"><%# Eval("VocationalSubjectName1Name") %></td>
+                                        <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("VocationalSubjectCode1Code") %></td>
+                                        <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("VocationalSubjectName1Name") %></td>
 
                                     </asp:PlaceHolder>
 
@@ -346,11 +360,11 @@
                                 </tr>
                                 <tr>
                                     <td>भाषा विषय-2</td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("CompulsorySubject2Code") %></td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("CompulsorySubject2Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject2Code") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject2Name") %></td>
                                     <td>ऐच्छिक विषय-2</td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject2Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Name") %></td>
                                 </tr>
 
                                 <tr>
@@ -358,8 +372,8 @@
                                     <%-- <td><%# Eval("CompulsorySubject3Code") %></td>
                                 <td><%# Eval("CompulsorySubject3Name") %></td>--%>
                                     <td>ऐच्छिक विषय-3</td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject3Code") %></td>
-                                    <td style="font-weight: 500;font-size: larger;"><%# Eval("ElectiveSubject3Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Code") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Name") %></td>
                                 </tr>
                             </tbody>
                         </table>
