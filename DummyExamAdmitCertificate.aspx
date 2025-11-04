@@ -230,7 +230,7 @@
                                         </tr>
                                         <tr>
                                             <td style="font-weight: bold;">कॉलेज/+2 स्कूल का नाम:</td>
-                                            <td style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
+                                            <td style="word-break: break-word; white-space: normal; width: 61%"><%# Eval("CollegeName") %></td>
                                         </tr>
                                     </table>
                                 </td>
