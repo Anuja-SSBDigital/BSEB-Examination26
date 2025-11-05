@@ -117,7 +117,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                                     }
 
 
-                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId));
+                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId),collegeId);
 
                                     finalStudentData.Rows.Add(combinedRow);
                                 }
@@ -323,7 +323,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             throw;
         }
     }
-    private void CategorizeAndPopulateSubjects(DataTable dtSubjects, DataRow targetRow, int facultyId)
+    private void CategorizeAndPopulateSubjects(DataTable dtSubjects, DataRow targetRow, int facultyId, string collegeId)
     {
         try
         {
@@ -437,8 +437,18 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 targetRow["VocationalSubjectTime"] = sub["ExamTime"];
             }
 
-            bool isVocationalFaculty = (facultyId == 4);
-            targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0 || isVocationalFaculty;
+            int isExists = dl.CheckVocationalCollegeSubjectExists(Convert.ToInt32(collegeId), facultyId);
+
+            if (isExists == 1)
+            {
+                targetRow["HasVocationalSubjects"] = true;
+            }
+            else
+            {
+                targetRow["HasVocationalSubjects"] = false;
+            }
+            //bool isVocationalFaculty = (facultyId == 4);
+            //targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0 || isVocationalFaculty;
 
             //log.Debug(string.Format("Subjects categorized: Compulsory={0}, Elective={1}, Additional={2}, Vocational={3}", 3, electiveSubjects.Count, additionalSubjects.Count, vocationalSubjects.Count));
         }
