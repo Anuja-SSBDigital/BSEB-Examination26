@@ -117,7 +117,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                                     }
 
 
-                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId));
+                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId),collegeId);
 
                                     finalStudentData.Rows.Add(combinedRow);
                                 }
@@ -233,13 +233,14 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
-                  lblFacultyName.Visible = false;
-                    trVocational.Visible = false;
-                    trVocationalVishay1.Visible = false;
-                    trVocationalVishay2.Visible = false;
-                    trVocationalCode.Visible = false;
-                    trVocationalCode1.Visible = false;
-                 
+
+                    //hfHasVocationalSubjects.Value = "false";
+                    //trVocational.Visible = false;
+                    //trVocationalVishay1.Visible = false;
+                    //trVocationalVishay2.Visible = false;
+                    //trVocationalCode.Visible = false;
+                    //trVocationalCode1.Visible = false;
+
                 }
                 else
                 {
@@ -331,7 +332,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
         }
     }
 
-    private void CategorizeAndPopulateSubjects(DataTable dtSubjects, DataRow targetRow, int facultyId)
+    private void CategorizeAndPopulateSubjects(DataTable dtSubjects, DataRow targetRow, int facultyId,string collegeId)
     {
         try
         {
@@ -407,29 +408,31 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 targetRow["AdditionalSubjectName"] = name;
             }
 
+            // Fill Vocational Subject
             if (vocationalSubjects.Count > 0)
             {
-                DataRow sub = vocationalSubjects[0];
+                var sub = vocationalSubjects[0];
                 int code = sub["SubjectPaperCode"] != DBNull.Value ? Convert.ToInt32(sub["SubjectPaperCode"]) : -1;
                 string name = sub["SubjectName"] != DBNull.Value ? sub["SubjectName"].ToString() : "";
 
                 targetRow["VocationalSubjectCode1Code"] = code != -1 ? code.ToString() : "";
                 targetRow["VocationalSubjectName1Name"] = name;
             }
+            int isExists = dl.CheckVocationalCollegeSubjectExists(Convert.ToInt32(collegeId), facultyId);
 
-            //bool isVocationalFaculty = (facultyId == 4);
-            //targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0 || isVocationalFaculty;
-            bool isVocationalFaculty = (facultyId == 4);
-
-            // Hide vocational portion if FacultyId = 4 (Vocational Faculty)
-            if (isVocationalFaculty)
+            if (isExists == 1)
             {
-                targetRow["HasVocationalSubjects"] = false; // explicitly hide vocational section
+                targetRow["HasVocationalSubjects"] = true;
             }
             else
             {
-                targetRow["HasVocationalSubjects"] = vocationalSubjects.Count > 0;
+                targetRow["HasVocationalSubjects"] = false;
             }
+                // Determine visibility of vocational section
+              //  bool isVocationalFaculty = (facultyId == 4);
+
+            // Only show vocational section if not FacultyId=4 and subjects exist
+          //  targetRow["HasVocationalSubjects"] = (!isVocationalFaculty && vocationalSubjects.Count > 0);
 
 
             log.Debug(string.Format("Subjects categorized: Compulsory={0}, Elective={1}, Additional={2}, Vocational={3}", 3, electiveSubjects.Count, additionalSubjects.Count, vocationalSubjects.Count));
