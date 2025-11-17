@@ -136,7 +136,9 @@ table {
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
                                             <%--<th>Faculty</th>--%>
-                                            <th>DOB</th>
+                                            <th>Registration No</th>
+                                            <th>Gender</th>
+                                            <%--<th>DOB</th>--%>
                               </tr>
                           </thead>
                           <tbody id="tableBody">
@@ -160,7 +162,9 @@ table {
                                                     </td>--%>
                                                     <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                     <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                    <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>
+                                                    <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
+                                                    <td class="repeater-col"><%# Eval("GenderName") %></td>
+                                                    <%--<td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>--%>
                                       </tr>
                                   </ItemTemplate>
                               </asp:Repeater>
@@ -314,12 +318,16 @@ function filterAndPaginate() {
         var studentName = row.cells[1].textContent.toLowerCase();
         var fatherName = row.cells[2].textContent.toLowerCase();
         var motherName = row.cells[3].textContent.toLowerCase();
-        var dob = row.cells[4].textContent.toLowerCase();
-
+        var RegistrationNo = row.cells[4].textContent.toLowerCase();
+        var GenderName = row.cells[5].textContent.toLowerCase().trim();
+        //var dob = row.cells[4].textContent.toLowerCase();
+        console.log('Gender:', GenderName);
         var match = studentName.includes(searchText) ||
             fatherName.includes(searchText) ||
             motherName.includes(searchText) ||
-            dob.includes(searchText);
+            RegistrationNo.includes(searchText) ||
+            GenderName.includes(searchText);
+            //dob.includes(searchText);
 
         row.dataset.visible = match ? "true" : "false";
     });
