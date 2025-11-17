@@ -187,13 +187,15 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 HiddenField hfHasVocationalSubjects = e.Item.FindControl("hfHasVocationalSubjects") as HiddenField;
 
                 Label lblFacultyHindi = e.Item.FindControl("lblFacultyHindi") as Label;
-                PlaceHolder phFaculty = e.Item.FindControl("phFaculty") as PlaceHolder;
+                Label lblFac = e.Item.FindControl("lblFac") as Label;
+                //PlaceHolder phFaculty = e.Item.FindControl("phFaculty") as PlaceHolder;
 
                 Label lblExamTitle = e.Item.FindControl("lblExamTitle") as Label;
                 Label lblExamTitleHindi = e.Item.FindControl("lblExamTitleHindi") as Label;
                 Label lblExamSchoolHindi = e.Item.FindControl("lblExamSchoolHindi") as Label;
                 Label lblFacultyName = e.Item.FindControl("lblFacultyName") as Label;
                 HiddenField hfFacultyId = e.Item.FindControl("hfFacultyId") as HiddenField;
+            
                 string FacultyId = hfFacultyId.Value;
                 string facultyName = "";
                 bool hasVocationalSubjects = false;
@@ -213,7 +215,8 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 switch (facultyName)
                 {
                     case "ARTS":
-                        hindiFaculty = "संकाय: <strong>कला</strong>";
+                        hindiFaculty = "संकाय: <strong>कला</strong> <br />";
+                        //lblFac.Visible = true;
                         break;
                     case "SCIENCE":
                         hindiFaculty = "संकाय: <strong>विज्ञान</strong>";
@@ -225,30 +228,32 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                 if (FacultyId == "4")
                 {
-                    if (phFaculty != null)
-                        phFaculty.Visible = false;
+                    if (lblFacultyHindi != null)
+                    {
+                        lblFacultyHindi.Visible = false;
+                        lblFac.Visible = false;
+                    }
+                    //lblFac = lblFacultyHindi;
+                  
+                    
+                    //lblFacultyHindi.Visible = false;
 
                     if (lblExamTitle != null)
-                        lblExamTitle.Text = "(VOCATIONAL)";
+                        lblExamTitle.Text = "VOCATIONAL";
+                    //lblExamTitleHindi.Visible = false;
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
 
-                    //hfHasVocationalSubjects.Value = "false";
-                    //trVocational.Visible = false;
-                    //trVocationalVishay1.Visible = false;
-                    //trVocationalVishay2.Visible = false;
-                    //trVocationalCode.Visible = false;
-                    //trVocationalCode1.Visible = false;
-
                 }
                 else
                 {
-                    if (phFaculty != null)
-                        phFaculty.Visible = true;
-
+                    //if (phFaculty != null)
+                    //    phFaculty.Visible = true;
+                    //lblExamTitleHindi.Visible = true;
                     if (lblFacultyHindi != null)
                         lblFacultyHindi.Text = "<label><strong>" + hindiFaculty + "</strong></label>";
+                    //lblFac.Visible = false;
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
@@ -275,6 +280,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             dt.Columns.Add("FatherName", typeof(string));
             dt.Columns.Add("MotherName", typeof(string));
             dt.Columns.Add("CategoryName", typeof(string));
+            dt.Columns.Add("CollegeCode", typeof(string));
             dt.Columns.Add("FacultyId", typeof(int));
             log.Debug("DOB student data table schema.");
             //dt.Columns.Add("DOB", typeof(DateTime));
@@ -296,7 +302,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             dt.Columns.Add("RegistrationNo", typeof(string));
             dt.Columns.Add("AadharNo", typeof(string));
             dt.Columns.Add("Disability", typeof(string));
-            dt.Columns.Add("RollCode", typeof(string));
+            //dt.Columns.Add("RollCode", typeof(string));
             dt.Columns.Add("RollNo", typeof(string));
             dt.Columns.Add("ExamTypeName", typeof(string));
             dt.Columns.Add("RollNumber", typeof(string));
@@ -304,6 +310,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             //dt.Columns.Add("ExamCenter", typeof(string));
 
             dt.Columns.Add("TheoryExamCenterName", typeof(string));
+            //dt.Columns.Add("PaperType", typeof(string));
 
             dt.Columns.Add("CompulsorySubject1Code", typeof(string));
             dt.Columns.Add("CompulsorySubject1Name", typeof(string));
@@ -322,6 +329,14 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             dt.Columns.Add("VocationalSubjectCode1Code", typeof(string));
             dt.Columns.Add("VocationalSubjectName1Name", typeof(string));
             dt.Columns.Add("HasVocationalSubjects", typeof(bool));
+
+            dt.Columns.Add("CompulsorySubject1PaperType", typeof(string));
+            dt.Columns.Add("CompulsorySubject2PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject1PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject2PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject3PaperType", typeof(string));
+            dt.Columns.Add("AdditionalSubjectPaperType", typeof(string));
+            dt.Columns.Add("VocationalSubjectPaperType", typeof(string));
 
             return dt;
         }
@@ -348,6 +363,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 string subjectGroup = r["SubjectGroup"] != DBNull.Value ? r["SubjectGroup"].ToString() : "";
                 string subjectName = r["SubjectName"] != DBNull.Value ? r["SubjectName"].ToString() : "";
                 int subjectCode = r["SubjectPaperCode"] != DBNull.Value ? Convert.ToInt32(r["SubjectPaperCode"]) : -1;
+                string paperType = r["PaperType"] != DBNull.Value ? r["PaperType"].ToString() : "";
 
                 if (string.IsNullOrEmpty(subjectGroup) && string.IsNullOrEmpty(subjectName) && subjectCode == -1)
                     continue;
@@ -356,16 +372,19 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 {
                     targetRow["CompulsorySubject1Code"] = subjectCode != -1 ? subjectCode.ToString() : "";
                     targetRow["CompulsorySubject1Name"] = subjectName;
+                    targetRow["CompulsorySubject1PaperType"] = paperType;
                 }
                 else if (subjectGroup.StartsWith("Compulsory subject group-2"))
                 {
                     targetRow["CompulsorySubject2Code"] = subjectCode != -1 ? subjectCode.ToString() : "";
                     targetRow["CompulsorySubject2Name"] = subjectName;
+                    targetRow["CompulsorySubject2PaperType"] = paperType;
                 }
                 else if (subjectGroup.Contains("Compulsory") && !subjectGroup.StartsWith("Compulsory subject group-"))
                 {
                     targetRow["CompulsorySubject3Code"] = subjectCode != -1 ? subjectCode.ToString() : "";
                     targetRow["CompulsorySubject3Name"] = subjectName;
+                    targetRow["CompulsorySubject3PaperType"] = paperType;
                 }
                 else if (subjectGroup.Contains("Vocational"))
                 {
@@ -393,9 +412,10 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 DataRow sub = electiveSubjects[i];
                 int code = sub["SubjectPaperCode"] != DBNull.Value ? Convert.ToInt32(sub["SubjectPaperCode"]) : -1;
                 string name = sub["SubjectName"] != DBNull.Value ? sub["SubjectName"].ToString() : "";
-
+                string paperType = sub["PaperType"] != DBNull.Value ? sub["PaperType"].ToString() : "";
                 targetRow["ElectiveSubject" + (i + 1) + "Code"] = code != -1 ? code.ToString() : "";
                 targetRow["ElectiveSubject" + (i + 1) + "Name"] = name;
+                targetRow["ElectiveSubject" + (i + 1) + "PaperType"] = paperType;
             }
 
             if (additionalSubjects.Count > 0)
@@ -406,6 +426,8 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                 targetRow["AdditionalSubjectCode"] = code != -1 ? code.ToString() : "";
                 targetRow["AdditionalSubjectName"] = name;
+                targetRow["AdditionalSubjectPaperType"] = sub["PaperType"].ToString();
+
             }
 
             // Fill Vocational Subject
@@ -417,6 +439,8 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                 targetRow["VocationalSubjectCode1Code"] = code != -1 ? code.ToString() : "";
                 targetRow["VocationalSubjectName1Name"] = name;
+                targetRow["VocationalSubjectPaperType"] = sub["PaperType"].ToString();
+
             }
             int isExists = dl.CheckVocationalCollegeSubjectExists(Convert.ToInt32(collegeId), facultyId);
 
