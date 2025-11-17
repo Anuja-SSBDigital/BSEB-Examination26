@@ -330,7 +330,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <p style="font-size: 17px; font-weight: 600;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
+                        <p style="font-size: 17px;font-weight: 600;margin-bottom: 0px !important;margin-top: 25px;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
                         <table class="subjects-table" style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <thead>
                                 <tr>
