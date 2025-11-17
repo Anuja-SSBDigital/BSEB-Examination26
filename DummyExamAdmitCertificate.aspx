@@ -305,13 +305,15 @@
                                             <%--<td><%# Eval("RollCode") %></td>--%>
                                             <td><%# Eval("CollegeCode") %></td>
                                             <td>रौल क्रमांक:</td>
-                                            <td><%# Eval("RollNumber") %></td>
+                                            <td>XXXXXXXX</td>
+                                            <%--<td><%# Eval("RollNumber") %></td>--%>
                                             <td>लिंग:</td>
                                             <td style="padding-left: 20px;"><%# Eval("Gender") %></td>
                                         </tr>
                                         <tr>
                                             <td>परीक्षा केंद्र का नाम:</td>
-                                            <td colspan="5"><%# Eval("TheoryExamCenterName") %></td>
+                                             <td>XXXXXXXX</td>
+                                            <%--<td colspan="5"><%# Eval("TheoryExamCenterName") %></td>--%>
                                         </tr>
 
                                     </table>
