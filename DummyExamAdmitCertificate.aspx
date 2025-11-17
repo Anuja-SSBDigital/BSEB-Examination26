@@ -201,6 +201,7 @@
                                 <div class="sub-title">
 
                                     <h5><strong>INTERMEDIATE ANNUAL EXAMINATION, 2026<br />
+                                        <asp:Label ID="lblExamTitle" runat="server" CssClass="english-title" />
                                     </strong></h5>
                                     <h5><strong><u>DUMMY ADMIT CARD</strong></u><br />
                                     </h5>
@@ -208,11 +209,20 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <asp:PlaceHolder ID="phFaculty" runat="server">
-                                    <asp:Label runat="server" ID="lblFacultyHindi" />
-                                    <br />
-                                </asp:PlaceHolder>
-                                <label style="margin-left: 37px;"><strong>FACULTY:</strong> <%# Eval("FacultyName") %></label>
+                                <%--<asp:PlaceHolder ID="phFaculty" runat="server">--%>
+                                <%--<asp:Label runat="server" ID="lblFacultyHindi" />--%>
+                                <br />
+                                <%--</asp:PlaceHolder>--%>
+                                <%--  <label style="margin-left: 37px;"><strong>FACULTY:</strong> <%# Eval("FacultyName") %></label>--%>
+                                <label style="margin-left: 37px;">
+                                    <strong>
+                                        <asp:Label ID="lblFacultyHindi" runat="server" Text='<%# Eval("FacultyName") %>'></asp:Label>
+                                        <br />
+                                    </strong>
+                                    <asp:Label ID="lblFac" runat="server" Text='<%# "FACULTY: " + Eval("FacultyName") %>'></asp:Label>
+
+                                </label>
+
                                 <asp:HiddenField ID="hfFacultyName" runat="server" Value='<%# Eval("FacultyName") %>' />
                             </div>
                         </div>
@@ -292,17 +302,18 @@
 
                                         <tr>
                                             <td>रौल कोड:</td>
-                                            <td><%# Eval("RollCode") %></td>
+                                            <%--<td><%# Eval("RollCode") %></td>--%>
+                                            <td><%# Eval("CollegeCode") %></td>
                                             <td>रौल क्रमांक:</td>
                                             <td><%# Eval("RollNumber") %></td>
                                             <td>लिंग:</td>
-                                            <td><%# Eval("Gender") %></td>
+                                            <td style="padding-left: 20px;"><%# Eval("Gender") %></td>
                                         </tr>
                                         <tr>
                                             <td>परीक्षा केंद्र का नाम:</td>
                                             <td colspan="5"><%# Eval("TheoryExamCenterName") %></td>
                                         </tr>
-                                        
+
                                     </table>
 
                                 </td>
@@ -317,7 +328,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <p style="font-size: 17px;font-weight: 600;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
+                        <p style="font-size: 17px; font-weight: 600;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
                         <table class="subjects-table" style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <thead>
                                 <tr>
@@ -354,17 +365,28 @@
                                 <tr>
                                     <td>भाषा विषय-1</td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Code") %></td>
-                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Name") %>
+                                        <%# Eval("CompulsorySubject1PaperType") %>
+                                    </td>
                                     <td>ऐच्छिक विषय-1</td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
-                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Name") %>
+                                        <%# Eval("ElectiveSubject1PaperType") %>
+
+                                    </td>
                                     <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("AdditionalSubjectCode") %></td>
-                                    <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("AdditionalSubjectName") %></td>
+                                    <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("AdditionalSubjectName") %>
+                                        <%# Eval("AdditionalSubjectPaperType") %>
+
+                                    </td>
                                     <%--    <td rowspan="3"><%# Eval("VocationalSubjectCode1Code") %></td>
                                 <td rowspan="3"><%# Eval("VocationalSubjectName1Name") %></td>--%>
                                     <asp:PlaceHolder ID="phVocational" runat="server" Visible='<%# Convert.ToBoolean(Eval("HasVocationalSubjects")) %>'>
                                         <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("VocationalSubjectCode1Code") %></td>
-                                        <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("VocationalSubjectName1Name") %></td>
+                                        <td rowspan="3" style="font-weight: 500; font-size: larger;"><%# Eval("VocationalSubjectName1Name") %>
+                                            <%# Eval("VocationalSubjectPaperType") %>
+
+                                        </td>
 
                                     </asp:PlaceHolder>
 
@@ -373,10 +395,15 @@
                                 <tr>
                                     <td>भाषा विषय-2</td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject2Code") %></td>
-                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject2Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject2Name") %>
+                                        <%# Eval("CompulsorySubject2PaperType") %>
+
+                                    </td>
                                     <td>ऐच्छिक विषय-2</td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
-                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Name") %>
+                                        <%# Eval("ElectiveSubject2PaperType") %>
+                                    </td>
                                 </tr>
 
                                 <tr>
@@ -385,7 +412,9 @@
                                 <td><%# Eval("CompulsorySubject3Name") %></td>--%>
                                     <td>ऐच्छिक विषय-3</td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Code") %></td>
-                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Name") %></td>
+                                    <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Name") %>
+                                        <%# Eval("ElectiveSubject3PaperType") %>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -407,7 +436,7 @@
                             <%--<hr style="border-top:var(--bs-border-width) solid black;opacity: 1;border: 2px;" />--%>
                             <hr style="font-size: 16px; border: 2px solid black !important; opacity: 1.25 !important;" />
                             <!-- Heading -->
-                            <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निर्देश</u></h6>
+                            <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निदेश</u></h6>
                             <ol>
                                 <li class="list-item">डमी प्रवेश-पत्र में यदि किसी विद्यार्थी के नाम, माता/पिता के नाम के स्पेलिंग में त्रुटि हो, वैवाहिक स्थिति, कोटि, लिंग, विषय, फोटो या हस्ताक्षर आदि में किसी प्रकार की त्रुटि परिलक्षित होती है, तो उससे संबंधित साक्ष्य एवं अपने हस्ताक्षर के साथ डमी प्रवेश-पत्र में संशोधन कर ऑनलाइन सुधार हेतु दिनांक xx-xx-xxxx तक अपने +2 विद्यालय/महाविद्यालय प्रधान को हस्तगत कराना सुनिश्चित करेंगे तथा डमी प्रवेश-पत्र की दूसरी प्रति शिक्षण संस्थान के प्रधान का हस्ताक्षर एवं मुहर प्राप्त कर अपने पास सुरक्षित रख लेंगे।
                                 </li>
