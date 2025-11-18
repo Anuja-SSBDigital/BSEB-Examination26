@@ -196,16 +196,16 @@
                             <div class="col-md-6 text-center">
                                 <div class="title">
 
-                                    <h5><strong>BIHAR SCHOOL EXAMINATION BOARD</strong></h5>
+                                    <h4><strong>BIHAR SCHOOL EXAMINATION BOARD</strong></h4>
                                 </div>
                                 <div class="sub-title">
 
-                                    <h5><strong>INTERMEDIATE ANNUAL EXAMINATION, 2026<br />
+                                    <h4><strong>INTERMEDIATE ANNUAL EXAMINATION, 2026<br />
                                         <asp:Label ID="lblExamTitle" runat="server" CssClass="english-title" />
-                                    </strong></h5>
-                                    <h5><strong><u>DUMMY ADMIT CARD</strong></u><br />
-                                    </h5>
-                                    <h5><strong><u>डमी एडमिट कार्ड</u></strong></h5>
+                                    </strong></h4>
+                                    <h4><strong><u>DUMMY ADMIT CARD</strong></u><br />
+                                    </h4>
+                                    <h4><strong><u>डमी एडमिट कार्ड</u></strong></h4>
                                 </div>
                             </div>
                             <div class="col-md-3">
