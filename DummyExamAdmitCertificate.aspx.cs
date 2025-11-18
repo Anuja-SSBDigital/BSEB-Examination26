@@ -193,6 +193,12 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 Label lblExamTitle = e.Item.FindControl("lblExamTitle") as Label;
                 Label lblExamTitleHindi = e.Item.FindControl("lblExamTitleHindi") as Label;
                 Label lblExamSchoolHindi = e.Item.FindControl("lblExamSchoolHindi") as Label;
+                Label lblDesc1 = e.Item.FindControl("lblDesc1") as Label;
+                Label lblDesc2 = e.Item.FindControl("lblDesc2") as Label;
+                Label lblvocdesc1 = e.Item.FindControl("lblvocdesc1") as Label;
+                Label lblvocdesc2 = e.Item.FindControl("lblvocdesc2") as Label;
+                Label lblvocdesc3 = e.Item.FindControl("lblvocdesc3") as Label;
+                Label lblCollegeName = e.Item.FindControl("lblCollegeName") as Label;
                 Label lblFacultyName = e.Item.FindControl("lblFacultyName") as Label;
                 HiddenField hfFacultyId = e.Item.FindControl("hfFacultyId") as HiddenField;
             
@@ -244,7 +250,13 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
-
+                    lblCollegeName.Text = "+2 स्कूल का नाम:";
+                    lblDesc1.Text = "+2 विद्यालय";
+                    lblDesc2.Text = "+2 विद्यालय";
+                    lblvocdesc1.Text = "(व्यवसायिक)";
+                    lblvocdesc2.Text = "(व्यवसायिक)";
+                    lblvocdesc3.Text = "(व्यवसायिक)";
+                    //+2 विद्यालय/महाविद्यालय  
                 }
                 else
                 {
@@ -257,6 +269,9 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
 
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                    lblCollegeName.Text = "कॉलेज/+2 स्कूल का नाम:";
+                    lblDesc1.Text = "+2 विद्यालय/महाविद्यालय";
+                    lblDesc2.Text = "+2 विद्यालय/महाविद्यालय";
                 }
             }
             catch (Exception ex)
