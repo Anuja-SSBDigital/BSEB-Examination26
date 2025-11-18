@@ -265,7 +265,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td><strong> <asp:Label ID="lblCollegeName" runat="server" /><br></strong></td>
+                                            <td><strong>
+                                                <asp:Label ID="lblCollegeName" runat="server" /><br>
+                                            </strong></td>
                                             <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
                                         </tr>
 
@@ -312,7 +314,7 @@
                                         </tr>
                                         <tr>
                                             <td>परीक्षा केंद्र का नाम:</td>
-                                             <td>XXXXXXXX</td>
+                                            <td>XXXXXXXX</td>
                                             <%--<td colspan="5"><%# Eval("TheoryExamCenterName") %></td>--%>
                                         </tr>
 
@@ -330,7 +332,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <p style="font-size: 17px;font-weight: 600;margin-bottom: 0px !important;margin-top: 25px;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
+                        <p style="font-size: 17px; font-weight: 600; margin-bottom: 0px !important; margin-top: 25px;">सैद्धान्तिक वार्षिक परीक्षा के विषय:</p>
                         <table class="subjects-table" style="width: 100%; font-family: system-ui; border-collapse: collapse;">
                             <thead>
                                 <tr>
@@ -420,16 +422,25 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="" style="font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif; font-size: 17px; margin-top: 65px;">
+                        <div class="" style="font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif; font-size: 17px;">
 
                             <!-- Signature block -->
-                            <div class="mb-3 row" style="margin-top: 80px;">
+                            <div class="col-md-12 text-end">
+
+                                <img src="assets/img/COE%20sign.png" style="width: 11%;" />
+
+                            </div>
+                            <div class="mb-3 row" style="">
+
+
                                 <div class="col-md-6">
 
-                                    <strong> <asp:Label ID="lblExamSchoolHindi" runat="server" /><br></strong>
+                                    <strong>
+                                        <asp:Label ID="lblExamSchoolHindi" runat="server" /><br>
+                                    </strong>
                                 </div>
-                                <div class="col-md-6 text-end">
 
+                                <div class="col-md-6 text-end">
                                     <strong>परीक्षा नियंत्रक (उ0मा)</strong>
                                 </div>
                             </div>
@@ -438,19 +449,29 @@
                             <!-- Heading -->
                             <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निदेश</u></h6>
                             <ol>
-                                <li class="list-item">डमी प्रवेश-पत्र में यदि किसी विद्यार्थी के नाम, माता/पिता के नाम के स्पेलिंग में त्रुटि हो, वैवाहिक स्थिति, कोटि, लिंग, विषय, फोटो या हस्ताक्षर आदि में किसी प्रकार की त्रुटि परिलक्षित होती है, तो उससे संबंधित साक्ष्य एवं अपने हस्ताक्षर के साथ डमी प्रवेश-पत्र में संशोधन कर ऑनलाइन सुधार हेतु दिनांक xx-xx-xxxx तक अपने <asp:Label ID="lblDesc1" runat="server" /> प्रधान को हस्तगत कराना सुनिश्चित करेंगे तथा डमी प्रवेश-पत्र की दूसरी प्रति शिक्षण संस्थान के प्रधान का हस्ताक्षर एवं मुहर प्राप्त कर अपने पास सुरक्षित रख लेंगे।
+                                <li class="list-item">डमी प्रवेश-पत्र में यदि किसी विद्यार्थी के नाम, माता/पिता के नाम के स्पेलिंग में त्रुटि हो, वैवाहिक स्थिति, कोटि, लिंग, विषय, फोटो या हस्ताक्षर आदि में किसी प्रकार की त्रुटि परिलक्षित होती है, तो उससे संबंधित साक्ष्य एवं अपने हस्ताक्षर के साथ डमी प्रवेश-पत्र में संशोधन कर ऑनलाइन सुधार हेतु दिनांक xx-xx-xxxx तक अपने
+                                    <asp:Label ID="lblDesc1" runat="server" />
+                                    प्रधान को हस्तगत कराना सुनिश्चित करेंगे तथा डमी प्रवेश-पत्र की दूसरी प्रति शिक्षण संस्थान के प्रधान का हस्ताक्षर एवं मुहर प्राप्त कर अपने पास सुरक्षित रख लेंगे।
                                 </li>
-                                <li class="list-item">संबंधित <asp:Label ID="lblDesc2" runat="server" /> प्रधान दिनांक xx-xx-xxxx तक की अवधि में विद्यार्थी के द्वारा डमी प्रवेश-पत्र में प्रतिवेदित त्रुटि का ऑनलाइन सुधार अनिवार्य रूप से करना सुनिश्चित करेंगे।
+                                <li class="list-item">संबंधित
+                                    <asp:Label ID="lblDesc2" runat="server" />
+                                    प्रधान दिनांक xx-xx-xxxx तक की अवधि में विद्यार्थी के द्वारा डमी प्रवेश-पत्र में प्रतिवेदित त्रुटि का ऑनलाइन सुधार अनिवार्य रूप से करना सुनिश्चित करेंगे।
                                 </li>
                                 <li class="list-item">डमी प्रवेश-पत्र में विद्यार्थी का रौल नम्बर, परीक्षा केन्द्र का नाम तथा परीक्षा की तिथि अंकित नहीं किया गया है। मूल प्रवेश-पत्र में इसे जारी किया जाएगा।
                                 </li>
-                                <li class="list-item">इन्टरमीडिएट <asp:Label ID="lblvocdesc1" runat="server" /> परीक्षा सत्र 2024-26 के नियमित कोटि के विद्यार्थियों के परीक्षा का विषय उनके सूचीकरण प्रमाण-पत्र के आधार पर अंकित किया गया है।
+                                <li class="list-item">इन्टरमीडिएट
+                                    <asp:Label ID="lblvocdesc1" runat="server" />
+                                    परीक्षा सत्र 2024-26 के नियमित कोटि के विद्यार्थियों के परीक्षा का विषय उनके सूचीकरण प्रमाण-पत्र के आधार पर अंकित किया गया है।
                                 </li>
-                                <li class="list-item">इसी प्रकार पूर्व के सत्रों में सूचीकृत वैसे पूर्ववर्ती विद्यार्थी, जो अभी तक इन्टरमीडिएट <asp:Label ID="lblvocdesc2" runat="server" /> परीक्षा में अनुत्तीर्ण हैं अथवा सूचीकृत होने के उपरांत किसी कारणवश परीक्षा आवेदन नहीं भर पाये या परीक्षा में सम्मिलित नहीं हो पाये, उनके परीक्षा का विषय सूचीकरण प्रमाण-पत्र के आधार पर ही अंकित किया गया है।
+                                <li class="list-item">इसी प्रकार पूर्व के सत्रों में सूचीकृत वैसे पूर्ववर्ती विद्यार्थी, जो अभी तक इन्टरमीडिएट
+                                    <asp:Label ID="lblvocdesc2" runat="server" />
+                                    परीक्षा में अनुत्तीर्ण हैं अथवा सूचीकृत होने के उपरांत किसी कारणवश परीक्षा आवेदन नहीं भर पाये या परीक्षा में सम्मिलित नहीं हो पाये, उनके परीक्षा का विषय सूचीकरण प्रमाण-पत्र के आधार पर ही अंकित किया गया है।
                                 </li>
                                 <li class="list-item">समुन्नत कोटि के विद्यार्थियों के परीक्षा का विषय वही अंकित किया गया है, जिस उत्तीर्ण विषय/विषयों के परीक्षाफल को बेहतर किये जाने हेतु (For Improvement) उनके द्वारा आवेदन किया गया है।
                                 </li>
-                                <li class="list-item">कम्पार्टमेन्टल कोटि के पात्र परीक्षार्थियों का इंटरमीडिएट वार्षिक <asp:Label ID="lblvocdesc3" runat="server" /> परीक्षा, 2026 के लिए उन्हीं विषय/विषयों (अधिकतम 02) को अंकित किया गया है, जिसमें वे अभी तक अनुत्तीर्ण हैं।
+                                <li class="list-item">कम्पार्टमेन्टल कोटि के पात्र परीक्षार्थियों का इंटरमीडिएट वार्षिक
+                                    <asp:Label ID="lblvocdesc3" runat="server" />
+                                    परीक्षा, 2026 के लिए उन्हीं विषय/विषयों (अधिकतम 02) को अंकित किया गया है, जिसमें वे अभी तक अनुत्तीर्ण हैं।
                                 </li>
                                 <li class="list-item">यह डमी प्रवेश-पत्र है, जिसके आधार पर परीक्षार्थी का परीक्षा केन्द्र में प्रवेश मान्य नहीं है।
 
@@ -465,9 +486,9 @@
 
                     </div>
 
-                    <b>
-                        <div id="infoDiv"></div>
-                    </b>
+                <b>
+                    <div id="infoDiv"></div>
+                </b>
                 </div>
 
 
