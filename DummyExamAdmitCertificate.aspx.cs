@@ -27,6 +27,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             {
                 string encodedStudentData = Request.QueryString["studentData"];
                 string Studentname = Request.QueryString["Studentname"];
+                string RegistrationNo = Request.QueryString["RegistrationNo"];
                 string Collegecode = Request.QueryString["Collegecode"];
                 string FacultyId = Request.QueryString["faculty"];
                 string DOB = Request.QueryString["Dob"];
@@ -144,12 +145,12 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                         log.Info(string.Format("Bound {0} student rows to repeater.", finalStudentData.Rows.Count));
                     }
                 }
-                else if (!string.IsNullOrEmpty(Studentname) && fromPage == "StudentExamDummyCard")
+                else if (!string.IsNullOrEmpty(RegistrationNo) && fromPage == "StudentExamDummyCard")
                 {
                     //log.Info("Processing StudentExamDummyCard flow.");
 
                     DataTable finalStudentData = CreateCombinedStudentDataTableSchema();
-                    DataTable dtStuRegCardDetails = dl.GetStudentDownloadDummyRegCardData(Convert.ToInt32(Collegecode), Convert.ToInt32(FacultyId), Studentname, DOB);
+                    DataTable dtStuRegCardDetails = dl.GetStudentDownloadDummyExmCardData(Convert.ToInt32(Collegecode), Convert.ToInt32(FacultyId), RegistrationNo, DOB);
                     //log.Info("get data table StuRegCardDetails.");
                     if (dtStuRegCardDetails.Rows.Count > 0)
                     {
@@ -210,8 +211,8 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                     }
                     else
                     {
-                        log.Warn("No data found for StudentRegCardDownload.");
-                        Response.Redirect("StudentRegCardDownload.aspx?alert=noData");
+                        log.Warn("No data found for StudentExamDummyCard.");
+                        Response.Redirect("StudentExamDummyCard.aspx?alert=noData");
                     }
 
                     if (finalStudentData.Rows.Count > 0)

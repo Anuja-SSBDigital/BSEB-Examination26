@@ -27,12 +27,11 @@
             overflow: auto; /* Prevent body scroll */
         }
 
-
         .header {
             background: #415791;
             color: white;
             padding: 16px;
-            font-weight:600 ;
+            font-weight: 600;
             font-size: 20px;
             text-align: center;
         }
@@ -87,9 +86,9 @@
             font-size: 14px;
         }
 
-            .btn-login:hover {
-                background-color: #e66000;
-            }
+        .btn-login:hover {
+            background-color: #e66000;
+        }
 
         @media(max-width: 576px) {
             .right-section {
@@ -101,12 +100,13 @@
                 align-items: flex-start;
             }
 
-                .captcha-box input,
-                .captcha-box button {
-                    width: 100%;
-                }
+            .captcha-box input,
+            .captcha-box button {
+                width: 100%;
+            }
         }
-         .error-message {
+
+        .error-message {
             color: red;
             font-size: 0.875em;
             text-align: left;
@@ -117,28 +117,40 @@
 
 </head>
 <body>
-    <form runat="server" id="formid">
+    <!-- Note: onsubmit added so Enter key triggers client-side validation -->
+    <form runat="server" id="formid" onsubmit="return validateForm();">
         <!-- Header -->
-       
         <div class="header text-center">
             <img src="assets/img/bsebimage2.png" class="logo" alt="Logo">
             Bihar School Examination Board
         </div>
+
         <!-- Main Card -->
         <div class="card-wrapper justify-content-center align-items-center">
             <div class="right-section text-center">
-              
-                <h5> Download Dummy Registration Card</h5>
-                <%--<p></p>--%>
-                <hr>
-             
 
-                <div onsubmit="return validateCaptcha()">
+                <h5> Download Dummy Registration Card</h5>
+                <hr>
+
+                <div>
+                    <div class="mb-3 input-group">
+                        <span class="input-group-text"><i class="fas fa-code"></i></span>
+                        <asp:TextBox runat="server" ID="txt_collegecode" CssClass="form-control" placeholder="College Code" TextMode="Number" oninput="enforceMaxLength(this, 5)"></asp:TextBox>
+                    </div>
+                    <div id="collegeCodeError" class="error-message" style="display: none;">Please enter college code.</div>
+
                     <div class="mb-3 input-group">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        <asp:TextBox runat="server" ID="txt_studentname" CssClass="form-control" placeholder="Student Name"></asp:TextBox>
+                        <asp:TextBox runat="server" ID="txt_RegistrationNo" CssClass="form-control" placeholder="Registration No"></asp:TextBox>
                     </div>
-                     <div id="studentNameError" class="error-message" style="display: none;">Please enter student name.</div>
+                    <div id="RegistrationNoError" class="error-message" style="display: none;">Please enter Registration No.</div>
+
+                    <div class="mb-3 input-group">
+                        <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                       <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
+                             </asp:DropDownList>
+                    </div>
+                    <div id="facultyError" class="error-message" style="display: none;">Please select a Faculty.</div>
 
                     <div class="mb-3 input-group">
                         <span class="input-group-text"><i class="fas fa-calendar"></i></span>
@@ -146,119 +158,134 @@
                     </div>
                     <div id="dobError" class="error-message" style="display: none;">Please select date of birth.</div>
 
-                    <div class="mb-3 input-group">
-                        <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
-                             <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
-                             </asp:DropDownList>
-                           
-                        <%--<asp:TextBox runat="server" ID="txt_faculty" CssClass="form-control" placeholder="Faculty"></asp:TextBox>--%>
-                    </div>
-                     <div id="facultyError" class="error-message" style="display: none;">Please select a Faculty.</div>
-
-                    <div class="mb-3 input-group">
-                        <span class="input-group-text"><i class="fas fa-code"></i></span>
-                        <asp:TextBox runat="server" ID="txt_collegecode" CssClass="form-control" placeholder="College Code" TextMode="Number" oninput="enforceMaxLength(this, 5)"></asp:TextBox>
-                    </div>
-                      <div id="collegeCodeError" class="error-message" style="display: none;">Please enter college code.</div>
-
-                    <div class="captcha-box">
-                        <span id="num1">11</span> + 
+                                     <div class="captcha-box">
+                      <span id="num1">11</span> + 
                         <span id="num2">10</span> =
-                        <input type="number" class="form-control" id="captchaInput" placeholder="Prove you are a human" required>
-                        <button type="button" class="btn btn-light btn-sm" onclick="generateCaptcha()"><i class="fas fa-sync-alt"></i></button>
-                    </div>
+                        <input type="number" class="form-control" id="captchaInput" placeholder="Prove you are a human">
+                      <button type="button" class="btn btn-light btn-sm" onclick="generateCaptcha()"><i class="fas fa-sync-alt"></i></button>
+                  </div>
+                  <input type="hidden" id="captchaResult">
+          <%--        <asp:Button ID="Button1" runat="server" Text="Login" OnClick="btn_login_Click"
+                      CssClass="btn btn-login" OnClientClick="return validateCaptcha();" />--%>
 
-                    <input type="hidden" id="captchaResult">
-                              <asp:Button ID="btnDwnlDummyCard" runat="server" Text="Submit" CssClass="btn btn-login" OnClientClick="return validateForm();" OnClick="DwnlDummyCard" />
-                      <%--<a href="login.aspx" target="_blank" class="">Back To Login</a>--%>
- 
+                    <asp:Button ID="btnDwnlDummyCard" runat="server" Text="Submit" CssClass="btn btn-login" OnClientClick="return validateForm();" OnClick="DwnlDummyCard" />
 
-                    <%--<asp:Button ID="Button1" runat="server" Text="Submit" CssClass="btn btn-login" OnClientClick="return validateCaptcha();" />--%>
                 </div>
             </div>
         </div>
 
-        <script src="assets/bundles/sweetalert/sweetalert.min.js"></script>
-        <script src="assets/js/page/sweetalert.js"></script>
-        <script>
-            function generateCaptcha() {
-                const n1 = Math.floor(Math.random() * 20) + 1;
-                const n2 = Math.floor(Math.random() * 20) + 1;
-                document.getElementById("num1").textContent = n1;
-                document.getElementById("num2").textContent = n2;
-                document.getElementById("captchaResult").value = n1 + n2;
-                document.getElementById("captchaInput").value = '';
-            }
-
-            //function validateCaptcha() {
-            //    const correct = parseInt(document.getElementById("captchaResult").value);
-            //    const user = parseInt(document.getElementById("captchaInput").value);
-            //    if (user !== correct) {
-            //        swal({
-            //            title: 'Failed',
-            //            text: 'Captcha incorrect. Try again.',
-            //            icon: 'error',
-            //            button: 'Retry'
-            //        });
-            //        generateCaptcha();
-            //        return false;
-            //    }
-            //    return true;
-            //}
-
-            // window.onload = generateCaptcha;
-
-            function validateForm() {
-                debugger
-                let isValid = true;
-                document.getElementById("studentNameError").style.display = "none";
-                document.getElementById("dobError").style.display = "none";
-                document.getElementById("facultyError").style.display = "none";
-                document.getElementById("collegeCodeError").style.display = "none";
-                const correct = parseInt(document.getElementById("captchaResult").value);
-                const user = parseInt(document.getElementById("captchaInput").value);
-
-                const studentName = document.getElementById("<%= txt_studentname.ClientID %>").value.trim();
-                if (studentName === "") {
-                    document.getElementById("studentNameError").style.display = "block";
-                    return false;
-                }
-                const dob = document.getElementById("<%= txt_dob.ClientID %>").value.trim();
-                if (dob === "") {
-                    document.getElementById("dobError").style.display = "block";
-                    return false;
-                }
-                const ddlFaculty = document.getElementById("<%= ddlFaculty.ClientID %>");
-                const faculty = ddlFaculty.value;
-                if (faculty === "" || faculty === "0") {
-                    document.getElementById("facultyError").style.display = "block";
-                    return false;
-                }
-                const collegeCode = document.getElementById("<%= txt_collegecode.ClientID %>").value.trim();
-                if (collegeCode === "") {
-                    document.getElementById("collegeCodeError").style.display = "block";
-                    return false;
-                }
-                if (user !== correct) {
-                    swal({
-                        title: 'Failed',
-                        text: 'Captcha incorrect. Try again.',
-                        icon: 'error',
-                        button: 'Retry'
-                    });
-                    generateCaptcha();
-                    return false;
-                }
-            }
-
-
-            function enforceMaxLength(el, maxLength) {
-                if (el.value.length > maxLength) {
-                    el.value = el.value.slice(0, maxLength);
-                }
-            }
-            window.onload = generateCaptcha;
-        </script>
+         
     </form>
 </body>
 </html>
+<script src="assets/bundles/sweetalert/sweetalert.min.js"></script>
+
+<script>
+    function validateForm() {
+        debugger
+        // 1. Clear previous errors
+        document.getElementById("collegeCodeError").style.display = "none";
+        document.getElementById("RegistrationNoError").style.display = "none";
+        document.getElementById("facultyError").style.display = "none";
+        document.getElementById("dobError").style.display = "none";
+
+
+        // 2. Get form elements
+        const collegeCodeEl = document.getElementById("<%= txt_collegecode.ClientID %>");
+        const regNoEl = document.getElementById("<%= txt_RegistrationNo.ClientID %>");
+        const ddlFaculty = document.getElementById("<%= ddlFaculty.ClientID %>");
+        const dobEl = document.getElementById("<%= txt_dob.ClientID %>");
+        const captchaInputEl = document.getElementById("captchaInput"); // Added to easily access the element
+
+        // Safety check for critical elements
+        if (!collegeCodeEl || !regNoEl || !ddlFaculty || !dobEl || !captchaInputEl) {
+            console.error("Critical form element not found. Allowing postback.");
+            return true;
+        }
+
+
+        // 3. Validation Checks (College Code, Registration No, Faculty, DOB)
+        const collegeCode = collegeCodeEl.value.trim();
+        if (collegeCode === "") {
+            document.getElementById("collegeCodeError").style.display = "block";
+            collegeCodeEl.focus();
+            collegeCodeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            return false;
+        }
+
+        const regNo = regNoEl.value.trim();
+        if (regNo === "") {
+            document.getElementById("RegistrationNoError").style.display = "block";
+            regNoEl.focus();
+            regNoEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            return false;
+        }
+
+        const faculty = ddlFaculty.value;
+        if (faculty === "" || faculty === "0") {
+            document.getElementById("facultyError").style.display = "block";
+            ddlFaculty.focus();
+            ddlFaculty.scrollIntoView({ behavior: "smooth", block: "center" });
+            return false;
+        }
+
+        const dob = dobEl.value.trim();
+        if (dob === "") {
+            document.getElementById("dobError").style.display = "block";
+            dobEl.focus();
+            dobEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            return false;
+        }
+
+        // 4. Captcha Validation (The Fix!)
+        const userInputValue = captchaInputEl.value.trim();
+        const correct = parseInt(document.getElementById("captchaResult").value);
+
+        // CHECK 1: Ensure the input field is NOT empty
+        if (userInputValue === "") {
+            swal({
+                title: 'Attention',
+                text: 'Please Enter the Captcha.',
+                icon: 'warning',
+                button: 'OK'
+            });
+            captchaInputEl.focus();
+            return false;
+        }
+
+        // CHECK 2: Ensure the input value is correct
+        const user = parseInt(userInputValue);
+        if (user !== correct) {
+            swal({
+                title: 'Failed',
+                text: 'Captcha incorrect. Try again.',
+                icon: 'error',
+                button: 'Retry'
+            });
+            generateCaptcha(); // Regenerate for a new try
+            captchaInputEl.focus();
+            return false;
+        }
+
+        // 5. If all validations pass, allow postback
+        return true;
+    }
+
+    function generateCaptcha() {
+        const n1 = Math.floor(Math.random() * 20) + 1;
+        const n2 = Math.floor(Math.random() * 20) + 1;
+        document.getElementById("num1").textContent = n1;
+        document.getElementById("num2").textContent = n2;
+        document.getElementById("captchaResult").value = n1 + n2;
+        document.getElementById("captchaInput").value = ''; // Clear input on refresh
+    }
+
+    // Call generateCaptcha when the page loads
+    window.onload = generateCaptcha;
+
+    function enforceMaxLength(el, maxLength) {
+        if (el.value.length > maxLength) {
+            el.value = el.value.slice(0, maxLength);
+        }
+    }
+</script>
