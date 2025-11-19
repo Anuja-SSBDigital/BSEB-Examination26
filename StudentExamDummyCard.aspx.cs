@@ -43,12 +43,12 @@ public partial class StudentExamDummyCard : System.Web.UI.Page
     {
         try
         {
-            string Studentname = txt_studentname.Text.Trim();
+            string RegistrationNo = txt_RegistrationNo.Text.Trim();
             string Collegecode = txt_collegecode.Text.Trim();
             string FacultyId = ddlFaculty.SelectedValue;
             string Dob = txt_dob.Text.Trim();
 
-            string url = "DummyExamAdmitCertificate.aspx?Studentname=" + Server.UrlEncode(Studentname.ToString()) +
+            string url = "DummyExamAdmitCertificate.aspx?RegistrationNo=" + Server.UrlEncode(RegistrationNo.ToString()) +
             "&Collegecode=" + Server.UrlEncode(Collegecode) + "&faculty=" + Server.UrlEncode(FacultyId) + "&Dob=" + Server.UrlEncode(Dob) +
             "&from=StudentExamDummyCard";
 
