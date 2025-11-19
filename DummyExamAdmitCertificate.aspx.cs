@@ -209,8 +209,8 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                     }
                     else
                     {
-                        log.Warn("No data found for StudentExamDummyCard.");
-                        Response.Redirect("StudentExamDummyCard.aspx?alert=noData");
+                        Response.Redirect("StudentExamDummyCard.aspx?msg=nodata");
+                       
                     }
 
                     if (finalStudentData.Rows.Count > 0)
