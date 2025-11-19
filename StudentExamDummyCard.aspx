@@ -120,6 +120,7 @@
     <!-- Note: onsubmit added so Enter key triggers client-side validation -->
     <form runat="server" id="formid" onsubmit="return validateForm();">
         <!-- Header -->
+           <asp:ScriptManager runat="server" ID="sm1" />
         <div class="header text-center">
             <img src="assets/img/bsebimage2.png" class="logo" alt="Logo">
             Bihar School Examination Board
@@ -181,6 +182,19 @@
 <script src="assets/bundles/sweetalert/sweetalert.min.js"></script>
 
 <script>
+    window.onload = function () {
+        // generate captcha first
+        generateCaptcha();
+
+        // Get query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get('msg');
+
+        if (msg === 'nodata') {
+            // Show SweetAlert (modern swal with icon)
+            alert("No Data Found! No records available.");
+        }
+    };
     function validateForm() {
         debugger
         // 1. Clear previous errors

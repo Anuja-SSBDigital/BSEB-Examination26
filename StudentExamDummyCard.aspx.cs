@@ -12,16 +12,18 @@ public partial class StudentExamDummyCard : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            if (Request.QueryString["msg"] == "nodata")
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "NoData", "alert('No Data Found! No records available.');", true);
+
+            }
+
             Session.Clear();
             Session.Abandon();
             Session.RemoveAll();
             Session["CollegeId"] = null;
             BindFacultydropdown();
-            if (Request.QueryString["alert"] == "noData")
-            {
-                string script = "<script type='text/javascript'>swal('No Matching Data', 'There is no matching data for the provided search criteria.', 'warning');</script>";
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "showalert", script);
-            }
+           
         }
     }
 
