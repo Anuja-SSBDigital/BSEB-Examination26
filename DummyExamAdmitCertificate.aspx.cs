@@ -147,8 +147,6 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 }
                 else if (!string.IsNullOrEmpty(RegistrationNo) && fromPage == "StudentExamDummyCard")
                 {
-                    //log.Info("Processing StudentExamDummyCard flow.");
-
                     DataTable finalStudentData = CreateCombinedStudentDataTableSchema();
                     DataTable dtStuRegCardDetails = dl.GetStudentDownloadDummyExmCardData(Convert.ToInt32(Collegecode), Convert.ToInt32(FacultyId), RegistrationNo, DOB);
                     //log.Info("get data table StuRegCardDetails.");
