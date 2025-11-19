@@ -52,7 +52,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                         {
                             string studentIdStr = parts[0];
                             string collegeId = parts[1];
-                            string facultyId = parts[2]; 
+                            string facultyId = parts[2];
                             string examtypid = parts[3];
 
                             int studentId;
@@ -61,7 +61,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                                 log.Debug(string.Format("Processing studentId={0}, collegeId={1}, facultyId={2}", studentId, collegeId, facultyId));
 
                                 DataTable dtPersonalDetails = dl.GetStudentDummyExamCertificateData(studentId, Convert.ToInt32(collegeId), Convert.ToInt32(facultyId));
-                                DataTable dtSubjectsForCurrentStudent = dl.GetStudentExamAddmitCardSubjectDetails(studentId, Convert.ToInt32(collegeId), Convert.ToInt32(facultyId), Convert.ToInt32(examtypid),false);
+                                DataTable dtSubjectsForCurrentStudent = dl.GetStudentExamAddmitCardSubjectDetails(studentId, Convert.ToInt32(collegeId), Convert.ToInt32(facultyId), Convert.ToInt32(examtypid), false);
                                 log.Debug("finalStudentData  " + dtPersonalDetails);
                                 if (dtPersonalDetails.Rows.Count > 0)
                                 {
@@ -79,21 +79,21 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                                     {
                                         if (finalStudentData.Columns.Contains(col.ColumnName))
                                         {
-                                            if (col.ColumnName == "StudentPhotoPath")  
+                                            if (col.ColumnName == "StudentPhotoPath")
                                             {
                                                 string photoFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
-                                               
+
                                                 combinedRow["StudentPhotoPath"] = string.IsNullOrEmpty(photoFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Photos/" + photoFileName;
                                             }
-                                            else if (col.ColumnName == "StudentSignaturePath")  
+                                            else if (col.ColumnName == "StudentSignaturePath")
                                             {
                                                 string signatureFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
-                                              
+
                                                 combinedRow["StudentSignaturePath"] = string.IsNullOrEmpty(signatureFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Signatures/" + signatureFileName;
                                             }
                                             else
                                             {
-                                               
+
                                                 combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
                                             }
                                             //if (col.ColumnName == "DOB")
@@ -117,7 +117,7 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                                     }
 
 
-                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId),collegeId);
+                                    CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId), collegeId);
 
                                     finalStudentData.Rows.Add(combinedRow);
                                 }
@@ -144,8 +144,85 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                         log.Info(string.Format("Bound {0} student rows to repeater.", finalStudentData.Rows.Count));
                     }
                 }
-              
-            }
+                else if (!string.IsNullOrEmpty(Studentname) && fromPage == "StudentExamDummyCard")
+                {
+                    //log.Info("Processing StudentExamDummyCard flow.");
+
+                    DataTable finalStudentData = CreateCombinedStudentDataTableSchema();
+                    DataTable dtStuRegCardDetails = dl.GetStudentDownloadDummyRegCardData(Convert.ToInt32(Collegecode), Convert.ToInt32(FacultyId), Studentname, DOB);
+                    //log.Info("get data table StuRegCardDetails.");
+                    if (dtStuRegCardDetails.Rows.Count > 0)
+                    {
+                        DataRow studentRow = dtStuRegCardDetails.Rows[0];
+
+                        int studentId = Convert.ToInt32(studentRow["StudentID"]);
+                        int collegeId = Convert.ToInt32(studentRow["CollegeId"]);
+                        int ExamTypeId = Convert.ToInt32(studentRow["ExamTypeId"]);
+
+                        DataTable dtSubjectsForCurrentStudent = dl.GetStudentExamAddmitCardSubjectDetails(studentId, Convert.ToInt32(collegeId), Convert.ToInt32(FacultyId), ExamTypeId, false);
+                        //log.Info("get data table SubjectsForCurrentStudent.");
+                        DataRow combinedRow = finalStudentData.NewRow();
+
+                        foreach (DataColumn col in dtStuRegCardDetails.Columns)
+                        {
+                            if (finalStudentData.Columns.Contains(col.ColumnName))
+                            {
+                                if (col.ColumnName == "StudentPhotoPath")
+                                {
+                                    string photoFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
+
+                                    combinedRow["StudentPhotoPath"] = string.IsNullOrEmpty(photoFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Photos/" + photoFileName;
+                                }
+                                else if (col.ColumnName == "StudentSignaturePath")
+                                {
+                                    string signatureFileName = studentRow[col] != DBNull.Value ? studentRow[col].ToString() : "";
+
+                                    combinedRow["StudentSignaturePath"] = string.IsNullOrEmpty(signatureFileName) ? (object)DBNull.Value : "~/Uploads/StudentsReg/Signatures/" + signatureFileName;
+                                }
+                                else
+                                {
+
+                                    combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
+                                }
+                                //if (col.ColumnName == "DOB")
+                                //{
+                                //    if (studentRow[col] != DBNull.Value)
+                                //    {
+                                //        DateTime dob = Convert.ToDateTime(studentRow[col]);
+                                //        combinedRow[col.ColumnName] = dob.ToString("MM/dd/yyyy");
+                                //        log.Debug("DOB  " + combinedRow[col.ColumnName]);
+                                //    }
+                                //    else
+                                //    {
+                                //        combinedRow[col.ColumnName] = DBNull.Value;
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //combinedRow[col.ColumnName] = studentRow[col] == DBNull.Value ? DBNull.Value : studentRow[col];
+                                //}
+                            }
+                        }
+                        //log.Info("Call CategorizeAndPopulateSubjects");
+                        CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(FacultyId), Convert.ToString(collegeId));
+
+                        finalStudentData.Rows.Add(combinedRow);
+                    }
+                    else
+                    {
+                        log.Warn("No data found for StudentRegCardDownload.");
+                        Response.Redirect("StudentRegCardDownload.aspx?alert=noData");
+                    }
+
+                    if (finalStudentData.Rows.Count > 0)
+                    {
+                        rptStudents.DataSource = finalStudentData;
+                        rptStudents.DataBind();
+                        //log.Info(string.Format("Bound {0} student rows to repeater (StudentExamDummyCard).", finalStudentData.Rows.Count));
+                    }
+
+                }
+             }
             catch (Exception ex)
             {
                 log.Error("Error in Page_Load", ex);
@@ -253,9 +330,9 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                     lblCollegeName.Text = "+2 स्कूल का नाम:";
                     lblDesc1.Text = "+2 विद्यालय";
                     lblDesc2.Text = "+2 विद्यालय";
-                    lblvocdesc1.Text = "(व्यवसायिक)";
-                    lblvocdesc2.Text = "(व्यवसायिक)";
-                    lblvocdesc3.Text = "(व्यवसायिक)";
+                    lblvocdesc1.Text = "(व्यावसायिक)";
+                    lblvocdesc2.Text = "(व्यावसायिक)";
+                    lblvocdesc3.Text = "(व्यावसायिक)";
                     //+2 विद्यालय/महाविद्यालय  
                 }
                 else
@@ -280,9 +357,6 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             }
         }
     }
-
-
-
 
     private DataTable CreateCombinedStudentDataTableSchema()
     {
@@ -482,4 +556,28 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
             throw;
         }
     }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        string from = Request.QueryString["from"];
+
+        //if (!string.IsNullOrEmpty(from))
+        //{
+           if (from == "StudentExamDummyCard")
+            {
+                Response.Redirect("StudentExamDummyCard.aspx");
+            }
+        else
+        {
+            Response.Redirect("Downloadadmitcard.aspx");
+        }
+        
+        //}
+        //else
+        //{
+        //    // Default fallback page
+        //    Response.Redirect("Default.aspx");
+        //}
+    }
+
 }
