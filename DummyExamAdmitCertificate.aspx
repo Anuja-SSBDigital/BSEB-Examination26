@@ -181,7 +181,9 @@
 <body>
     <form runat="server" id="form1">
         <div class="text-center mt-4 mb-5">
-            <a href="Downloadadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
+            <asp:Button ID="btnBack" runat="server" Text="Back" CssClass="btn btn-primary" OnClick="btnBack_Click" />
+
+            <%--<a href="Downloadadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>--%>
             <button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>
             <%--   <button onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>--%>
         </div>
@@ -196,16 +198,16 @@
                             <div class="col-md-6 text-center">
                                 <div class="title">
 
-                                    <h4><strong>BIHAR SCHOOL EXAMINATION BOARD</strong></h4>
+                                    <h5><strong>BIHAR SCHOOL EXAMINATION BOARD</strong></h5>
                                 </div>
                                 <div class="sub-title">
 
-                                    <h4><strong>INTERMEDIATE ANNUAL EXAMINATION, 2026<br />
+                                    <h5><strong>INTERMEDIATE ANNUAL EXAMINATION, 2026<br />
                                         <asp:Label ID="lblExamTitle" runat="server" CssClass="english-title" />
-                                    </strong></h4>
-                                    <h4><strong><u>DUMMY ADMIT CARD</strong></u><br />
-                                    </h4>
-                                    <h4><strong><u>डमी एडमिट कार्ड</u></strong></h4>
+                                    </strong></h5>
+                                    <h5><strong><u>DUMMY ADMIT CARD</strong></u><br />
+                                    </h5>
+                                    <h5><strong><u>डमी एडमिट कार्ड</u></strong></h5>
                                 </div>
                             </div>
                             <div class="col-md-3">
