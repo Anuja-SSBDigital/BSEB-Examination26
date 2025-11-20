@@ -296,6 +296,8 @@
                             <asp:HiddenField ID="hfStudentPaperAppliedId" runat="server" />
                             <asp:HiddenField ID="hfSubjectPaperId" runat="server" />
                                <asp:HiddenField runat="server" ID="hnd_extype"/>
+                               <asp:HiddenField runat="server" ID="hnd_ExamCorrectionForm"/>
+                               <asp:HiddenField runat="server" ID="hnd_StudentExamRegForm"/>
                             <%--<asp:Button ID="Button1" runat="server" Text="Submit Selected Subjects"  CssClass="btn btn-primary text-center" OnClientClick="return validateSubjectSelection();"/>--%>
                             <asp:Button ID="btnSubmitSubjects" runat="server" Text="Update Subjects" CssClass="btn btn-primary text-center  mt-2" OnClick="btnSubmitSubjects_Click" OnClientClick="return validateSubjectSelection();" />
                         </div>
@@ -354,7 +356,10 @@
 
      function validateSubjectSelection() {
          const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-         if (ExamTypeId == 3) {
+         const ExamCorrectionForm = parseInt(document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value);
+         //if (ExamTypeId == 3) {
+         if (ExamTypeId == 3 || (ExamTypeId == 1 && ExamCorrectionForm == 'ExamCorrectionForm'))
+         {
              storeElectiveSelections();
              let group1SubjectsDetails = getCheckedGroupDetails(".compGroup1", ".compGroup1Value");
              let group2SubjectsDetails = getCheckedGroupDetails(".compGroup2", ".compGroup2Value");
@@ -738,8 +743,13 @@
         allCheckboxes.forEach(cb => {
             cb.addEventListener('click', function (e) {
                 const wasChecked = cb.dataset.initialChecked === 'true';
+                const ExamCorrectionForm = parseInt(document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value);
+                const StudentExamRegForm = parseInt(document.getElementById('<%= hnd_StudentExamRegForm.ClientID %>').value);
 
-                if ([1, 2, 5, 6].includes(ExamTypeId)) {
+                if (ExamTypeId === 1 && ExamCorrectionForm == "ExamCorrectionForm") {
+                    return;  // allow free checking
+                }
+                if ([2, 5, 6].includes(ExamTypeId)) {
                     e.preventDefault();
                     return false;
                 }
