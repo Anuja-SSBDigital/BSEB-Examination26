@@ -439,7 +439,7 @@ public partial class StudentExamRegForm : System.Web.UI.Page
             if (result > 0)
             {
                 string encryptedStudentId = CryptoHelper.Encrypt(studentId);
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode) + "&StudentExamRegForm=StudentExamRegForm";
                 return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
             }
             else
@@ -514,7 +514,7 @@ public partial class StudentExamRegForm : System.Web.UI.Page
             if (result > 0)
             {
                 string encryptedStudentId = CryptoHelper.Encrypt(studentId);
-                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode);
+                string redirectUrl = "ExamStudentSubjectgrps.aspx?studentId=" + HttpUtility.UrlEncode(encryptedStudentId) + "&FacultyId=" + HttpUtility.UrlEncode(facultyId) + "&ExamTypeId=" + HttpUtility.UrlEncode(examTypeId) + "&collegeCode=" + HttpUtility.UrlEncode(collegeCode) + "&StudentExamRegForm=StudentExamRegForm";
                 return new { status = "success", message = "Student updated successfully.", redirectUrl = redirectUrl };
             }
             else
