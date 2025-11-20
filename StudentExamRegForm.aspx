@@ -889,11 +889,11 @@
             var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
             var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
                     var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
-
+                    var StudentExamRegForm = "StudentExamRegForm";
                     var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
                         "&FacultyId=" + encodeURIComponent(facultyId) +
                         "&ExamTypeId=" + encodeURIComponent(examTypeId) +
-                        "&collegeCode=" + encodeURIComponent(collegeCode);
+                        "&collegeCode=" + encodeURIComponent(collegeCode) + "&StudentExamRegForm=StudentExamRegForm";
                     window.location.href = url;
                 });
             } else {
@@ -945,11 +945,12 @@
                 var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
                 var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
                 var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+                var StudentExamRegForm = "StudentExamRegForm";
 
                 var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
                     "&FacultyId=" + encodeURIComponent(facultyId) +
                     "&ExamTypeId=" + encodeURIComponent(examTypeId) +
-                    "&collegeCode=" + encodeURIComponent(collegeCode);
+                    "&collegeCode=" + encodeURIComponent(collegeCode) + "&StudentExamRegForm=StudentExamRegForm";
                 window.location.href = url;
             });
                      } else {
