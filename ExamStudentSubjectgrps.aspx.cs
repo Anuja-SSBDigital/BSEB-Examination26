@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -26,7 +27,12 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                     hnd_extype.Value = ExamTypeId;
                     Session["ExamTypeId"] = ExamTypeId.ToString();
                     string fromPage = Request.QueryString["from"];
+                   
                     string collegeCode = Request.QueryString["collegeCode"];
+                    string ExamCorrectionForm = Request.QueryString["ExamCorrectionForm"];
+                    string StudentExamRegForm = Request.QueryString["StudentExamRegForm"];
+                    hnd_ExamCorrectionForm.Value = ExamCorrectionForm;
+                    hnd_StudentExamRegForm.Value = StudentExamRegForm;
 
                     DataTable facultyList = dl.getFacultyfordropdown();
                     ddlFaculty.DataSource = facultyList;
@@ -415,7 +421,15 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                             //if (ExamTypeId != "3" || ExamTypeId != "4")
                             if (ExamTypeId != "4")
                             {
-                                ApplyPreviouslySelectedSubjects(studentId, "0");
+                               
+                                if (ExamTypeId == "1" && ExamCorrectionForm == "ExamCorrectionForm")
+                                {
+                                    ApplyPreviouslySelectedSubjects(studentId, "1");
+                                }
+                                else
+                                {
+                                    ApplyPreviouslySelectedSubjects(studentId, "0");
+                                }
                                 //if (ExamTypeId == "3")
                                 //{
 
@@ -739,7 +753,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
     {
         var selected1 = Request.Form.GetValues("chkElectiveSubjects") ?? new string[0];
         var selected2 = Request.Form.GetValues("chkGroup2Subjects") ?? new string[0];
-
+        string ExamCorrectionForm = Request.QueryString["ExamCorrectionForm"];
         List<string> selectedCodes = new List<string>(selected1);
         selectedCodes.AddRange(selected2);
 
@@ -749,16 +763,21 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         {
             throw new Exception("Exactly 3 elective subjects must be selected.");
         }
+        //else if (examTypeId ==1 && selectedCodes.Count != 3 && ExamCorrectionForm == "ExamCorrectionForm")
+        //{
+        //    throw new Exception("Exactly 3 elective subjects must be selected.");
+        //}
 
         DataTable existingSubjects = dl.GetSubjectsByStudentIdAndComGrp(studentId, comgrp);
 
         // ✅ 2. Insert missing subjects
-        while (existingSubjects.Rows.Count < selectedCodes.Count)
+        //while (existingSubjects.Rows.Count < selectedCodes.Count)
+        while (existingSubjects.Rows.Count < 3)
         {
             SaveSubjectByCode(selectedCodes[existingSubjects.Rows.Count], studentId, modifiedBy, comgrp, examTypeId);
             existingSubjects = dl.GetSubjectsByStudentIdAndComGrp(studentId, comgrp);
         }
-
+     
         // ✅ 3. DELETE ONLY if examTypeId != 4
         if (examTypeId != 4)
         {
@@ -819,6 +838,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
     {
         var selected1 = Request.Form.GetValues("chkVocElectiveSubjects") ?? new string[0];
         var selected2 = Request.Form.GetValues("chkGroup2Subjects") ?? new string[0];
+        string ExamCorrectionForm = Request.QueryString["ExamCorrectionForm"];
 
         List<string> selectedCodes = new List<string>(selected1);
         selectedCodes.AddRange(selected2);
@@ -839,7 +859,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         }
 
         // ✅ 3. DELETE ONLY if examTypeId != 4
-        if (examTypeId != 4)
+        if (examTypeId != 4 || examTypeId != 1)
         {
             while (existingSubjects.Rows.Count > selectedCodes.Count)
             {
@@ -1053,7 +1073,19 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
             }
 
             // Store the locked status in ViewState for the front-end
-            ViewState["IsLocked"] = hasExistingSubjects.ToString();
+            // ViewState["IsLocked"] = hasExistingSubjects.ToString();
+            // If ExamTypeId = 1 → Do NOT lock subjects
+            string ExamCorrectionForm = Request.QueryString["ExamCorrectionForm"];
+
+            if (ExamTypeId == "1" && ExamCorrectionForm == "ExamCorrectionForm")
+            {
+                ViewState["IsLocked"] = "False";
+            }
+            else
+            {
+                ViewState["IsLocked"] = hasExistingSubjects.ToString();
+            }
+
             Dictionary<string, string> comGrpToAppliedId = new Dictionary<string, string>();
             foreach (DataRow row in appliedSubjects.Rows)
             {
