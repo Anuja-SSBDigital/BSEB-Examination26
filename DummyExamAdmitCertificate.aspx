@@ -184,8 +184,12 @@
             <asp:Button ID="btnBack" runat="server" Text="Back" CssClass="btn btn-primary" OnClick="btnBack_Click" />
 
             <%--<a href="Downloadadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>--%>
-            <button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>
+            <%--<button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>--%>
             <%--   <button onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>--%>
+
+            <%--<asp:Button ID="btnDownloadUpdate" runat="server"  OnClick="btnDownloadUpdate_Click" />--%>
+            <button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>
+
         </div>
         <asp:Repeater ID="rptStudents" runat="server" OnItemDataBound="rptStudents_ItemDataBound">
             <ItemTemplate>
@@ -493,6 +497,7 @@
                 </b>
                 </div>
 
+                <asp:HiddenField ID="hdn_studentids" runat="server" />
 
                 <div style="page-break-after: always;" class="no-print"></div>
             </ItemTemplate>
@@ -504,8 +509,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script>
             async function generatePDF() {
+
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
+
                 const elements = document.querySelectorAll('.container');
 
                 // Format current date/time
@@ -522,15 +529,15 @@
                 };
                 const formattedDate = now.toLocaleString('en-US', options);
 
+                // Generate PDF pages
                 for (let i = 0; i < elements.length; i++) {
+
                     const element = elements[i];
-                    const canvas = await html2canvas(element, {
-                        scale: 2,
-                        useCORS: true
-                    });
+                    const canvas = await html2canvas(element, { scale: 2, useCORS: true });
 
                     const imgData = canvas.toDataURL('image/jpeg', 1.0);
                     const imgProps = pdf.getImageProperties(imgData);
+
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
@@ -538,17 +545,72 @@
                         pdf.addPage();
                     }
 
-                    // Add the image content
                     pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
-                    // Add footer (date-time and page number)
                     pdf.setFontSize(10);
                     pdf.setTextColor(0, 0, 0);
-                    pdf.text(`${formattedDate}    Page ${i + 1} of ${elements.length}`, 10, 290); // 10 = x, 290 = y (bottom)
+                    pdf.text(`${formattedDate}    Page ${i + 1} of ${elements.length}`, 10, 290);
                 }
-
+                //await updateDownloadStatus();
+                // SAVE PDF
                 pdf.save('AdmitCards.pdf');
+
+                // CALL BTN UPDATE CLICK WebMethod AFTER PDF DOWNLOAD
+                
             }
+            //function updateDownloadStatus() {
+
+            //    return fetch("DummyExamAdmitCertificate.aspx/btnDownloadUpdate_Click", {
+
+            //        method: "POST",
+
+            //        headers: {
+
+            //            "Content-Type": "application/json; charset=utf-8"
+
+            //        },
+
+            //        body: JSON.stringify({
+
+            //            studentIds: studentIds,
+
+            //            fromPage: fromPage
+
+            //        })
+
+            //    })
+
+            //        .then(response => response.json())
+
+            //        .then(result => {
+
+            //            if (result.d === true) {
+
+            //                // 🔥 Final redirect logic
+
+            //                if (fromPage === "StudentExamDummyCard") {
+
+            //                    window.location.href = "StudentExamDummyCard.aspx";
+
+            //                } else {
+
+            //                    window.location.href = "DownloadAdmitCard.aspx";
+
+            //                }
+
+            //            }
+
+            //            else {
+
+            //                alert("Error updating DeclarationFormDownloaded status.");
+
+            //            }
+
+            //        });
+
+            //}
+
+
         </script>
 
     </form>
