@@ -1105,6 +1105,67 @@ function (response) {
      window.onload = function () {
          debugger;
          const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
+
+         // List of fields to disable when examType = 1
+         const lockedFieldsForType1 = [
+        '<%= txtcollegeName.ClientID %>',
+        '<%= txtcollegeCode.ClientID %>',
+        '<%= txtrollNumber.ClientID %>',
+        '<%= txtboardRollCode.ClientID %>',
+        '<%= txtpassingYear.ClientID %>',
+        '<%= ddlFaculty.ClientID %>'
+         ];
+
+         // Collect all input fields and selects to disable them
+         const allFields = document.querySelectorAll('input, select, textarea, div');
+
+         // --- CASE 1: ExamType = 1 (Lock specific fields) ---
+         if (examType === "1") {
+             allFields.forEach(function (field) {
+                 // Skip the update button and other buttons you don't want to disable
+                 if (field.id === '<%= btnUpdate.ClientID %>') return;
+
+            // Lock only the specific fields listed in lockedFieldsForType1
+            if (lockedFieldsForType1.includes(field.id)) {
+                field.disabled = true;  // Disable the field
+            } else {
+                field.disabled = false;  // Enable the other fields
+            }
+        });
+    }
+
+    // Handle other exam types (e.g., 2, 3, 4, 6)
+    if (["2", "3", "4", "6"].includes(examType)) {
+        allFields.forEach(function (field) {
+            if (field.id === '<%= btnUpdate.ClientID %>') return; // skip update button
+
+            // Lock all fields by default
+            field.disabled = true;
+
+            // Unlock specific fields for these exam types (you can specify which ones to unlock)
+            const unlockedFieldsForType2346 = [
+                '<%= ddlGender.ClientID %>',
+                '<%= ddlCasteCategory.ClientID %>',
+                '<%= ddlNationality.ClientID %>',
+                '<%= ddlReligion.ClientID %>',
+                '<%= ddlMaritalStatus.ClientID %>',
+                // Add any other fields that should be unlocked for these exam types
+            ];
+
+            if (unlockedFieldsForType2346.includes(field.id)) {
+                field.disabled = false;  // Unlock these fields
+            }
+        });
+    }
+
+    // Enable the update button (if exists)
+         const updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
+         if (updateBtn) updateBtn.disabled = false;
+     };
+
+    <%-- window.onload = function () {
+         debugger;
+         const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
     const lockedFields = [
         '<%= txtStudentName.ClientID %>',
         '<%= txtfatherName.ClientID %>',
@@ -1112,6 +1173,9 @@ function (response) {
         // '<%= txtDOB.ClientID %>',  // Assuming you have some conditions for DOB
         '<%= ddlFaculty.ClientID %>',
         '<%= txtcollegeCode.ClientID %>'
+        '<%= txtboardRollCode.ClientID %>'
+        '<%= txtpassingYear.ClientID %>'
+        '<%= txtrollNumber.ClientID %>'
              // add more fields if needed
          ];
 
@@ -1133,7 +1197,7 @@ function (response) {
         allFields.forEach(function (field) {
             if (field.id === '<%= btnUpdate.ClientID %>') return; // skip update button
             // Lock only the specific fields (CollegeName, CollegeCode, Faculty)
-            if (['<%= txtcollegeName.ClientID %>', '<%= txtcollegeCode.ClientID %>', '<%= ddlFaculty.ClientID %>'].includes(field.id)) {
+            if (['<%= txtcollegeName.ClientID %>', '<%= txtcollegeCode.ClientID %>', '<%= txtrollNumber.ClientID %>', '<%= txtboardRollCode.ClientID %>', '<%= txtpassingYear.ClientID %>', '<%= ddlFaculty.ClientID %>'].includes(field.id)) {
                 field.disabled = true;
             } else {
                 field.disabled = false;
@@ -1207,7 +1271,7 @@ function (response) {
          //        toggleAadharDivs();
          //    });
          //}
-    };
+    };--%>
 
     // Corrected toggleAadharDivs function
      function toggleAadharDivs() {
