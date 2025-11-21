@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-              <%--  <div id="VocElectiveSection" runat="server">
+                <div id="VocElectiveSection" runat="server">
                     <div class="q33-box borderline" ID="Elective1titleVoc" runat="server">
                         <div class="section-title">Elective Subject Group (Total 300 Marks)</div>
                         <p ID="Elective1titleVoc2" runat="server">(Select (✓) any three subjects - each 100 Marks)</p>
@@ -157,6 +157,7 @@
                                             "value=\"" + Eval("Code1") + "\" " +
                                             "data-name=\"" + HttpUtility.HtmlEncode(Eval("Name1")).ToLower() + "\" " +
                                             (Eval("Code1").ToString() == "402" ? "checked='checked'" : GetCheckedAttr(Eval("Code1"))) + " " +
+                                             
                                             "onclick='syncVocElectiveSelection(this)' /> " +
                                             HttpUtility.HtmlEncode(Eval("Name1")) + " - " + HttpUtility.HtmlEncode(Eval("Code1")) 
                                             : "" %>
@@ -170,6 +171,7 @@
                                             "value=\"" + Eval("Code2") + "\" " +
                                             "data-name=\"" + HttpUtility.HtmlEncode(Eval("Name2")).ToLower() + "\" " +
                                             GetCheckedAttr(Eval("Code2")) + " " +
+                                           
                                             "onclick='syncVocElectiveSelection(this)' /> " +
                                             HttpUtility.HtmlEncode(Eval("Name2")) + " - " + HttpUtility.HtmlEncode(Eval("Code2")) 
                                             : "" %>
@@ -182,7 +184,7 @@
 
                         </table>
                     </div>
-                </div>--%>
+                </div>
 
             </div>
         </div>
@@ -298,6 +300,7 @@
                                <asp:HiddenField runat="server" ID="hnd_extype"/>
                                <asp:HiddenField runat="server" ID="hnd_ExamCorrectionForm"/>
                                <asp:HiddenField runat="server" ID="hnd_StudentExamRegForm"/>
+                               <asp:HiddenField runat="server" ID="hnd_FacultyId"/>
                             <%--<asp:Button ID="Button1" runat="server" Text="Submit Selected Subjects"  CssClass="btn btn-primary text-center" OnClientClick="return validateSubjectSelection();"/>--%>
                             <asp:Button ID="btnSubmitSubjects" runat="server" Text="Update Subjects" CssClass="btn btn-primary text-center  mt-2" OnClick="btnSubmitSubjects_Click" OnClientClick="return validateSubjectSelection();" />
                         </div>
@@ -355,10 +358,91 @@
      }
 
      function validateSubjectSelection() {
+         debugger
          const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
-         const ExamCorrectionForm = parseInt(document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value);
-         //if (ExamTypeId == 3) {
-         if (ExamTypeId == 3 || (ExamTypeId == 1 && ExamCorrectionForm == 'ExamCorrectionForm'))
+         const ExamCorrectionForm = document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value;
+
+         if (ExamTypeId == 3) 
+         {
+             storeElectiveSelections();
+             let group1SubjectsDetails = getCheckedGroupDetails(".compGroup1", ".compGroup1Value");
+             let group2SubjectsDetails = getCheckedGroupDetails(".compGroup2", ".compGroup2Value");
+             let electiveSubjectsDetails = getElectiveSubjectDetails();
+             let additionalSubjects = getAdditionalSubjectValues();
+             let vocationalSubjects = getVocationalSubjectValues();
+
+             if (group1SubjectsDetails.length !== 1) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly one subject from Compulsory Group 1.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (group2SubjectsDetails.length !== 1) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly one subject from Compulsory Group 2.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (electiveSubjectsDetails.length !== 3) {
+                 swal({
+                     title: "Selection Required",
+                     text: "Please select exactly three subjects from Elective Subject Group.",
+                     icon: "warning",
+                     button: "OK"
+                 });
+                 return false;
+             }
+
+             if (additionalSubjects.length === 1) {
+                 const allMainSubjectsWithDetails = [
+                     ...group1SubjectsDetails,
+                     ...group2SubjectsDetails,
+                     ...electiveSubjectsDetails
+                 ];
+                 const selectedAdditional = additionalSubjects[0];
+
+                 const isDuplicate = allMainSubjectsWithDetails.some(mainSubject => {
+                     return (
+                         mainSubject.name?.trim().toLowerCase() === selectedAdditional.name?.trim().toLowerCase() ||
+                         mainSubject.code?.trim().toLowerCase() === selectedAdditional.code?.trim().toLowerCase()
+                     );
+                 });
+
+                 if (isDuplicate) {
+                     swal({
+                         title: "Invalid Selection",
+                         text: "The subject '" + selectedAdditional.name.toUpperCase() + "' selected in the Additional Group must not be the same as any subject selected in the Compulsory or Elective Groups.",
+                         icon: "error",
+                         button: "OK"
+                     });
+
+                     document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+                         const parentSpan = cb.closest('.additionalSubject');
+                         const title = parentSpan?.title?.trim().toLowerCase();
+                         const codeMatch = parentSpan?.innerText?.match(/\(([^)]+)\)/);
+                         const code = codeMatch && codeMatch[1] ? codeMatch[1].trim().toLowerCase() : '';
+
+                         if (
+                             title === selectedAdditional.name?.trim().toLowerCase() ||
+                             code === selectedAdditional.code?.trim().toLowerCase()
+                         ) {
+                             cb.checked = false;
+                         }
+                     });
+                     return false;
+                 }
+             }
+             return true;
+         }
+         else if (ExamTypeId == 1 && ExamCorrectionForm == 'ExamCorrectionForm')
          {
              storeElectiveSelections();
              let group1SubjectsDetails = getCheckedGroupDetails(".compGroup1", ".compGroup1Value");
@@ -604,22 +688,27 @@
                 });
             });
 
-            let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
-            electiveCheckboxes.forEach(cb => {
-                cb.addEventListener('change', function () {
-                    let checkedBoxes = Array.from(document.querySelectorAll('input.electiveSubject:checked'));
-                    if (checkedBoxes.length > 3) {
-                        swal({
-                            title: "Limit Exceeded",
-                            text: "You can select a maximum of three elective subjects.",
-                            icon: "warning",
-                            button: "OK"
-                        });
-                        this.checked = false; // Uncheck the one that exceeded the limit
-                        this.removeAttribute('checked');
-                    }
+                let electiveCheckboxes = document.querySelectorAll('input.electiveSubject');
+                electiveCheckboxes.forEach(cb => {
+                    cb.addEventListener('change', function () {
+                        let checkedBoxes = Array.from(document.querySelectorAll('input.electiveSubject:checked'));
+                        if (checkedBoxes.length > 3) {
+                            swal({
+                                title: "Limit Exceeded",
+                                text: "You can select a maximum of three elective subjects.",
+                                icon: "warning",
+                                button: "OK"
+                            });
+                            // Uncheck all beyond the first three
+                            checkedBoxes.slice(3).forEach(extra => {
+                                extra.checked = false;
+                                extra.removeAttribute('checked');
+                            });
+                            //this.checked = false; // Uncheck the one that exceeded the limit
+                            //this.removeAttribute('checked');
+                        }
+                    });
                 });
-            });
 
             let additionalCheckboxes = document.querySelectorAll('.additionalSubject input[type="checkbox"]');
             additionalCheckboxes.forEach(cb => {
@@ -732,10 +821,20 @@
             '.compGroup1 input[type="checkbox"], ' +
             '.compGroup2 input[type="checkbox"], ' +
             'input.electiveSubject, ' +
+            //'input.electiveVoc1, ' +
+            //'input.electiveVoc2, ' +
             '.additionalSubject input[type="checkbox"], ' +
             '.VocationalSubjects input[type="checkbox"]'
         );
-
+  
+        //if (FacultyId === 4 && isLocked) {
+        //    allCheckboxes.forEach(cb => {
+        //        cb.disabled = true;      // prevent selection
+        //        cb.style.pointerEvents = 'none'; // extra safety
+        //        cb.style.opacity = '0.6'; // visual effect
+        //    });
+        //    return; // no click listeners needed
+        //}
         allCheckboxes.forEach(cb => {
             cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
         });
@@ -745,10 +844,15 @@
                 const wasChecked = cb.dataset.initialChecked === 'true';
                 const ExamCorrectionForm = parseInt(document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value);
                 const StudentExamRegForm = parseInt(document.getElementById('<%= hnd_StudentExamRegForm.ClientID %>').value);
+                const FacultyId = parseInt(document.getElementById('<%= hnd_FacultyId.ClientID %>').value);
 
                 if (ExamTypeId === 1 && ExamCorrectionForm == "ExamCorrectionForm") {
                     return;  // allow free checking
                 }
+                //if (FacultyId === 4) {
+                //    e.preventDefault();
+                //    return false;
+                //}
                 if ([2, 5, 6].includes(ExamTypeId)) {
                     e.preventDefault();
                     return false;
