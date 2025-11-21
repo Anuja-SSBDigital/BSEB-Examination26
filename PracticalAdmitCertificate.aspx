@@ -370,7 +370,8 @@
                                     </tr>
                                     <tr>
                                         <td>रौल कोड</td>
-                                        <td><%# Eval("RollCode") %></td>
+                                         <td><%# Eval("CollegeCode") %></td>
+                                        <%--<td><%# Eval("RollCode") %></td>--%>
                                         <td>रौल क्रमांक</td>
                                         <td><%# Eval("RollNumber") %></td>
                                         <td>लिंग</td>
@@ -426,22 +427,22 @@
                             </tr>
                             <tr runat="server" id="trElective2">
                                 <td><%# Eval("ElectiveSubject2Code") %></td>
-                                <td><%# Eval("ElectiveSubject2Name") %></td>
+                                <td><%# Eval("ElectiveSubject2Name") %> <%# Eval("ElectiveSubject1PaperType") %></td>
                             </tr>
                             <tr runat="server" id="trElective3">
                                 <td><%# Eval("ElectiveSubject3Code") %></td>
-                                <td><%# Eval("ElectiveSubject3Name") %></td>
+                                <td><%# Eval("ElectiveSubject3Name") %> <%# Eval("ElectiveSubject2PaperType") %></td>
                             </tr>
                             <tr runat="server" id="trAdditional">
                                 <td>अतिरिक्त विषय</td>
                                 <td><%# Eval("AdditionalSubjectCode") %></td>
-                                <td><%# Eval("AdditionalSubjectName") %></td>
+                                <td><%# Eval("AdditionalSubjectName") %> <%# Eval("AdditionalSubjectPaperType") %></td>
                                 <%-- <td style="text-align: center;"><%# Eval("AdditionalSubjectDate") %></td>--%>
                             </tr>
                             <tr runat="server" id="trVocational">
                                 <td>व्यवसायिक विषय</td>
                                 <td><%# Eval("VocationalSubjectCode") %></td>
-                                <td><%# Eval("VocationalSubjectName") %></td>
+                                <td><%# Eval("VocationalSubjectName") %>  <%# Eval("VocationalSubjectPaperType") %></td>
 
                             </tr>
                         </tbody>
