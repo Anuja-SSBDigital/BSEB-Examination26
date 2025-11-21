@@ -157,19 +157,33 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                                         vocElectiveTable.Rows.Add(newRow);
                                     }
-
                                     rptVocElectiveSubjects.DataSource = vocElectiveTable;
                                     rptVocElectiveSubjects.DataBind();
 
-                                    VocElectiveSection.Visible = true;
                                     ElectiveSection.Visible = false;
-                                    rptVocElectiveSubjects.Visible = rptVocElectiveSubjects.Items.Count > 0;
-
-                                    // Hide other irrelevant sections
-                                    ElectiveCard.Visible = false;
+                                    VocElectiveSection.Visible = true;
                                     divAdditionalSubjects.Visible = false;
+                                    //rptVocElectiveSubjects.DataSource = vocElectiveTable;
+                                    //rptVocElectiveSubjects.DataBind();
+
+                                    //// Keep the same visibility logic you used but make sure parent section is visible
+                                    //VocElectiveSection.Visible = true;
+                                    //rptVocElectiveSubjects.Visible = rptVocElectiveSubjects.Items.Count > 0;
+
+                                    //// Hide other irrelevant sections as your original code did
+                                    //ElectiveSection.Visible = false;
+                                    //ElectiveCard.Visible = false;
+                                    //divAdditionalSubjects.Visible = false;
                                     //ElectiveSection.Visible = false;
                                     //VocElectiveSection.Visible = true;
+                                    //if (ExamTypeId == "2")
+                                    //{
+
+
+                                    //    ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    //    VocElectiveSection.Visible = true;
+                                    //    divAdditionalSubjects.Visible = false;
+                                    //}
                                 }
 
 
@@ -248,19 +262,30 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                     ViewState["ElectiveSubjects"] = electiveReshaped;
                                     VocElectiveSection.Visible = false;
 
+                                    if (ExamTypeId == "2")
+                                    {
+                                        ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
+                                        VocElectiveSection.Visible = false;
+                                        divAdditionalSubjects.Visible = false;
+
+                                        Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
+                                        Elective1title2.Visible = rptElectiveSubjects.Items.Count > 0;
+                                        rptElectiveSubjects.Visible = rptElectiveSubjects.Items.Count > 0;
+                                    }
+
                                 }
                                 // ========== Elective (GroupName = 'Elective')
+                              
+                                //if (ExamTypeId == "2")
+                                //{
+                                //    ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
+                                //    VocElectiveSection.Visible = false;
+                                //    divAdditionalSubjects.Visible = false;
 
-                                if (ExamTypeId == "2")
-                                {
-                                    ElectiveCard.Visible = rptElectiveSubjects.Items.Count > 0;
-                                    VocElectiveSection.Visible = false;
-                                    divAdditionalSubjects.Visible = false;
-
-                                    Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
-                                    Elective1title2.Visible = rptElectiveSubjects.Items.Count > 0;
-                                    rptElectiveSubjects.Visible = rptElectiveSubjects.Items.Count > 0;
-                                }
+                                //    Elective1title.Visible = rptElectiveSubjects.Items.Count > 0;
+                                //    Elective1title2.Visible = rptElectiveSubjects.Items.Count > 0;
+                                //    rptElectiveSubjects.Visible = rptElectiveSubjects.Items.Count > 0;
+                                //}
 
                             }
                             else
@@ -329,7 +354,16 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                             if (ExamTypeId != "4")
                             {
-                                ApplyPreviouslySelectedSubjects(studentId, "0");
+                                //ApplyPreviouslySelectedSubjects(studentId, "0");
+                                if (ExamTypeId == "1" && ExamCorrectionForm == "ExamCorrectionForm")
+                                {
+                                    ApplyPreviouslySelectedSubjects(studentId, "1");
+                                }
+                                else
+                                {
+                                    ApplyPreviouslySelectedSubjects(studentId, ExamTypeId);
+                                    //ApplyPreviouslySelectedSubjects(studentId, "0");
+                                }
                             }
                             else if (ExamTypeId == "4" && hasImproved)
                             {
