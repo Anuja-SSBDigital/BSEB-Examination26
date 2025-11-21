@@ -227,6 +227,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 DataRow row = dt.Rows[0];
 
                 string ExamTypeId = row["ExamTypeId"].ToString().Trim();
+               
                 hnd_extype.Value = ExamTypeId;
                 //if (ExamTypeId == "3")
                 //{
