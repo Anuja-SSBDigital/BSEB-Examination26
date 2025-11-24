@@ -222,6 +222,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             dt.Columns.Add("StudentName", typeof(string));
             dt.Columns.Add("FatherName", typeof(string));
             dt.Columns.Add("MotherName", typeof(string));
+            dt.Columns.Add("CollegeCode", typeof(string));
             //dt.Columns.Add("DOB", typeof(string));
             dt.Columns.Add("Gender", typeof(string));
             dt.Columns.Add("MaritalStatus", typeof(string));
@@ -315,6 +316,14 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             dt.Columns.Add("VocationalSubjectTime", typeof(string));
             dt.Columns.Add("HasVocationalSubjects", typeof(bool));
 
+            dt.Columns.Add("CompulsorySubject1PaperType", typeof(string));
+            dt.Columns.Add("CompulsorySubject2PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject1PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject2PaperType", typeof(string));
+            dt.Columns.Add("ElectiveSubject3PaperType", typeof(string));
+            dt.Columns.Add("AdditionalSubjectPaperType", typeof(string));
+            dt.Columns.Add("VocationalSubjectPaperType", typeof(string));
+
             return dt;
         }
         catch (Exception ex)
@@ -339,6 +348,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 string subjectGroup = r["SubjectGroup"] != DBNull.Value ? r["SubjectGroup"].ToString() : "";
                 string subjectName = r["SubjectName"] != DBNull.Value ? r["SubjectName"].ToString() : "";
                 int subjectCode = r["SubjectPaperCode"] != DBNull.Value ? Convert.ToInt32(r["SubjectPaperCode"]) : -1;
+                string paperType = r["PaperType"] != DBNull.Value ? r["PaperType"].ToString() : "";
 
                 if (string.IsNullOrEmpty(subjectGroup) && string.IsNullOrEmpty(subjectName) && subjectCode == -1)
                     continue;
@@ -350,6 +360,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                     if (r["ExamDate"] != DBNull.Value) targetRow["CompulsorySubject1Date"] = Convert.ToDateTime(r["ExamDate"]).ToString("dd-MM-yyyy");
                     targetRow["CompulsorySubject1Shift"] = r["ExamShift"];
                     targetRow["CompulsorySubject1Time"] = r["ExamTime"];
+                    targetRow["CompulsorySubject1PaperType"] = paperType;
                 }
                 else if (subjectGroup.StartsWith("Compulsory subject group-2"))
                 {
@@ -358,6 +369,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                     if(r["ExamDate"] != DBNull.Value) targetRow["CompulsorySubject2Date"] = Convert.ToDateTime(r["ExamDate"]).ToString("dd-MM-yyyy");
                     targetRow["CompulsorySubject2Shift"] = r["ExamShift"];
                     targetRow["CompulsorySubject2Time"] = r["ExamTime"];
+                    targetRow["CompulsorySubject2PaperType"] = paperType;
                 }
                 else if (subjectGroup.Contains("Compulsory") && !subjectGroup.StartsWith("Compulsory subject group-"))
                 {
@@ -366,6 +378,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                     if (r["ExamDate"] != DBNull.Value) targetRow["CompulsorySubject3Date"] = Convert.ToDateTime(r["ExamDate"]).ToString("dd-MM-yyyy");
                     targetRow["CompulsorySubject3Shift"] = r["ExamShift"];
                     targetRow["CompulsorySubject3Time"] = r["ExamTime"];
+                    targetRow["CompulsorySubject3PaperType"] = paperType;
                 }
                 else if (subjectGroup.Contains("Vocational"))
                 {
@@ -393,9 +406,11 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 DataRow sub = electiveSubjects[i];
                 int code = sub["SubjectPaperCode"] != DBNull.Value ? Convert.ToInt32(sub["SubjectPaperCode"]) : -1;
                 string name = sub["SubjectName"] != DBNull.Value ? sub["SubjectName"].ToString() : "";
+                string paperType = sub["PaperType"] != DBNull.Value ? sub["PaperType"].ToString() : "";
 
                 targetRow["ElectiveSubject" + (i + 1) + "Code"] = code != -1 ? code.ToString() : "";
                 targetRow["ElectiveSubject" + (i + 1) + "Name"] = name;
+                targetRow["ElectiveSubject" + (i + 1) + "PaperType"] = paperType;
                 if (sub["ExamDate"] != DBNull.Value)
                 {
                     DateTime examDate = Convert.ToDateTime(sub["ExamDate"]);
@@ -420,6 +435,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 if (sub["ExamDate"] != DBNull.Value) targetRow["AdditionalSubjectDate"] = Convert.ToDateTime(sub["ExamDate"]).ToString("dd-MM-yyyy");
                 targetRow["AdditionalSubjectShift"] = sub["ExamShift"];
                 targetRow["AdditionalSubjectTime"] = sub["ExamTime"];
+                targetRow["AdditionalSubjectPaperType"] = sub["PaperType"].ToString();
             }
 
             if (vocationalSubjects.Count > 0)
@@ -435,6 +451,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 if (sub["ExamDate"] != DBNull.Value) targetRow["VocationalSubjectDate"] = Convert.ToDateTime(sub["ExamDate"]).ToString("dd-MM-yyyy");
                 targetRow["VocationalSubjectShift"] = sub["ExamShift"];
                 targetRow["VocationalSubjectTime"] = sub["ExamTime"];
+                targetRow["VocationalSubjectPaperType"] = sub["PaperType"].ToString();
             }
 
             int isExists = dl.CheckVocationalCollegeSubjectExists(Convert.ToInt32(collegeId), facultyId);
