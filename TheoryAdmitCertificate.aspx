@@ -248,7 +248,8 @@
                                     </tr>
                                     <tr>
                                         <td><strong>रौल कोड:</strong></td>
-                                        <td><%# Eval("RollCode") %></td>
+                                         <td><%# Eval("CollegeCode") %></td>
+                                        <%--<td><%# Eval("RollCode") %></td>--%>
                                         <td><strong>रौल क्रमांक:</strong></td>
                                         <td><%# Eval("RollNumber") %></td>
                                         <td><strong>लिंग:</strong></td>
@@ -316,7 +317,7 @@
                                 <%# Eval("CompulsorySubject1Code") %>
                             </td>
                             <td>
-                                <%# Eval("CompulsorySubject1Name") %></td>
+                                <%# Eval("CompulsorySubject1Name") %>  <%# Eval("CompulsorySubject1PaperType") %></td>
                             <td><%# Eval("CompulsorySubject1Date") %></td>
                             <td><%# Eval("CompulsorySubject1Shift") %></td>
                             <td><%# Eval("CompulsorySubject1Time") %></td>
@@ -327,7 +328,7 @@
                             <td>
                                 <%# Eval("CompulsorySubject2Code") %></td>
                             <td>
-                                <%# Eval("CompulsorySubject2Name") %></td>
+                                <%# Eval("CompulsorySubject2Name") %>    <%# Eval("CompulsorySubject2PaperType") %></td>
                             <td><%# Eval("CompulsorySubject2Date") %></td>
                             <td><%# Eval("CompulsorySubject2Shift") %></td>
                             <td><%# Eval("CompulsorySubject2Time") %></td>
@@ -341,7 +342,7 @@
                             <td>
                                 <%# Eval("ElectiveSubject1Code") %></td>
                             <td>
-                                <%# Eval("ElectiveSubject1Name") %></td>
+                                <%# Eval("ElectiveSubject1Name") %>  <%# Eval("ElectiveSubject1PaperType") %></td>
                             <td><%# Eval("ElectiveSubject1Date") %></td>
                             <td><%# Eval("ElectiveSubject1Shift") %></td>
                             <td><%# Eval("ElectiveSubject1Time") %></td>
@@ -352,7 +353,7 @@
                             <td>
                                 <%# Eval("ElectiveSubject2Code") %></td>
                             <td>
-                                <%# Eval("ElectiveSubject2Name") %></td>
+                                <%# Eval("ElectiveSubject2Name") %>  <%# Eval("ElectiveSubject2PaperType") %></td>
                             <td><%# Eval("ElectiveSubject2Date") %></td>
                             <td><%# Eval("ElectiveSubject2Shift") %></td>
                             <td><%# Eval("ElectiveSubject2Time") %></td>
@@ -361,7 +362,7 @@
                         <tr>
                             <td>ऐच्छिक विषय-3</td>
                             <td><%# Eval("ElectiveSubject3Code") %></td>
-                            <td><%# Eval("ElectiveSubject3Name") %></td>
+                            <td><%# Eval("ElectiveSubject3Name") %>  <%# Eval("ElectiveSubject3PaperType") %></td>
                             <td><%# Eval("ElectiveSubject3Date") %></td>
                             <td><%# Eval("ElectiveSubject3Shift") %></td>
                             <td><%# Eval("ElectiveSubject3Time") %></td>
@@ -371,7 +372,7 @@
                             <td colspan="2">अतिरिक्त विषय (Additional Subject)</td>
                             <%--<td></td>--%>
                             <td><%# Eval("AdditionalSubjectCode") %></td>
-                            <td><%# Eval("AdditionalSubjectName") %></td>
+                            <td><%# Eval("AdditionalSubjectName") %> <%# Eval("AdditionalSubjectPaperType") %></td>
                             <td><%# Eval("AdditionalSubjectDate") %></td>
                             <td><%# Eval("AdditionalSubjectShift") %></td>
                             <td><%# Eval("AdditionalSubjectTime") %></td>
@@ -382,7 +383,7 @@
                                     (Vocational Trade)</td>
                                 <%--<td></td>--%>
                                 <td><%# Eval("VocationalSubjectCode") %></td>
-                                <td><%# Eval("VocationalSubjectName") %></td>
+                                <td><%# Eval("VocationalSubjectName") %>   <%# Eval("VocationalSubjectPaperType") %></td>
                                 <td><%# Eval("VocationalSubjectDate") %></td>
                                 <td><%# Eval("VocationalSubjectShift") %></td>
                                 <td><%# Eval("VocationalSubjectTime") %></td>
