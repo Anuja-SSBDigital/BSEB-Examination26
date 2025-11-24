@@ -1087,7 +1087,8 @@ function (response) {
             var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
                 "&FacultyId=" + encodeURIComponent(facultyId) +
                 "&ExamTypeId=" + encodeURIComponent(examTypeId) +
-                "&collegeCode=" + encodeURIComponent(collegeCode);
+                "&collegeCode=" + encodeURIComponent(collegeCode) +
+                "&ExamCorrectionForm=ExamCorrectionForm";
             window.location.href = url;
         });
                               } else {
