@@ -312,7 +312,64 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
 
  <script type="text/javascript">
+   
+
+     //function syncVocElectiveSelection(clickedCheckbox) {
+     //    // Force Code 402 to stay checked
+     //    if (clickedCheckbox.value === "402" && !clickedCheckbox.checked) {
+     //        clickedCheckbox.checked = true;
+     //        clickedCheckbox.setAttribute('checked', 'checked');
+     //        return;
+     //    }
+
+     //    const subjectName = clickedCheckbox.dataset.name.trim().toLowerCase();
+     //    if (!subjectName) return;
+
+     //    const isChecked = clickedCheckbox.checked;
+     //    clickedCheckbox.setAttribute('checked', isChecked ? 'checked' : '');
+     //    document.querySelectorAll('input[type="checkbox"][data-name="' + subjectName + '"]').forEach(cb => {
+     //        if (cb !== clickedCheckbox) {
+     //            cb.checked = isChecked;
+     //            cb.setAttribute('checked', isChecked ? 'checked' : '');
+     //        }
+     //    });
+        
+     //}
      function syncVocElectiveSelection(clickedCheckbox) {
+         debugger
+
+         const ExamTypeId = parseInt(document.getElementById('<%= hnd_extype.ClientID %>').value);
+         const ExamCorrectionForm = document.getElementById('<%= hnd_ExamCorrectionForm.ClientID %>').value.trim();
+
+         const subjectName = clickedCheckbox.dataset.name.trim().toLowerCase();
+
+         // ⭐ CASE 1: FULL LOCK
+         // ExamTypeId = 3 AND ExamCorrectionForm = "ExamCorrectionForm"
+         if (ExamTypeId === 3 && ExamCorrectionForm === "ExamCorrectionForm") {
+             clickedCheckbox.checked = clickedCheckbox.defaultChecked; // revert to original
+             return false;  // stop — lock all Voc elective checkboxes
+         }
+
+         // ⭐ CASE 2: Normal Selection Sync ONLY IF:
+         // ExamTypeId = 3 AND ExamCorrectionForm != "ExamCorrectionForm"
+         if (ExamTypeId === 3 && ExamCorrectionForm !== "ExamCorrectionForm") {
+
+             const isChecked = clickedCheckbox.checked;
+             clickedCheckbox.setAttribute('checked', isChecked ? 'checked' : '');
+
+             // Sync other checkboxes of same subject
+             document.querySelectorAll('input[type="checkbox"][data-name="' + subjectName + '"]').forEach(cb => {
+                 if (cb !== clickedCheckbox) {
+                     cb.checked = isChecked;
+                     cb.setAttribute('checked', isChecked ? 'checked' : '');
+                 }
+             });
+
+             return; // stop here, don’t go further
+         }
+
+         // ⭐ CASE 3: OTHER EXAM TYPES → Original logic
+
          // Force Code 402 to stay checked
          if (clickedCheckbox.value === "402" && !clickedCheckbox.checked) {
              clickedCheckbox.checked = true;
@@ -320,11 +377,9 @@
              return;
          }
 
-         const subjectName = clickedCheckbox.dataset.name.trim().toLowerCase();
-         if (!subjectName) return;
-
          const isChecked = clickedCheckbox.checked;
          clickedCheckbox.setAttribute('checked', isChecked ? 'checked' : '');
+
          document.querySelectorAll('input[type="checkbox"][data-name="' + subjectName + '"]').forEach(cb => {
              if (cb !== clickedCheckbox) {
                  cb.checked = isChecked;
@@ -527,6 +582,8 @@
                  '.compGroup1 input[type="checkbox"], ' +
                  '.compGroup2 input[type="checkbox"], ' +
                  'input.electiveSubject, ' +
+                 //'input.electiveVoc1, ' +
+                 //'input.electiveVoc2, ' +
                  '.additionalSubject input[type="checkbox"], ' +
                  '.VocationalSubjects input[type="checkbox"]'
              );
@@ -821,20 +878,11 @@
             '.compGroup1 input[type="checkbox"], ' +
             '.compGroup2 input[type="checkbox"], ' +
             'input.electiveSubject, ' +
-            //'input.electiveVoc1, ' +
-            //'input.electiveVoc2, ' +
+            'input.electiveVoc1, ' +
+            'input.electiveVoc2, ' +
             '.additionalSubject input[type="checkbox"], ' +
             '.VocationalSubjects input[type="checkbox"]'
         );
-  
-        //if (FacultyId === 4 && isLocked) {
-        //    allCheckboxes.forEach(cb => {
-        //        cb.disabled = true;      // prevent selection
-        //        cb.style.pointerEvents = 'none'; // extra safety
-        //        cb.style.opacity = '0.6'; // visual effect
-        //    });
-        //    return; // no click listeners needed
-        //}
         allCheckboxes.forEach(cb => {
             cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
         });
@@ -849,6 +897,10 @@
                 if (ExamTypeId === 1 && ExamCorrectionForm == "ExamCorrectionForm") {
                     return;  // allow free checking
                 }
+                if (ExamTypeId === 3 && isLocked) {
+                    e.preventDefault();
+                    return false;
+                }
                 //if (FacultyId === 4) {
                 //    e.preventDefault();
                 //    return false;
@@ -857,10 +909,7 @@
                     e.preventDefault();
                     return false;
                 }
-                if (ExamTypeId === 3 && isLocked) {
-                    e.preventDefault();
-                    return false;
-                }
+               
             });
         });
     });
