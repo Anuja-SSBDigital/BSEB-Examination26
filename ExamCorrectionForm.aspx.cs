@@ -27,7 +27,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                     hfStudentIdEncrypted.Value = CryptoHelper.Encrypt(StudentId);
                     //string registrationType = Request.QueryString["registrationType"];
                     string examTypeId = Request.QueryString["examTypeId"];
-                   
+
                     if (!string.IsNullOrEmpty(StudentId))
                     {
                         // string decodedStudentId = Server.UrlDecode(encodedStudentId);
@@ -290,7 +290,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 txtIFSCCode.Text = row["IFSCCode"].ToString();
                 txtIdentification1.Text = row["IdentificationMark1"].ToString();
                 txtIdentification2.Text = row["IdentificationMark2"].ToString();
-                if (row["AadharCardNo"].ToString() == "")
+                if (row["AadharNumber"].ToString() == "")
                 {
                     aadharNo.Checked = true;
                 }
