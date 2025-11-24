@@ -312,8 +312,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
 
  <script type="text/javascript">
-   
-
      function syncVocElectiveSelection(clickedCheckbox) {
          // Force Code 402 to stay checked
          if (clickedCheckbox.value === "402" && !clickedCheckbox.checked) {
@@ -333,7 +331,6 @@
                  cb.setAttribute('checked', isChecked ? 'checked' : '');
              }
          });
-        
      }
 
      function getElectiveSubjectValues() {
@@ -530,8 +527,6 @@
                  '.compGroup1 input[type="checkbox"], ' +
                  '.compGroup2 input[type="checkbox"], ' +
                  'input.electiveSubject, ' +
-                 //'input.electiveVoc1, ' +
-                 //'input.electiveVoc2, ' +
                  '.additionalSubject input[type="checkbox"], ' +
                  '.VocationalSubjects input[type="checkbox"]'
              );
@@ -826,11 +821,20 @@
             '.compGroup1 input[type="checkbox"], ' +
             '.compGroup2 input[type="checkbox"], ' +
             'input.electiveSubject, ' +
-            'input.electiveVoc1, ' +
-            'input.electiveVoc2, ' +
+            //'input.electiveVoc1, ' +
+            //'input.electiveVoc2, ' +
             '.additionalSubject input[type="checkbox"], ' +
             '.VocationalSubjects input[type="checkbox"]'
         );
+  
+        //if (FacultyId === 4 && isLocked) {
+        //    allCheckboxes.forEach(cb => {
+        //        cb.disabled = true;      // prevent selection
+        //        cb.style.pointerEvents = 'none'; // extra safety
+        //        cb.style.opacity = '0.6'; // visual effect
+        //    });
+        //    return; // no click listeners needed
+        //}
         allCheckboxes.forEach(cb => {
             cb.dataset.initialChecked = cb.checked ? 'true' : 'false';
         });
@@ -845,10 +849,6 @@
                 if (ExamTypeId === 1 && ExamCorrectionForm == "ExamCorrectionForm") {
                     return;  // allow free checking
                 }
-                if (ExamTypeId === 3 && isLocked) {
-                    e.preventDefault();
-                    return false;
-                }
                 //if (FacultyId === 4) {
                 //    e.preventDefault();
                 //    return false;
@@ -857,7 +857,10 @@
                     e.preventDefault();
                     return false;
                 }
-               
+                if (ExamTypeId === 3 && isLocked) {
+                    e.preventDefault();
+                    return false;
+                }
             });
         });
     });

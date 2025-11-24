@@ -641,7 +641,7 @@
              }
 
              // ✅ Matric Roll Code
-             var rollCodeField = document.getElementById('<%= txtboardRollCode.ClientID %>');
+             <%--var rollCodeField = document.getElementById('<%= txtboardRollCode.ClientID %>');
              var rollCodeErr = document.getElementById('txtboardRollCodeErr');
              if (rollCodeField.value.trim() === "") {
                  rollCodeErr.style.display = "inline";
@@ -680,7 +680,7 @@
              } else {
                  passingYearErr.style.display = "none";
                  passingYearField.classList.remove("is-invalid");
-             }
+             }--%>
 
              var ddlGender = document.getElementById('<%= ddlGender.ClientID %>');
              var ddlGenderError = document.getElementById('ddlGenderError');
@@ -919,8 +919,9 @@
                  aadharFileName = fileUpload.files[0].name;
                  aadharFileExtension = fileUpload.files[0].name.split('.').pop().toLowerCase();
              }
-
+             var differentlyAbled = document.getElementById('<%= rdoAbledYes.ClientID %>').checked ? 1 : 0;
              PageMethods.UpdateStudentDetails(
+                    
                  document.getElementById('<%= hfStudentId.ClientID %>').value,
                               document.getElementById('<%= hfFaculty.ClientID %>').value,
                               mobile,
@@ -953,7 +954,8 @@
                  document.getElementById('<%= txtStudentName.ClientID %>').value,
                  document.getElementById('<%= txtmotherName.ClientID %>').value,
                  document.getElementById('<%= txtfatherName.ClientID %>').value,
-                 document.getElementById('<%= hfCollegeId.ClientID %>').value,
+                     document.getElementById('<%= hfCollegeId.ClientID %>').value,
+                     differentlyAbled,
                 
 function (response) {
 
@@ -1057,6 +1059,8 @@ function (response) {
                  ddlMaritalStatus.classList.remove("is-invalid");
              }
 
+             var differentlyAbled = document.getElementById('<%= rdoAbledYes.ClientID %>').checked ? 1 : 0;
+
              PageMethods.UpdateStudent(
                  document.getElementById('<%= hfStudentId.ClientID %>').value,
                           document.getElementById('<%= hfFaculty.ClientID %>').value,
@@ -1066,7 +1070,8 @@ function (response) {
                           document.getElementById('<%= ddlReligion.ClientID %>').value,
                           document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
          document.getElementById('<%= hnd_extype.ClientID %>').value,
-         document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+                 document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+                 differentlyAbled,
 
 function (response) {
     if (response.status === "success") {

@@ -132,13 +132,19 @@
                                         <a href="PayExamFormFee.aspx" class="nav-link">Exam Payment</a>
                                     </li>
                                     <li runat="server" id="li_ExaminationForm">
-                                        <a href="ExamForm.aspx" class="nav-link">Exam Form</a>
+                                        <a href="ExamForm.aspx" class="nav-link">Exam Form/Correction</a>
                                     </li>
                                     <li runat="server" id="liRegisteredList">
                                         <a href="StudentRegisteredList.aspx" class="nav-link">Exam Form Submitted List</a>
                                     </li>
                                     <li runat="server" id="li_paymentsummary">
                                         <a href="PaymentSummary.aspx" class="nav-link">Payment Summary</a>
+                                    </li>
+									<li runat="server" id="li_Downloadadmitcard">
+                                        <a href="Downloadadmitcard.aspx" class="nav-link">Download Dummy Admit Card</a>
+                                    </li>
+									<li runat="server" id="li_CORRECTIONDUMMYREPORT" Visible="false">
+                                        <a href="DummyCorrectionDetails.aspx" class="nav-link">Exam Report</a>
                                     </li>
                                     <li runat="server" id="li_collegemster" visible="false">
                                         <a href="CollegeMaster.aspx" class="nav-link">College Master</a>
@@ -149,9 +155,13 @@
                                                                         <li runat="server" id="li_scheduler" visible="false">
     <a href="Paymentupdate.aspx" class="nav-link">Payment Scheduler</a>
 </li>
+                                     <li runat="server" id="liExmchallanrecall" visible="false">
+     <a href="ChallanRecall.aspx" class="nav-link">Challan Recall</a>
+ </li>
                                     <%-- <li runat="server" id="li_Downloadadmitcard">
                                         <a href="Downloadadmitcard.aspx" class="nav-link">Download Admit Card</a>
                                     </li>
+									
                                     <li runat="server" id="li_DownloadPracticaladmitcard">
                                         <a href="DownloadPracticaladmitcard.aspx" class="nav-link">Download Practical Admit Card</a>
                                     </li>
@@ -220,7 +230,7 @@
                                 </a>
                             </li>
 
-                            <li class="dropdown" runat="server" id="li_ExaminationForm">
+                            <li class="dropdown" runat="server" Visible="false" id="li_ExaminationForm">
                                 <a href="ExamForm.aspx" class="nav-link">
                                     <i class="fas fa-pen"></i><span>Exam Form</span>
                                 </a>

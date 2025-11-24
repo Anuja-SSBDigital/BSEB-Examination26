@@ -290,6 +290,15 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 txtIFSCCode.Text = row["IFSCCode"].ToString();
                 txtIdentification1.Text = row["IdentificationMark1"].ToString();
                 txtIdentification2.Text = row["IdentificationMark2"].ToString();
+                if (row["AadharCardNo"].ToString() == "")
+                {
+                    aadharNo.Checked = true;
+                }
+                else
+                {
+                    aadharYes.Checked = true;
+
+                }
                 //txtparentno.Text = row["ParentGuardianMobileNo"].ToString();
                 //txtApaarId.Text = row["ApaarId"].ToString();
 
@@ -365,7 +374,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
     }
     [System.Web.Services.WebMethod]
-    public static object UpdateStudent( string studentId, string facultyId, string Gender,string CasteCategory,string Nationality,string Religion, string maritalStatus, string examTypeId,string collegeCode)
+    public static object UpdateStudent( string studentId, string facultyId, string Gender,string CasteCategory,string Nationality,string Religion, string maritalStatus, string examTypeId,string collegeCode, int differentlyAbled)
     {
         try
         {
@@ -373,7 +382,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
             // Call the update method in DB or other logic as required
             DBHelper dl = new DBHelper();
-            int result = dl.UpdateImpQueComExaminationForm(Convert.ToInt32(studentId), maritalStatus, Gender, CasteCategory, Nationality, Religion);
+            int result = dl.UpdateImpQueComExaminationForm(Convert.ToInt32(studentId), maritalStatus, Gender, CasteCategory, Nationality, Religion, differentlyAbled);
                 //"","","","");
             //int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2, medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
 
@@ -430,7 +439,8 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
      string StudentName,
     string MotherName,
     string FatherName,
-    string hdnCollegeId)
+    string hdnCollegeId,
+    int differentlyAbled)
     {
         try
         {
@@ -458,7 +468,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
             //string result1 = dl.AddOrUpdateCorrectionHistory(Convert.ToInt32(studentId),Convert.ToInt32(hdnCollegeId),StudentName.Trim(),FatherName.Trim(),MotherName.Trim(),collegeCode);
 
             string correctionResult = dl.AddOrUpdateCorrectionHistory(Convert.ToInt32(studentId), Convert.ToInt32(hdnCollegeId),StudentName.Trim(), FatherName.Trim(), MotherName.Trim(), collegeCode, mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2,
-                medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
+                medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB, differentlyAbled);
 
             // Check for error in the correction history result
             if (correctionResult.IndexOf("successfully", StringComparison.OrdinalIgnoreCase) == -1)

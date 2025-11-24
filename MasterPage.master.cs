@@ -23,12 +23,14 @@ public partial class MasterPage : System.Web.UI.MasterPage
                 //// Hide college menus for Admin
 
 
-                li_ExaminationForm.Visible = true;
+                //li_ExaminationForm.Visible = true;
                 li_ExamDwnld.Visible = true;
                 li_PayExamFormFee.Visible = true;
                 li_collegemster.Visible = true;
                 li_studentsatus.Visible = true;
                 li_scheduler.Visible = true;
+                liExmchallanrecall.Visible = true;
+				li_CORRECTIONDUMMYREPORT.Visible=true;
                 //liExmchallanrecall.Visible = true;
                 //li_Downloadadmitcard.Visible = true;
                 //li_DownloadPracticaladmitcard.Visible = true;
@@ -40,7 +42,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
             {
                 // College menus
 
-                li_ExaminationForm.Visible = true;
+               // li_ExaminationForm.Visible = true;
                 li_ExamDwnld.Visible = true;
                 li_PayExamFormFee.Visible = true;
                 //liExmchallanrecall.Visible = true;

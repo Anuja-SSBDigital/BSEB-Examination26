@@ -141,12 +141,12 @@
                                 <th>Student Name</th>
                                 <th>Father Name</th>
                                 <th>Mother Name</th>
-                                <th>TransactionId</th>
-                                <%--<th>Correaction</th>--%>
-                                <th>Edit</th>
+                                <th>Remarks</th>
+                                <th>Correction</th>
+                               <%-- <th>Edit</th>--%>
                                 <th>View</th>
                                 <th>Status</th>
-                                <th>Remarks</th>
+                               
                             </tr>
                         </thead>
 
@@ -160,24 +160,24 @@
                                         <td><%# Eval("StudentName") %></td>
                                         <td><%# Eval("FatherName") %></td>
                                         <td><%# Eval("MotherName") %></td>
-                                        <td><%# Eval("TransactionId") %></td>
-                                        <%--<td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correaction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>--%>
+                                         <td>
+                                            <asp:Label ID="lblRemarks" runat="server" Text='<%# Eval("CorrectionRemarks") %>'></asp:Label>
+                                        </td>
+                                        <td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>
                                          <asp:HiddenField ID="hfExamFeeSubmit" runat="server" Value='<%# Eval("IsExamFeeSubmit") %>' />
  <asp:HiddenField ID="hfExamFormSubmit" runat="server" Value='<%# Eval("IsExamFormSubmit") %>' />
  <asp:HiddenField ID="hfExamTypeid" runat="server" Value='<%# Eval("ExamTypeid") %>' />
-                                        <td>
-                                           
-                                            <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-sm btn-info" Text="Edit" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnEdit_Click" />
-                                        </td>
+                                          <%--  <td>
+       
+        <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-sm btn-info" Text="Edit" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnEdit_Click" />
+    </td>--%>
                                         <td>
                                             <asp:Button ID="btnView" runat="server" CssClass="btn btn-sm btn-primary" Text="View" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnView_Click" />
                                         </td>
                                         <td>
                                             <asp:Label ID="lblStatus" runat="server" CssClass="badge"></asp:Label>
                                         </td>
-                                        <td>
-                                            <asp:Label ID="lblRemarks" runat="server" Text='<%# Eval("CorrectionRemarks") %>'></asp:Label>
-                                        </td>
+                                       
                                     </tr>
                                 </ItemTemplate>
                             </asp:Repeater>
