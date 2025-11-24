@@ -513,8 +513,7 @@
          const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
 
          // if (examType == 1)
-         if (examType == 1 || examType == 5)
-         {
+         if (examType == 1 || examType == 5) {
              var studentNameField = document.getElementById('<%= txtStudentName.ClientID %>');
              var studentNameErr = document.getElementById('txtStudentNameErr');
              if (studentNameField.value.trim() === "") {
@@ -541,20 +540,20 @@
 
              // Father Name
              var fatherNameField = document.getElementById('<%= txtfatherName.ClientID %>');
-                var fatherNameErr = document.getElementById('txtfatherNameErr');
-                if (fatherNameField.value.trim() === "") {
-                    fatherNameErr.style.display = "inline";
-                    fatherNameField.classList.add("is-invalid");
-                    fatherNameField.focus();
-                    return false;
-                }
-                else {
-                        fatherNameErr.style.display = "none";
-                      fatherNameField.classList.remove("is-invalid");
-                 }
+             var fatherNameErr = document.getElementById('txtfatherNameErr');
+             if (fatherNameField.value.trim() === "") {
+                 fatherNameErr.style.display = "inline";
+                 fatherNameField.classList.add("is-invalid");
+                 fatherNameField.focus();
+                 return false;
+             }
+             else {
+                 fatherNameErr.style.display = "none";
+                 fatherNameField.classList.remove("is-invalid");
+             }
 
-    // Mother Name
-          
+             // Mother Name
+
              var dobField = document.getElementById('<%= txtDOB.ClientID %>');
              var dob = dobField.value.trim();
              var txtDOBErrSpan = document.getElementById('txtDOBErr');
@@ -598,21 +597,21 @@
              }--%>
 
              var DistrictField = document.getElementById('<%= txtdistrict.ClientID %>');
-                var district = DistrictField.value.trim();
-                var txtdistrictErrSpan = document.getElementById('txtdistrictErr');
+             var district = DistrictField.value.trim();
+             var txtdistrictErrSpan = document.getElementById('txtdistrictErr');
 
-                if (district === "") {
-                    txtdistrictErrSpan.style.display = "inline";
-                    txtdistrictErrSpan.textContent = "Please enter District.";
-                    DistrictField.classList.add("is-invalid");
-                    DistrictField.focus();
-                    return false;
-                } else {
-                    txtdistrictErrSpan.style.display = "none";
-                    DistrictField.classList.remove("is-invalid");
-                }
+             if (district === "") {
+                 txtdistrictErrSpan.style.display = "inline";
+                 txtdistrictErrSpan.textContent = "Please enter District.";
+                 DistrictField.classList.add("is-invalid");
+                 DistrictField.focus();
+                 return false;
+             } else {
+                 txtdistrictErrSpan.style.display = "none";
+                 DistrictField.classList.remove("is-invalid");
+             }
 
-// Division validation
+             // Division validation
              var DivisionField = document.getElementById('<%= txtsubDivision.ClientID %>');
              var division = DivisionField.value.trim();
              var txtsubDivisionErrSpan = document.getElementById('txtsubDivisionErr');
@@ -629,7 +628,7 @@
              }
              // ✅ Matric Board Name
              var ddlMatrixBoard = document.getElementById('<%= ddlMatrixBoard.ClientID %>');
-             var ddlMatrixBoardErr = document.getElementById('ddlMatrixBoardErr');
+             <%--   var ddlMatrixBoardErr = document.getElementById('ddlMatrixBoardErr');
              if (ddlMatrixBoard.value === "" || ddlMatrixBoard.value === "0") {
                  ddlMatrixBoardErr.style.display = "inline";
                  ddlMatrixBoard.classList.add("is-invalid");
@@ -638,11 +637,11 @@
              } else {
                  ddlMatrixBoardErr.style.display = "none";
                  ddlMatrixBoard.classList.remove("is-invalid");
-             }
+             }--%>
 
              // ✅ Matric Roll Code
-             <%--var rollCodeField = document.getElementById('<%= txtboardRollCode.ClientID %>');
-             var rollCodeErr = document.getElementById('txtboardRollCodeErr');
+             var rollCodeField = document.getElementById('<%= txtboardRollCode.ClientID %>');
+              <%-- var rollCodeErr = document.getElementById('txtboardRollCodeErr');
              if (rollCodeField.value.trim() === "") {
                  rollCodeErr.style.display = "inline";
                  rollCodeErr.textContent = "Please enter Roll Code.";
@@ -652,25 +651,25 @@
              } else {
                  rollCodeErr.style.display = "none";
                  rollCodeField.classList.remove("is-invalid");
-             }
+             }--%>
 
              // ✅ Roll Number
              var rollNumberField = document.getElementById('<%= txtrollNumber.ClientID %>');
-             var rollNumberErr = document.getElementById('txtrollNumberErr');
-             if (rollNumberField.value.trim() === "") {
-                 rollNumberErr.style.display = "inline";
-                 rollNumberErr.textContent = "Please enter Roll Number.";
-                 rollNumberField.classList.add("is-invalid");
-                 rollNumberField.focus();
-                 return false;
-             } else {
-                 rollNumberErr.style.display = "none";
-                 rollNumberField.classList.remove("is-invalid");
-             }
+             <%-- var rollNumberErr = document.getElementById('txtrollNumberErr');
+             //if (rollNumberField.value.trim() === "") {
+             //    rollNumberErr.style.display = "inline";
+             //    rollNumberErr.textContent = "Please enter Roll Number.";
+             //    rollNumberField.classList.add("is-invalid");
+             //    rollNumberField.focus();
+             //    return false;
+             //} else {
+             //    rollNumberErr.style.display = "none";
+             //    rollNumberField.classList.remove("is-invalid");
+             //}--%>
 
              // ✅ Passing Year
              var passingYearField = document.getElementById('<%= txtpassingYear.ClientID %>');
-             var passingYearErr = document.getElementById('txtpassingYearErr');
+              <%-- var passingYearErr = document.getElementById('txtpassingYearErr');
              if (passingYearField.value.trim() === "") {
                  passingYearErr.style.display = "inline";
                  passingYearErr.textContent = "Please enter Passing Year.";
@@ -696,18 +695,18 @@
 
              // ✅ Caste Category
              var ddlCasteCategory = document.getElementById('<%= ddlCasteCategory.ClientID %>');
-   var ddlCasteCategoryError = document.getElementById('ddlCasteCategoryError');
-   if (ddlCasteCategory.value === "" || ddlCasteCategory.value === "0") {
-       ddlCasteCategoryError.style.display = "inline";
-       ddlCasteCategory.classList.add("is-invalid");
-       ddlCasteCategory.focus();
-       return false;
-   } else {
-       ddlCasteCategoryError.style.display = "none";
-       ddlCasteCategory.classList.remove("is-invalid");
-   }
+             var ddlCasteCategoryError = document.getElementById('ddlCasteCategoryError');
+             if (ddlCasteCategory.value === "" || ddlCasteCategory.value === "0") {
+                 ddlCasteCategoryError.style.display = "inline";
+                 ddlCasteCategory.classList.add("is-invalid");
+                 ddlCasteCategory.focus();
+                 return false;
+             } else {
+                 ddlCasteCategoryError.style.display = "none";
+                 ddlCasteCategory.classList.remove("is-invalid");
+             }
 
-   // ✅ Nationality
+             // ✅ Nationality
              var ddlNationality = document.getElementById('<%= ddlNationality.ClientID %>');
              var NationalityError = document.getElementById('NationalityError');
              if (ddlNationality.value === "" || ddlNationality.value === "0") {
@@ -734,8 +733,8 @@
              }
 
              var mobileField = document.getElementById('<%= txtMobile.ClientID %>');
-             var mobile = mobileField.value.trim();
-             var mobileErrorSpan = document.getElementById('txtMobileError');
+              var mobile = mobileField.value.trim();
+           <%--   var mobileErrorSpan = document.getElementById('txtMobileError');
              var mobilePattern = /^[6-9]\d{9}$/;
 
              if (mobile === "") {
@@ -753,26 +752,26 @@
              } else {
                  mobileErrorSpan.style.display = "none";
                  mobileField.classList.remove("is-invalid");
-             }
+             }--%>
 
              // Address validation
              var addressField = document.getElementById('<%= txtAdress.ClientID %>');
              var address = addressField.value.trim();
-             var addressErrorSpan = document.getElementById('txtAdressError');
+             //var addressErrorSpan = document.getElementById('txtAdressError');
 
-             if (address === "") {
-                 addressErrorSpan.style.display = "inline";
-                 addressErrorSpan.textContent = "Please enter Address.";
-                 addressField.classList.add("is-invalid");
-                 addressField.focus();
-                 return false;
-             } else {
-                 addressErrorSpan.style.display = "none";
-                 addressField.classList.remove("is-invalid");
-             }
-                         // Email validation (as is)
-                         var email = document.getElementById('<%= txtEmail.ClientID %>').value;
-                var emailErrorSpan = document.getElementById('txtEmailError');
+             //if (address === "") {
+             //    addressErrorSpan.style.display = "inline";
+             //    addressErrorSpan.textContent = "Please enter Address.";
+             //    addressField.classList.add("is-invalid");
+             //    addressField.focus();
+             //    return false;
+             //} else {
+             //    addressErrorSpan.style.display = "none";
+             //    addressField.classList.remove("is-invalid");
+             //}
+             // Email validation (as is)
+             var email = document.getElementById('<%= txtEmail.ClientID %>').value;
+                <%--var emailErrorSpan = document.getElementById('txtEmailError');
                 var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
                 if (email === "") {
@@ -788,29 +787,29 @@
             } else {
                 emailErrorSpan.style.display = "none";
                     document.getElementById('<%= txtEmail.ClientID %>').classList.remove("is-invalid");
-             }
+             }--%>
 
              var pincodeField = document.getElementById('<%= txtpincode.ClientID %>');
              var pincode = pincodeField.value.trim();
-             var pincodeErrorSpan = document.getElementById('txtpincodeError'); // Assuming you add this span in your HTML
-             var pincodePattern = /^\d{6}$/;
+             //var pincodeErrorSpan = document.getElementById('txtpincodeError'); // Assuming you add this span in your HTML
+             //var pincodePattern = /^\d{6}$/;
 
-             if (pincode === "") {
-                 pincodeErrorSpan.style.display = "inline";
-                 pincodeErrorSpan.textContent = "Please enter Pin Code.";
-                 pincodeField.classList.add("is-invalid");
-                 pincodeField.focus();
-                 return false;
-             } else if (!pincodePattern.test(pincode)) {
-                 pincodeErrorSpan.style.display = "inline";
-                 pincodeErrorSpan.textContent = "Please enter a valid 6-digit Pin Code.";
-                 pincodeField.classList.add("is-invalid");
-                 pincodeField.focus();
-                 return false;
-             } else {
-                 pincodeErrorSpan.style.display = "none";
-                 pincodeField.classList.remove("is-invalid");
-             }
+             //if (pincode === "") {
+             //    pincodeErrorSpan.style.display = "inline";
+             //    pincodeErrorSpan.textContent = "Please enter Pin Code.";
+             //    pincodeField.classList.add("is-invalid");
+             //    pincodeField.focus();
+             //    return false;
+             //} else if (!pincodePattern.test(pincode)) {
+             //    pincodeErrorSpan.style.display = "inline";
+             //    pincodeErrorSpan.textContent = "Please enter a valid 6-digit Pin Code.";
+             //    pincodeField.classList.add("is-invalid");
+             //    pincodeField.focus();
+             //    return false;
+             //} else {
+             //    pincodeErrorSpan.style.display = "none";
+             //    pincodeField.classList.remove("is-invalid");
+             //}--%>
 
              var ddlMaritalStatus = document.getElementById('<%= ddlMaritalStatus.ClientID %>');
              var maritalErrorSpan = document.getElementById('MaritalError');
@@ -827,7 +826,7 @@
              // Identification validation
              var identification1Field = document.getElementById('<%= txtIdentification1.ClientID %>');
              var identification2Field = document.getElementById('<%= txtIdentification2.ClientID %>');
-             var identificationErrorSpan = document.getElementById('IdentificationError');
+           <%--     var identificationErrorSpan = document.getElementById('IdentificationError');
 
              if (identification1Field.value.trim() === "" && identification2Field.value.trim() === "") {
                  identificationErrorSpan.style.display = "inline";
@@ -839,10 +838,10 @@
                  identificationErrorSpan.style.display = "none";
                  identification1Field.classList.remove("is-invalid");
                  identification2Field.classList.remove("is-invalid");
-             }
+             }--%>
              // Medium validation
              var ddlMedium = document.getElementById('<%= ddlMedium.ClientID %>');
-     var mediumErrorSpan = document.getElementById('MediumError');
+     <%--  var mediumErrorSpan = document.getElementById('MediumError');
      if (ddlMedium.value === "" || ddlMedium.value === "0") {
          mediumErrorSpan.style.display = "inline";
          ddlMedium.classList.add("is-invalid");
@@ -851,13 +850,13 @@
      } else {
          mediumErrorSpan.style.display = "none";
          ddlMedium.classList.remove("is-invalid");
-     }
-    // Aadhar validation (as is)
-    const aadharYes = document.getElementById('<%= aadharYes.ClientID %>');
-    const aadharNo = document.getElementById('<%= aadharNo.ClientID %>');
-    const AadharNumber = document.getElementById('<%= txtAadharNumber.ClientID %>');
-    const txtAadharNumberError = document.getElementById('txtAadharNumberError');
-    const txtAadharFileError = document.getElementById('txtAadharFileError');
+     }--%>
+             // Aadhar validation (as is)ID %>');
+             const aadharYes = document.getElementById('<%= aadharYes.ClientID %>');
+             const aadharNo = document.getElementById('<%= aadharNo.ClientID %>');
+             const AadharNumber = document.getElementById('<%= txtAadharNumber.ClientID %>');
+             const txtAadharNumberError = document.getElementById('txtAadharNumberError');
+             const txtAadharFileError = document.getElementById('txtAadharFileError');
              const fileUpload = document.getElementById('<%= fuAadharFile.ClientID %>');
              const aadharPattern = /^\d{12}$/;
 
@@ -921,76 +920,75 @@
              }
              var differentlyAbled = document.getElementById('<%= rdoAbledYes.ClientID %>').checked ? 1 : 0;
              PageMethods.UpdateStudentDetails(
-                    
+
                  document.getElementById('<%= hfStudentId.ClientID %>').value,
-                              document.getElementById('<%= hfFaculty.ClientID %>').value,
-                              mobile,
-                              email,
-                              document.getElementById('<%= txtAdress.ClientID %>').value,
-                              document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
-                              document.getElementById('<%= txtpincode.ClientID %>').value,
-                              document.getElementById('<%= txtBranchName.ClientID %>').value,
-                              document.getElementById('<%= txtIFSCCode.ClientID %>').value,
-                              document.getElementById('<%= txtBankACNo.ClientID %>').value,
-                              document.getElementById('<%= txtIdentification1.ClientID %>').value,
-                              document.getElementById('<%= txtIdentification2.ClientID %>').value,
-                              document.getElementById('<%= ddlMedium.ClientID %>').value,
-                              document.getElementById('<%= hnd_extype.ClientID %>').value,
-                              document.getElementById('<%= txtcollegeCode.ClientID %>').value,
-                              aadharValue,
-                              aadharFileName,
-                              aadharFileExtension,
-                              document.getElementById('<%= txtdistrict.ClientID %>').value,
-                              document.getElementById('<%= txtsubDivision.ClientID %>').value,
-                              document.getElementById('<%= ddlMatrixBoard.ClientID %>').value,       
-                document.getElementById('<%= txtboardRollCode.ClientID %>').value,     
-                document.getElementById('<%= txtrollNumber.ClientID %>').value,         
-                document.getElementById('<%= txtpassingYear.ClientID %>').value,        
-                document.getElementById('<%= ddlGender.ClientID %>').value,             
-                document.getElementById('<%= ddlCasteCategory.ClientID %>').value,      
-                document.getElementById('<%= ddlNationality.ClientID %>').value,        
-                document.getElementById('<%= ddlReligion.ClientID %>').value,           
-                 document.getElementById('<%= txtDOB.ClientID %>').value,   
+                 document.getElementById('<%= hfFaculty.ClientID %>').value,
+                 mobile,
+                 email,
+                 document.getElementById('<%= txtAdress.ClientID %>').value,
+                 document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
+                 document.getElementById('<%= txtpincode.ClientID %>').value,
+                 document.getElementById('<%= txtBranchName.ClientID %>').value,
+                 document.getElementById('<%= txtIFSCCode.ClientID %>').value,
+                 document.getElementById('<%= txtBankACNo.ClientID %>').value,
+                 document.getElementById('<%= txtIdentification1.ClientID %>').value,
+                 document.getElementById('<%= txtIdentification2.ClientID %>').value,
+                 document.getElementById('<%= ddlMedium.ClientID %>').value,
+                 document.getElementById('<%= hnd_extype.ClientID %>').value,
+                 document.getElementById('<%= txtcollegeCode.ClientID %>').value,
+                 aadharValue,
+                 aadharFileName,
+                 aadharFileExtension,
+                 document.getElementById('<%= txtdistrict.ClientID %>').value,
+                 document.getElementById('<%= txtsubDivision.ClientID %>').value,
+                 document.getElementById('<%= ddlMatrixBoard.ClientID %>').value,
+                 document.getElementById('<%= txtboardRollCode.ClientID %>').value,
+                 document.getElementById('<%= txtrollNumber.ClientID %>').value,
+                 document.getElementById('<%= txtpassingYear.ClientID %>').value,
+                 document.getElementById('<%= ddlGender.ClientID %>').value,
+                 document.getElementById('<%= ddlCasteCategory.ClientID %>').value,
+                 document.getElementById('<%= ddlNationality.ClientID %>').value,
+                 document.getElementById('<%= ddlReligion.ClientID %>').value,
+                 document.getElementById('<%= txtDOB.ClientID %>').value,
                  document.getElementById('<%= txtStudentName.ClientID %>').value,
                  document.getElementById('<%= txtmotherName.ClientID %>').value,
                  document.getElementById('<%= txtfatherName.ClientID %>').value,
-                     document.getElementById('<%= hfCollegeId.ClientID %>').value,
-                     differentlyAbled,
-                
-function (response) {
+                 document.getElementById('<%= hfCollegeId.ClientID %>').value,
+                 differentlyAbled,
 
-        if (response.status === "success") {
-            swal("Success", response.message, "success").then(() => {
+                 function (response) {
+
+                     if (response.status === "success") {
+                         swal("Success", response.message, "success").then(() => {
             <%-- var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;--%>
-                var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
-                var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
-                var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
-                var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
-                var ExamCorrectionForm = "ExamCorrectionForm";
+                             var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
+                             var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
+                             var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+                             var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+                             var ExamCorrectionForm = "ExamCorrectionForm";
 
-                var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
-                    "&FacultyId=" + encodeURIComponent(facultyId) +
-                    "&ExamTypeId=" + encodeURIComponent(examTypeId) +
-                    "&collegeCode=" + encodeURIComponent(collegeCode) + 
-                    "&ExamCorrectionForm=ExamCorrectionForm";
-                window.location.href = url;
-            });
-                                  } else {
-                                      swal("Error", response.message, "error");
-                                  }
-                              },
-                              function (err) {
-                                  swal("Error", "Server error: " + err.get_message(), "error");
-                              }
+                             var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
+                                 "&FacultyId=" + encodeURIComponent(facultyId) +
+                                 "&ExamTypeId=" + encodeURIComponent(examTypeId) +
+                                 "&collegeCode=" + encodeURIComponent(collegeCode) +
+                                 "&ExamCorrectionForm=ExamCorrectionForm";
+                             window.location.href = url;
+                         });
+                     } else {
+                         swal("Error", response.message, "error");
+                     }
+                 },
+                 function (err) {
+                     swal("Error", "Server error: " + err.get_message(), "error");
+                 }
              );
 
-             return false; 
+             return false;
          }
- 
+
          // Pin Code validation
-     
-        else  if (examType ==2 || examType == 3 || examType == 4 || examType == 6)
-         {
+
+         else if (examType == 2 || examType == 3 || examType == 4 || examType == 6) {
              // ✅ Gender
              var ddlGender = document.getElementById('<%= ddlGender.ClientID %>');
              var ddlGenderError = document.getElementById('ddlGenderError');
@@ -1018,35 +1016,35 @@ function (response) {
              }
 
              // ✅ Nationality
-                         var ddlNationality = document.getElementById('<%= ddlNationality.ClientID %>');
-              var NationalityError = document.getElementById('NationalityError');
-              if (ddlNationality.value === "" || ddlNationality.value === "0") {
-                  NationalityError.style.display = "inline";
-                  ddlNationality.classList.add("is-invalid");
-                  ddlNationality.focus();
-                  return false;
-              } else {
-                  NationalityError.style.display = "none";
-                  ddlNationality.classList.remove("is-invalid");
-              }
+             var ddlNationality = document.getElementById('<%= ddlNationality.ClientID %>');
+             var NationalityError = document.getElementById('NationalityError');
+             if (ddlNationality.value === "" || ddlNationality.value === "0") {
+                 NationalityError.style.display = "inline";
+                 ddlNationality.classList.add("is-invalid");
+                 ddlNationality.focus();
+                 return false;
+             } else {
+                 NationalityError.style.display = "none";
+                 ddlNationality.classList.remove("is-invalid");
+             }
 
-              // ✅ Religion
-              var ddlReligion = document.getElementById('<%= ddlReligion.ClientID %>');
-              var ReligionError = document.getElementById('ReligionError');
-              if (ddlReligion.value === "" || ddlReligion.value === "0") {
-                  ReligionError.style.display = "inline";
-                  ddlReligion.classList.add("is-invalid");
-                  ddlReligion.focus();
-                  return false;
-              } else {
-                  ReligionError.style.display = "none";
-                  ddlReligion.classList.remove("is-invalid");
-              }
-              //}
-              // Mobile validation (as is)
+             // ✅ Religion
+             var ddlReligion = document.getElementById('<%= ddlReligion.ClientID %>');
+             var ReligionError = document.getElementById('ReligionError');
+             if (ddlReligion.value === "" || ddlReligion.value === "0") {
+                 ReligionError.style.display = "inline";
+                 ddlReligion.classList.add("is-invalid");
+                 ddlReligion.focus();
+                 return false;
+             } else {
+                 ReligionError.style.display = "none";
+                 ddlReligion.classList.remove("is-invalid");
+             }
+             //}
+             // Mobile validation (as is)
 
 
-  // Marital Status validation
+             // Marital Status validation
              var ddlMaritalStatus = document.getElementById('<%= ddlMaritalStatus.ClientID %>');
              var maritalErrorSpan = document.getElementById('MaritalError');
              if (ddlMaritalStatus.value === "" || ddlMaritalStatus.value === "0") {
@@ -1063,111 +1061,122 @@ function (response) {
 
              PageMethods.UpdateStudent(
                  document.getElementById('<%= hfStudentId.ClientID %>').value,
-                          document.getElementById('<%= hfFaculty.ClientID %>').value,
-                          document.getElementById('<%= ddlGender.ClientID %>').value,
-                          document.getElementById('<%= ddlCasteCategory.ClientID %>').value,
-                          document.getElementById('<%= ddlNationality.ClientID %>').value,
-                          document.getElementById('<%= ddlReligion.ClientID %>').value,
-                          document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
-         document.getElementById('<%= hnd_extype.ClientID %>').value,
+                 document.getElementById('<%= hfFaculty.ClientID %>').value,
+                 document.getElementById('<%= ddlGender.ClientID %>').value,
+                 document.getElementById('<%= ddlCasteCategory.ClientID %>').value,
+                 document.getElementById('<%= ddlNationality.ClientID %>').value,
+                 document.getElementById('<%= ddlReligion.ClientID %>').value,
+                 document.getElementById('<%= ddlMaritalStatus.ClientID %>').value,
+                 document.getElementById('<%= hnd_extype.ClientID %>').value,
                  document.getElementById('<%= txtcollegeCode.ClientID %>').value,
                  differentlyAbled,
 
-function (response) {
-    if (response.status === "success") {
-        debugger
-        swal("Success", response.message, "success").then(() => {
-      
+                 function (response) {
+                     if (response.status === "success") {
+                         debugger
+                         swal("Success", response.message, "success").then(() => {
+
             <%--var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;--%>
-            var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
-            var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
-            var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
-            var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
-            var ExamCorrectionForm = "ExamCorrectionForm";
-            var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
-                "&FacultyId=" + encodeURIComponent(facultyId) +
-                "&ExamTypeId=" + encodeURIComponent(examTypeId) +
-                "&collegeCode=" + encodeURIComponent(collegeCode) +
-                "&ExamCorrectionForm=ExamCorrectionForm";
-            window.location.href = url;
-        });
-                              } else {
-                                  swal("Error", response.message, "error");
-                              }
-                          },
-                          function (err) {
-                              swal("Error", "Server error: " + err.get_message(), "error");
-                          }
+                             var studentIdEncrypted = document.getElementById('<%= hfStudentIdEncrypted.ClientID %>').value;
+                             var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
+                             var examTypeId = document.getElementById('<%= hnd_extype.ClientID %>').value;
+                             var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
+                             var ExamCorrectionForm = "ExamCorrectionForm";
+                             var url = "ExamStudentSubjectgrps.aspx?studentId=" + encodeURIComponent(studentIdEncrypted) +
+                                 "&FacultyId=" + encodeURIComponent(facultyId) +
+                                 "&ExamTypeId=" + encodeURIComponent(examTypeId) +
+                                 "&collegeCode=" + encodeURIComponent(collegeCode) +
+                                 "&ExamCorrectionForm=ExamCorrectionForm";
+                             window.location.href = url;
+                         });
+                     } else {
+                         swal("Error", response.message, "error");
+                     }
+                 },
+                 function (err) {
+                     swal("Error", "Server error: " + err.get_message(), "error");
+                 }
              );
-             return false; 
+             return false;
          }
-      
-   
+
+     }
       
        //  return false; // Prevent default form submission
-    }
+      // Handle Aadhar div visibility on page load
+         window.onload = function () {
+             debugger
+             const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
 
-     // Handle Aadhar div visibility on page load
-     window.onload = function () {
-         debugger;
-         const examType = document.getElementById('<%= hnd_extype.ClientID %>').value;
-
-         // List of fields to disable when examType = 1
-         const lockedFieldsForType1 = [
+          // List of fields to disable when examType = 1
+          const lockedFieldsForType1 = [
         '<%= txtcollegeName.ClientID %>',
         '<%= txtcollegeCode.ClientID %>',
         '<%= txtrollNumber.ClientID %>',
         '<%= txtboardRollCode.ClientID %>',
         '<%= txtpassingYear.ClientID %>',
-        '<%= ddlFaculty.ClientID %>'
-         ];
+        '<%= ddlFaculty.ClientID %>',
+        '<%= txtMobile.ClientID %>',
+        '<%= txtAdress.ClientID %>',
+        '<%= txtEmail.ClientID %>',
+        '<%= ddlArea.ClientID %>',
+       '<%= ddlMatrixBoard.ClientID %>',
+        '<%= txtBranchName.ClientID %>',
+        '<%= txtpincode.ClientID %>',
+        '<%= txtIFSCCode.ClientID %>',
+        '<%= txtBankACNo.ClientID %>',
+        '<%= txtIdentification1.ClientID %>',
+        '<%= txtIdentification2.ClientID %>',
+        '<%= ddlMedium.ClientID %>',
+    ];
 
-         // Collect all input fields and selects to disable them
-         const allFields = document.querySelectorAll('input, select, textarea, div');
+    // Select only valid form inputs
+    const allFields = document.querySelectorAll('input, select, textarea');
 
-         // --- CASE 1: ExamType = 1 (Lock specific fields) ---
-         if (examType === "1") {
-             allFields.forEach(function (field) {
-                 // Skip the update button and other buttons you don't want to disable
-                 if (field.id === '<%= btnUpdate.ClientID %>') return;
-
-            // Lock only the specific fields listed in lockedFieldsForType1
-            if (lockedFieldsForType1.includes(field.id)) {
-                field.disabled = true;  // Disable the field
-            } else {
-                field.disabled = false;  // Enable the other fields
-            }
-        });
-    }
-
-    // Handle other exam types (e.g., 2, 3, 4, 6)
-    if (["2", "3", "4", "6"].includes(examType)) {
+    // --- CASE 1: ExamType = 1 ---
+    if (examType === "1") {
         allFields.forEach(function (field) {
+
             if (field.id === '<%= btnUpdate.ClientID %>') return; // skip update button
 
-            // Lock all fields by default
-            field.disabled = true;
-
-            // Unlock specific fields for these exam types (you can specify which ones to unlock)
-            const unlockedFieldsForType2346 = [
-                '<%= ddlGender.ClientID %>',
-                '<%= ddlCasteCategory.ClientID %>',
-                '<%= ddlNationality.ClientID %>',
-                '<%= ddlReligion.ClientID %>',
-                '<%= ddlMaritalStatus.ClientID %>',
-                // Add any other fields that should be unlocked for these exam types
-            ];
-
-            if (unlockedFieldsForType2346.includes(field.id)) {
-                field.disabled = false;  // Unlock these fields
+            if (lockedFieldsForType1.includes(field.id)) {
+                field.disabled = true;  // Lock these fields
+            } else {
+                field.disabled = false; // Allow others
             }
         });
     }
 
-    // Enable the update button (if exists)
-         const updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
-         if (updateBtn) updateBtn.disabled = false;
-     };
+    // CASE 2, 3, 4, 6
+    if (["2", "3", "4", "6"].includes(examType)) {
+
+        const unlockedFieldsForType2346 = [
+            '<%= ddlGender.ClientID %>',
+            '<%= ddlCasteCategory.ClientID %>',
+            '<%= ddlNationality.ClientID %>',
+            '<%= ddlReligion.ClientID %>',
+            '<%= ddlMaritalStatus.ClientID %>',
+        ];
+
+        allFields.forEach(function (field) {
+            if (field.id === '<%= btnUpdate.ClientID %>') return;
+
+            field.disabled = true; // lock everything
+
+            if (unlockedFieldsForType2346.includes(field.id)) {
+                field.disabled = false;  // unlock selected ones
+            }
+        });
+    }
+
+    // Enable update button
+             const updateBtn = document.getElementById('<%= btnUpdate.ClientID %>');
+             if (updateBtn) updateBtn.disabled = false;
+         };
+
+
+
+
 
     <%-- window.onload = function () {
          debugger;
@@ -1307,7 +1316,7 @@ function (response) {
      window.addEventListener('load', toggleAadharDivs);
 
 
-    function goToNextStep() {
+<%--    function goToNextStep() {
         var studentId = document.getElementById('<%= hfStudentId.ClientID %>').value;
         var facultyId = document.getElementById('<%= hfFaculty.ClientID %>').value;
         var collegeCode = document.getElementById('<%= txtcollegeCode.ClientID %>').value;
@@ -1333,7 +1342,7 @@ function (response) {
          );
 
          return false; // Prevent form submission
-     }
+     }--%>
 
      // Enforce max length for fields
      function enforceMaxLength(el, maxLength) {
