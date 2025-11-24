@@ -525,7 +525,7 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
                                 }
                                 else
                                 {
-                                    ApplyPreviouslySelectedSubjects(studentId, "0");
+                                    ApplyPreviouslySelectedSubjects(studentId, ExamTypeId);
                                 }
                                 //if (ExamTypeId == "3")
                                 //{
@@ -1228,9 +1228,13 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
                 ApplyToVocElectiveSubjects(rptVocElectiveSubjects, groupWiseCodes, "3");
             }
-            ApplyToCompulsorySubjects(rptCompulsorySubjects, groupWiseCodes, "1");
+            else
+            {
+                ApplyToElectiveSubjects(rptElectiveSubjects, groupWiseCodes, "3");
+            }
+                ApplyToCompulsorySubjects(rptCompulsorySubjects, groupWiseCodes, "1");
             ApplyToCompulsorySubjects(rptCompulsorySubjects2, groupWiseCodes, "2");
-            ApplyToElectiveSubjects(rptElectiveSubjects, groupWiseCodes, "3");
+            
             ApplyToAdditionalSubjects(rptAdditionalSubjects, groupWiseCodes, "4");
             ApplyToVocationalSubjects(rptVocationalAdditionalSubjects, groupWiseCodes, "5");
         }
