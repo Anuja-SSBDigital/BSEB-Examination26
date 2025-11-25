@@ -1082,7 +1082,7 @@
                  document.getElementById('<%= hnd_extype.ClientID %>').value,
                  document.getElementById('<%= txtcollegeCode.ClientID %>').value,
                  differentlyAbled,
-
+                 document.getElementById('<%= ddlMedium.ClientID %>').value,
                  function (response) {
                      if (response.status === "success") {
                          debugger
