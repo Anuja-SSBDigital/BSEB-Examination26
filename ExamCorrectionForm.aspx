@@ -841,7 +841,7 @@
              }--%>
              // Medium validation
              var ddlMedium = document.getElementById('<%= ddlMedium.ClientID %>');
-     <%--  var mediumErrorSpan = document.getElementById('MediumError');
+      var mediumErrorSpan = document.getElementById('MediumError');
      if (ddlMedium.value === "" || ddlMedium.value === "0") {
          mediumErrorSpan.style.display = "inline";
          ddlMedium.classList.add("is-invalid");
@@ -850,7 +850,7 @@
      } else {
          mediumErrorSpan.style.display = "none";
          ddlMedium.classList.remove("is-invalid");
-     }--%>
+     }
              // Aadhar validation (as is)ID %>');
              const aadharYes = document.getElementById('<%= aadharYes.ClientID %>');
              const aadharNo = document.getElementById('<%= aadharNo.ClientID %>');
@@ -1057,6 +1057,18 @@
                  ddlMaritalStatus.classList.remove("is-invalid");
              }
 
+             var ddlMedium = document.getElementById('<%= ddlMedium.ClientID %>');
+             var mediumErrorSpan = document.getElementById('MediumError');
+             if (ddlMedium.value === "" || ddlMedium.value === "0") {
+                 mediumErrorSpan.style.display = "inline";
+                 ddlMedium.classList.add("is-invalid");
+                 ddlMedium.focus();
+                 return false;
+             } else {
+                 mediumErrorSpan.style.display = "none";
+                 ddlMedium.classList.remove("is-invalid");
+             }
+
              var differentlyAbled = document.getElementById('<%= rdoAbledYes.ClientID %>').checked ? 1 : 0;
 
              PageMethods.UpdateStudent(
@@ -1127,7 +1139,7 @@
         '<%= txtBankACNo.ClientID %>',
         '<%= txtIdentification1.ClientID %>',
         '<%= txtIdentification2.ClientID %>',
-        '<%= ddlMedium.ClientID %>',
+       
     ];
 
     // Select only valid form inputs
@@ -1156,6 +1168,7 @@
             '<%= ddlNationality.ClientID %>',
             '<%= ddlReligion.ClientID %>',
             '<%= ddlMaritalStatus.ClientID %>',
+            '<%= ddlMedium.ClientID %>',
         ];
 
         allFields.forEach(function (field) {
