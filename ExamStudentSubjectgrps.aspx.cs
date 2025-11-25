@@ -873,12 +873,15 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
 
         // ✅ 2. Insert missing subjects
         //while (existingSubjects.Rows.Count < selectedCodes.Count)
-        while (existingSubjects.Rows.Count < 3)
+        while (existingSubjects.Rows.Count < selectedCodes.Count)
         {
-            SaveSubjectByCode(selectedCodes[existingSubjects.Rows.Count], studentId, modifiedBy, comgrp, examTypeId);
+            int index = existingSubjects.Rows.Count;
+            SaveSubjectByCode(selectedCodes[index], studentId, modifiedBy, comgrp, examTypeId);
+
             existingSubjects = dl.GetSubjectsByStudentIdAndComGrp(studentId, comgrp);
         }
-     
+
+
         // ✅ 3. DELETE ONLY if examTypeId != 4
         if (examTypeId != 4)
         {
@@ -960,7 +963,9 @@ public partial class ExamStudentSubjectgrps : System.Web.UI.Page
         //}
         while (existingSubjects.Rows.Count < 3)
         {
-            SaveSubjectByCode(selectedCodes[existingSubjects.Rows.Count], studentId, modifiedBy, comgrp, examTypeId);
+            int index = existingSubjects.Rows.Count;
+            SaveSubjectByCode(selectedCodes[index], studentId, modifiedBy, comgrp, examTypeId);
+            //SaveSubjectByCode(selectedCodes[existingSubjects.Rows.Count], studentId, modifiedBy, comgrp, examTypeId);
             existingSubjects = dl.GetSubjectsByStudentIdAndComGrp(studentId, comgrp);
         }
         // ✅ 3. DELETE ONLY if examTypeId != 4
