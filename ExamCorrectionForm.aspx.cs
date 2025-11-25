@@ -165,12 +165,12 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                 ddlMatrixBoard.DataTextField = "BoardName";
                 ddlMatrixBoard.DataValueField = "Pk_BoardId";
                 ddlMatrixBoard.DataBind();
-                ddlMatrixBoard.Items.Insert(0, new ListItem("Select Matrix Board", "0"));
+                ddlMatrixBoard.Items.Insert(0, new ListItem("Select Matrix Board", "4"));
             }
             else
             {
                 ddlMatrixBoard.Items.Clear();
-                ddlMatrixBoard.Items.Insert(0, new ListItem("Select Matrix Board", "0"));
+                ddlMatrixBoard.Items.Insert(0, new ListItem("Select Matrix Board", "4"));
             }
             DataTable dtMarital_Ms = dl.getMarital_Mstfordropdown();
             if (dtMarital_Ms.Rows.Count > 0)
