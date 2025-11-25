@@ -374,7 +374,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
     }
     [System.Web.Services.WebMethod]
-    public static object UpdateStudent( string studentId, string facultyId, string Gender,string CasteCategory,string Nationality,string Religion, string maritalStatus, string examTypeId,string collegeCode, int differentlyAbled)
+    public static object UpdateStudent( string studentId, string facultyId, string Gender,string CasteCategory,string Nationality,string Religion, string maritalStatus, string examTypeId,string collegeCode, int differentlyAbled,string medium)
     {
         try
         {
@@ -382,7 +382,7 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
 
             // Call the update method in DB or other logic as required
             DBHelper dl = new DBHelper();
-            int result = dl.UpdateImpQueComExaminationForm(Convert.ToInt32(studentId), maritalStatus, Gender, CasteCategory, Nationality, Religion, differentlyAbled);
+            int result = dl.UpdateImpQueComExaminationForm(Convert.ToInt32(studentId), maritalStatus, Gender, CasteCategory, Nationality, Religion, differentlyAbled,medium);
                 //"","","","");
             //int result = dl.UpdateStudentExamRegForm(Convert.ToInt32(studentId), mobile, email, address, maritalStatus, pincode, branchName, ifscCode, bankACNo, identification1, identification2, medium, Convert.ToInt32(examTypeId), AadharNumber, adharfileFileName, district, subdivision, MatrixBoard, RollCode, RollNumber, PassingYear, Gender, CasteCategory, Nationality, Religion, DOB);
 
