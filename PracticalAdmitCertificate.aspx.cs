@@ -188,8 +188,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             if (facultyName == "VOCATIONAL")
             {
                 phFaculty.Visible = false;
-                lblExamTitle.Text = "INTERMEDIATE ANNUAL  EXAMINATION, 2025 (VOCATIONAL)";
-                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक  परीक्षा, 2025 (व्यवसायिक)";
+                lblExamTitle.Text = "INTERMEDIATE ANNUAL  EXAMINATION, 2026 (VOCATIONAL)";
+                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक  परीक्षा, 2026 (व्यवसायिक)";
                 lblExamSubjectHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
                 // Show only elective
                 trElective1.Visible = true;
@@ -203,8 +203,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             {
                 phFaculty.Visible = true;
                 lblFacultyHindi.Text = "<label><strong>" + hindiFaculty + "</strong></label>";
-                lblExamTitle.Text = "INTERMEDIATE ANNUAL EXAMINATION, 2025";
-                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2025";
+                lblExamTitle.Text = "INTERMEDIATE ANNUAL EXAMINATION, 2026";
+                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2026";
                 lblExamSubjectHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
                 // Show all
                 trElective1.Visible = true;
@@ -216,8 +216,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             }
 
             // Exam dates
-            lblExamStartDate.Text = "10/01/2025";
-            lblExamToDate.Text = "20/01/2025";
+            lblExamStartDate.Text = "10/01/2026";
+            lblExamToDate.Text = "20/01/2026";
         }
     }
 
