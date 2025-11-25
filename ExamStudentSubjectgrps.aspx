@@ -836,7 +836,7 @@
         }
     });
 
-    function storeAdditionalSelections() {
+   <%-- function storeAdditionalSelections() {
         const selected = [];
         const checkboxes = document.querySelectorAll('input.additionalSubject[type="checkbox"]');
 
@@ -846,20 +846,46 @@
             }
         });
         document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value = selected.join(',');
-    }
+    }--%>
+     function storeAdditionalSelections() {
+         const hf = document.getElementById('<%= hfAdditionalSubjects.ClientID %>');
+         if (!hf) return;   // <-- prevents null crash
 
-    function restoreAdditionalSelections() {
-        const stored = document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value;
-        if (!stored) return;
+         const selected = [];
+         document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+             if (cb.checked) selected.push(cb.value.trim());
+         });
 
-        const selectedCodes = stored.split(',').map(s => s.trim().toLowerCase());
-        document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
-            const code = cb.value.trim().toLowerCase();
-            if (selectedCodes.includes(code)) {
-                cb.checked = true;
-            }
-        });
-    }
+         hf.value = selected.join(',');
+     }
+     function restoreAdditionalSelections() {
+         const hf = document.getElementById('<%= hfAdditionalSubjects.ClientID %>');
+         if (!hf) return;   // <-- prevents error
+
+         const stored = hf.value;
+         if (!stored) return;
+
+         const selectedCodes = stored.split(',').map(s => s.trim().toLowerCase());
+         document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+             const code = cb.value.trim().toLowerCase();
+             if (selectedCodes.includes(code)) {
+                 cb.checked = true;
+             }
+         });
+     }
+
+   <%--  function restoreAdditionalSelections() {
+         const stored = document.getElementById('<%= hfAdditionalSubjects.ClientID %>').value;
+     if (!stored) return;
+
+     const selectedCodes = stored.split(',').map(s => s.trim().toLowerCase());
+     document.querySelectorAll('.additionalSubject input[type="checkbox"]').forEach(cb => {
+         const code = cb.value.trim().toLowerCase();
+         if (selectedCodes.includes(code)) {
+             cb.checked = true;
+         }
+     });
+ }--%>
 
     document.addEventListener('DOMContentLoaded', function () {
         restoreAdditionalSelections();
