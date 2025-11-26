@@ -299,6 +299,9 @@ public partial class ExamCorrectionForm : System.Web.UI.Page
                     aadharYes.Checked = true;
 
                 }
+                string aadharFileName = row["AadharFileName"].ToString();
+                hfAadharFileName.Value = aadharFileName;
+
                 //txtparentno.Text = row["ParentGuardianMobileNo"].ToString();
                 //txtApaarId.Text = row["ApaarId"].ToString();
 
