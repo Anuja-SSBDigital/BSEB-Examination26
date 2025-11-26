@@ -487,6 +487,8 @@
                             <asp:HiddenField ID="hfStudentId" runat="server" />
                             <asp:HiddenField ID="hfFaculty" runat="server" />
                             <asp:HiddenField ID="hfCollegeId" runat="server" />
+                            <asp:HiddenField ID="hfAadharFileName" runat="server" />
+
                             
                         <%--    <asp:HiddenField ID="hfOldStudentName" runat="server" />
                             <asp:HiddenField ID="hfOldFatherName" runat="server" />
@@ -896,28 +898,75 @@
              }
 
              // ✅ NO case
+             const existingFile = document.getElementById('<%= hfAadharFileName.ClientID %>').value;
+
+             // If Aadhar = NO
              if (aadharNo.checked) {
-                 if (!fileUpload || fileUpload.files.length === 0) {
-                     txtAadharFileError.style.display = "inline";
-                     txtAadharFileError.textContent = "Please upload supporting Aadhar document.";
-                     fileUpload.focus();
-                     return false;
+
+                 // CASE 1: No file exists in DB → Upload required
+                 if (!existingFile) {
+
+                     if (!fileUpload || fileUpload.files.length === 0) {
+                         txtAadharFileError.style.display = "inline";
+                         txtAadharFileError.textContent = "Please upload supporting Aadhar document.";
+                         fileUpload.focus();
+                         return false;
+                     }
                  }
-                 const file = fileUpload.files[0];
-                 if (file.size > 20480) { // 20 KB
-                     txtAadharFileError.style.display = "inline";
-                     txtAadharFileError.textContent = "File size must be ≤ 20 KB.";
-                     return false;
+
+                 // CASE 2: If user uploaded NEW file → Validate and use new file
+                 if (fileUpload.files.length > 0) {
+
+                     const file = fileUpload.files[0];
+
+                     if (file.size > 20480) {
+                         txtAadharFileError.style.display = "inline";
+                         txtAadharFileError.textContent = "File size must be ≤ 20 KB.";
+                         return false;
+                     }
+
+                     const ext = file.name.split('.').pop().toLowerCase();
+                     if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
+                         txtAadharFileError.style.display = "inline";
+                         txtAadharFileError.textContent = "Only JPG/JPEG/PNG files allowed.";
+                         return false;
+                     }
+
+                     // Use NEW file
+                     aadharFileName = file.name;
+                     aadharFileExtension = ext;
                  }
-                 const ext = file.name.split('.').pop().toLowerCase();
-                 if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
-                     txtAadharFileError.style.display = "inline";
-                     txtAadharFileError.textContent = "Only JPG/JPEG/PNG files allowed.";
-                     return false;
+                 else {
+                     // CASE 3: No new upload → Use existing file
+                     if (existingFile) {
+                         aadharFileName = existingFile;
+                         aadharFileExtension = existingFile.split('.').pop().toLowerCase();
+                     }
                  }
-                 aadharFileName = fileUpload.files[0].name;
-                 aadharFileExtension = fileUpload.files[0].name.split('.').pop().toLowerCase();
              }
+
+             //if (aadharNo.checked) {
+             //    if (!fileUpload || fileUpload.files.length === 0) {
+             //        txtAadharFileError.style.display = "inline";
+             //        txtAadharFileError.textContent = "Please upload supporting Aadhar document.";
+             //        fileUpload.focus();
+             //        return false;
+             //    }
+             //    const file = fileUpload.files[0];
+             //    if (file.size > 20480) { // 20 KB
+             //        txtAadharFileError.style.display = "inline";
+             //        txtAadharFileError.textContent = "File size must be ≤ 20 KB.";
+             //        return false;
+             //    }
+             //    const ext = file.name.split('.').pop().toLowerCase();
+             //    if (ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png') {
+             //        txtAadharFileError.style.display = "inline";
+             //        txtAadharFileError.textContent = "Only JPG/JPEG/PNG files allowed.";
+             //        return false;
+             //    }
+             //    aadharFileName = fileUpload.files[0].name;
+             //    aadharFileExtension = fileUpload.files[0].name.split('.').pop().toLowerCase();
+             //}
              var differentlyAbled = document.getElementById('<%= rdoAbledYes.ClientID %>').checked ? 1 : 0;
              PageMethods.UpdateStudentDetails(
 
