@@ -327,20 +327,28 @@
                 </div>
             </div>
         </div>--%>
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table style="width: 100%; border-collapse: collapse; font-family: system-ui">
                         <tr>
                             <!-- Left Side: Student Details -->
-                            <td style="width: 80%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
-                                <table style="width: 100%; font-size: 15px; line-height: revert; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
+                            <td style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
+                                <table style="width: 100%; font-size: 15px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
                                     <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
+                                    <colgroup>
+                                        <col style="width: 25%;">
+                                        <col style="width: 25%;">
+                                        <col style="width: 25%;">
+                                        <col style="width: 25%;">
+                                    </colgroup>
 
                                     <tr>
-                                        <td>* BSEB UNIQUE Id:</td>
-                                        <td><%# Eval("UniqueNo") %></td>
+                                        <td style="font-size: large;">BSEB UNIQUE Id:</td>
+                                        <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("UniqueNo") %></td>
                                     </tr>
+
                                     <tr>
-                                        <td>+2 स्कूल का नाम:</td>
-                                        <td><%# Eval("CollegeName") %></td>
+                                        <td>+2 स्कूल का नाम</td>
+
+                                        <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
                                     </tr>
                                     <tr>
                                         <td>परीक्षार्थी का नाम:</td>
@@ -377,7 +385,7 @@
                                         <td>रौल क्रमांक:</td>
                                         <td><%# Eval("RollNumber") %></td>
                                         <td>लिंग:</td>
-                                        <td><%# Eval("Gender") %></td>
+                                        <td style="padding-left: 20px;"><%# Eval("Gender") %></td>
                                     </tr>
                                     <tr>
                                         <td>परीक्षा केंद्र का नाम:</td>
@@ -387,7 +395,7 @@
                             </td>
 
                             <!-- Right Side: Photo and Signature -->
-                            <td style="width: 20%; text-align: center; vertical-align: top;">
+                            <td style="width: 15%; text-align: center; vertical-align: top;">
                                 <div style="border: 1px solid black; padding: 5px; display: inline-block;">
                                     <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="width: 100%; max-width: 160px; height: auto;" />
                                 </div>
@@ -419,7 +427,7 @@
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Name") %></td>
                                 <%--<td rowspan="3" style="border-bottom: hidden; vertical-align: middle;">--%>
-                                <td rowspan="3" style="vertical-align: middle;">
+                                <td rowspan="3" style="vertical-align: middle; font-weight: 600; font-size: larger;">
                                     <div style="text-align: center;">
                                         <asp:Label ID="lblExamStartDate" runat="server" CssClass="hindi-title" /><br />
                                         <span>To</span><br />
@@ -451,18 +459,27 @@
                     </table>
 
 
-                    <div class="" style="font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif; font-size: 17px; margin-top: 65px;">
+                    <div class="" style="font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif; font-size: 17px; margin-top: 25px;">
+                        <div class="col-md-12 text-end">
 
-                        <!-- Signature block -->
-                        <div class="row ">
-                            <div class="col-md-6" style="font-weight: 600">
-                                <asp:Label ID="lblExamSubjectHindi" runat="server" />
+                            <img src="assets/img/COE%20sign.png" style="width: 11%;" />
 
+                        </div>
+                        <div class="mb-3 row" style="">
+
+
+                            <div class="col-md-6">
+
+                                <strong>
+                                    <asp:Label ID="lblExamSubjectHindi" runat="server" /><br>
+                                </strong>
                             </div>
-                            <div class="col-md-6 text-end" style="font-weight: 600">
-                                परीक्षा नियंत्रक (30मा0)
+
+                            <div class="col-md-6 text-end">
+                                <strong>परीक्षा नियंत्रक (उ0मा)</strong>
                             </div>
                         </div>
+                        <!-- Signature block -->
                         <hr style="border: 1px solid black; margin: 10px 0;" />
                         <!-- Heading -->
                         <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निर्देश</u></h6>
