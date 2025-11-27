@@ -300,6 +300,10 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                 HtmlTableCell trVocationalCode = (HtmlTableCell)e.Item.FindControl("trVocationalCode");
                 HtmlTableCell trVocationalCode1 = (HtmlTableCell)e.Item.FindControl("trVocationalCode1");
 
+                HtmlTableCell tdElective1 = e.Item.FindControl("tdElective1") as HtmlTableCell;
+                HtmlTableCell tdElective2 = e.Item.FindControl("tdElective2") as HtmlTableCell;
+                HtmlTableCell tdElective3 = e.Item.FindControl("tdElective3") as HtmlTableCell;
+
                 if (hfFacultyName != null)
                     facultyName = hfFacultyName.Value.Trim().ToUpper();
 
@@ -328,9 +332,17 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                         lblFacultyHindi.Visible = false;
                         lblFac.Visible = false;
                     }
+                    if (tdElective1 != null)
+                        tdElective1.InnerHtml = "ऐच्छिक विषय-1 <br /> (फाउंडेशन कोर्स )";
+
+                    if (tdElective2 != null)
+                        tdElective2.InnerHtml = "ऐच्छिक विषय-2 <br /> (व्यावसायिक शिक्षा ट्रेड पत्र-I )";
+
+                    if (tdElective3 != null)
+                        tdElective3.InnerHtml = "ऐच्छिक विषय-3 <br /> (व्यावसायिक शिक्षा ट्रेड पत्र-II )";
                     //lblFac = lblFacultyHindi;
-                  
-                    
+
+
                     //lblFacultyHindi.Visible = false;
 
                     if (lblExamTitle != null)
@@ -355,7 +367,14 @@ public partial class DummyExamAdmitCertificate : System.Web.UI.Page
                     if (lblFacultyHindi != null)
                         lblFacultyHindi.Text = "<label><strong>" + hindiFaculty + "</strong></label>";
                     //lblFac.Visible = false;
+                    if (tdElective1 != null)
+                        tdElective1.InnerHtml = "ऐच्छिक विषय-1";
 
+                    if (tdElective2 != null)
+                        tdElective2.InnerHtml = "ऐच्छिक विषय-2";
+
+                    if (tdElective3 != null)
+                        tdElective3.InnerHtml = "ऐच्छिक विषय-3";
                     if (lblExamSchoolHindi != null)
                         lblExamSchoolHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
                     lblCollegeName.Text = "कॉलेज/+2 स्कूल का नाम:";
