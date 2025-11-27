@@ -378,7 +378,7 @@
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("CompulsorySubject1Name") %>
                                         <%# Eval("CompulsorySubject1PaperType") %>
                                     </td>
-                                    <td>ऐच्छिक विषय-1</td>
+                                    <td id="tdElective1" runat="server"></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject1Name") %>
                                         <%# Eval("ElectiveSubject1PaperType") %>
@@ -409,7 +409,7 @@
                                         <%# Eval("CompulsorySubject2PaperType") %>
 
                                     </td>
-                                    <td>ऐच्छिक विषय-2</td>
+                                    <td id="tdElective2" runat="server"></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject2Name") %>
                                         <%# Eval("ElectiveSubject2PaperType") %>
@@ -420,7 +420,7 @@
                                     <td colspan="3"></td>
                                     <%-- <td><%# Eval("CompulsorySubject3Code") %></td>
                                 <td><%# Eval("CompulsorySubject3Name") %></td>--%>
-                                    <td>ऐच्छिक विषय-3</td>
+                                    <td id="tdElective3" runat="server"></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Code") %></td>
                                     <td style="font-weight: 500; font-size: larger;"><%# Eval("ElectiveSubject3Name") %>
                                         <%# Eval("ElectiveSubject3PaperType") %>
