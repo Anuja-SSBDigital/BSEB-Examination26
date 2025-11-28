@@ -247,6 +247,13 @@
         hr {
             opacity: 1 !important;
         }
+
+         tbody{
+            color:black;
+        }
+        li{
+            color:black;
+        }
     </style>
 
 </head>
