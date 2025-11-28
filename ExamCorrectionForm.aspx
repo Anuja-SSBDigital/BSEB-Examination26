@@ -517,59 +517,59 @@
          // if (examType == 1)
          if (examType == 1 || examType == 5) {
              var studentNameField = document.getElementById('<%= txtStudentName.ClientID %>');
-             var studentNameErr = document.getElementById('txtStudentNameErr');
-             if (studentNameField.value.trim() === "") {
-                 studentNameErr.style.display = "inline";
-                 studentNameField.classList.add("is-invalid");
-                 studentNameField.focus();
-                 return false;
-             } else {
-                 studentNameErr.style.display = "none";
-                 studentNameField.classList.remove("is-invalid");
-             }
+             //var studentNameErr = document.getElementById('txtStudentNameErr');
+             //if (studentNameField.value.trim() === "") {
+             //    studentNameErr.style.display = "inline";
+             //    studentNameField.classList.add("is-invalid");
+             //    studentNameField.focus();
+             //    return false;
+             //} else {
+             //    studentNameErr.style.display = "none";
+             //    studentNameField.classList.remove("is-invalid");
+             //}
 
              var motherNameField = document.getElementById('<%= txtmotherName.ClientID %>');
-             var motherNameErr = document.getElementById('txtmotherNameErr');
-             if (motherNameField.value.trim() === "") {
-                 motherNameErr.style.display = "inline";
-                 motherNameField.classList.add("is-invalid");
-                 motherNameField.focus();
-                 return false;
-             } else {
-                 motherNameErr.style.display = "none";
-                 motherNameField.classList.remove("is-invalid");
-             }
+             //var motherNameErr = document.getElementById('txtmotherNameErr');
+             //if (motherNameField.value.trim() === "") {
+             //    motherNameErr.style.display = "inline";
+             //    motherNameField.classList.add("is-invalid");
+             //    motherNameField.focus();
+             //    return false;
+             //} else {
+             //    motherNameErr.style.display = "none";
+             //    motherNameField.classList.remove("is-invalid");
+             //}
 
              // Father Name
              var fatherNameField = document.getElementById('<%= txtfatherName.ClientID %>');
-             var fatherNameErr = document.getElementById('txtfatherNameErr');
-             if (fatherNameField.value.trim() === "") {
-                 fatherNameErr.style.display = "inline";
-                 fatherNameField.classList.add("is-invalid");
-                 fatherNameField.focus();
-                 return false;
-             }
-             else {
-                 fatherNameErr.style.display = "none";
-                 fatherNameField.classList.remove("is-invalid");
-             }
+             //var fatherNameErr = document.getElementById('txtfatherNameErr');
+             //if (fatherNameField.value.trim() === "") {
+             //    fatherNameErr.style.display = "inline";
+             //    fatherNameField.classList.add("is-invalid");
+             //    fatherNameField.focus();
+             //    return false;
+             //}
+             //else {
+             //    fatherNameErr.style.display = "none";
+             //    fatherNameField.classList.remove("is-invalid");
+             //}
 
              // Mother Name
 
              var dobField = document.getElementById('<%= txtDOB.ClientID %>');
              var dob = dobField.value.trim();
-             var txtDOBErrSpan = document.getElementById('txtDOBErr');
+             //var txtDOBErrSpan = document.getElementById('txtDOBErr');
 
-             if (dob === "") {
-                 txtDOBErrSpan.style.display = "inline";
-                 txtDOBErrSpan.textContent = "Please enter Date of Birth.";
-                 dobField.classList.add("is-invalid");
-                 dobField.focus();
-                 return false;
-             } else {
-                 txtDOBErrSpan.style.display = "none";
-                 dobField.classList.remove("is-invalid");
-             }
+             //if (dob === "") {
+             //    txtDOBErrSpan.style.display = "inline";
+             //    txtDOBErrSpan.textContent = "Please enter Date of Birth.";
+             //    dobField.classList.add("is-invalid");
+             //    dobField.focus();
+             //    return false;
+             //} else {
+             //    txtDOBErrSpan.style.display = "none";
+             //    dobField.classList.remove("is-invalid");
+             //}
 
            <%--  var oldStudentName = document.getElementById('<%= hfOldStudentName.ClientID %>').value.trim();
              var oldFatherName = document.getElementById('<%= hfOldFatherName.ClientID %>').value.trim();
@@ -1171,6 +1171,10 @@
 
           // List of fields to disable when examType = 1
           const lockedFieldsForType1 = [
+        '<%= txtStudentName.ClientID %>',
+        '<%= txtmotherName.ClientID %>',
+        '<%= txtfatherName.ClientID %>',
+        '<%= txtDOB.ClientID %>',
         '<%= txtcollegeName.ClientID %>',
         '<%= txtcollegeCode.ClientID %>',
         '<%= txtrollNumber.ClientID %>',
