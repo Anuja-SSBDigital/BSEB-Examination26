@@ -9,8 +9,8 @@
     <title>Theory Admit Certificate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif;
@@ -92,11 +92,13 @@
                 display: none !important;
             }
         }
-        tbody{
-            color:black;
+
+        tbody {
+            color: black;
         }
-        li{
-            color:black;
+
+        li {
+            color: black;
         }
         /*@media print {
             body {
@@ -211,13 +213,11 @@
                         </div>
                     </div>
 
-                    
+
                     <table style="width: 100%; border-collapse: collapse; font-family: system-ui">
                         <tr>
-                            <td
-                                style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
-                                <table
-                                    style="width: 100%; font-size: 15px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
+                            <td style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
+                                <table style="width: 100%; font-size: 15px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
 
                                     <asp:HiddenField ID="hfFacultyId" runat="server"
                                         Value='<%# Eval("FacultyId") %>' />
@@ -288,135 +288,124 @@
                                         <td colspan="5"><%# Eval("TheoryExamCenterName") %></td>
 
                                     </tr>
+                                </table>
+                            </td>
+                            <td style="width: 15%; text-align: center; vertical-align: top;">
+                                <div style="border: 1px solid black; padding: 5px; display: inline-block;">
+                                    <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="width: 100%; max-width: 160px; height: auto;" />
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%; max-width: 180px; height: auto;" />
+                                </div>
+                            </td>
+
                         </tr>
                     </table>
-                    <!-- Right side: photo -->
-                    <%-- <td style="width: 25%; text-align: center; vertical-align: top;">
-                    <div style="border: 1px solid black; padding: 5px; display: inline-block;">
-                        <img src='<%# Eval("StudentPhotoPath") %>' alt="Photo" style="width: 100%; max-width: 160px; height: auto;">
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <img src='<%# Eval("StudentSignaturePath") %>' alt="Signature" style="width: 100%; max-width: 180px; height: auto;">
-                    </div>
-                </td>--%>
 
+                    <table class="table table-details text-center align-middle" style="font-size: 14px; border: 2px solid #000;">
+                        <thead>
+                            <tr>
+                                <%--<th colspan="7">सैद्धान्तिक वार्षिक परीक्षा के विषय (निरधारित परीक्षा कार्यक्रम सहित)</th>--%>
+                                <th colspan="7">
+                                    <asp:Label ID="lblExamSubjectHindi" runat="server" />
+                                </th>
 
-                    <td style="width: 15%; text-align: center; vertical-align: top;">
-                        <div style="border: 1px solid black; padding: 5px; display: inline-block;">
-                            <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="width: 100%; max-width: 160px; height: auto;" />
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%; max-width: 180px; height: auto;" />
-                        </div>
-                    </td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th rowspan="2"></th>
+                                <th rowspan="2">विषय कोड<br>
+                                    (संख्यात्मक)</th>
+                                <th rowspan="2">विषय का नाम</th>
+                                <th rowspan="2">परीक्षा की तिथि</th>
+                                <th rowspan="2">पाली</th>
+                                <th rowspan="2">परीक्षा का समय</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="2">अनिवार्य विषय<br>
+                                    (Compulsory Subjects)</td>
+                                <td>भाषा विषय-1</td>
+                                <td>
+                                    <%# Eval("CompulsorySubject1Code") %>
+                                </td>
+                                <td>
+                                    <%# Eval("CompulsorySubject1Name") %>  <%# Eval("CompulsorySubject1PaperType") %></td>
+                                <td><%# Eval("CompulsorySubject1Date") %></td>
+                                <td><%# Eval("CompulsorySubject1Shift") %></td>
+                                <td><%# Eval("CompulsorySubject1Time") %></td>
 
-                    </tr>
-               </table>
+                            </tr>
+                            <tr>
+                                <td>भाषा विषय-2</td>
+                                <td>
+                                    <%# Eval("CompulsorySubject2Code") %></td>
+                                <td>
+                                    <%# Eval("CompulsorySubject2Name") %>    <%# Eval("CompulsorySubject2PaperType") %></td>
+                                <td><%# Eval("CompulsorySubject2Date") %></td>
+                                <td><%# Eval("CompulsorySubject2Shift") %></td>
+                                <td><%# Eval("CompulsorySubject2Time") %></td>
 
-                <table class="table table-details text-center align-middle" style="font-size: 14px; border: 2px solid #000;">
-                    <thead>
-                        <tr>
-                            <%--<th colspan="7">सैद्धान्तिक वार्षिक परीक्षा के विषय (निरधारित परीक्षा कार्यक्रम सहित)</th>--%>
-                            <th colspan="7">
-                                <asp:Label ID="lblExamSubjectHindi" runat="server" />
-                            </th>
+                            </tr>
 
-                        </tr>
-                        <tr>
-                            <th rowspan="2"></th>
-                            <th rowspan="2"></th>
-                            <th rowspan="2">विषय कोड<br>
-                                (संख्यात्मक)</th>
-                            <th rowspan="2">विषय का नाम</th>
-                            <th rowspan="2">परीक्षा की तिथि</th>
-                            <th rowspan="2">पाली</th>
-                            <th rowspan="2">परीक्षा का समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td rowspan="2">अनिवार्य विषय<br>
-                                (Compulsory Subjects)</td>
-                            <td>भाषा विषय-1</td>
-                            <td>
-                                <%# Eval("CompulsorySubject1Code") %>
-                            </td>
-                            <td>
-                                <%# Eval("CompulsorySubject1Name") %>  <%# Eval("CompulsorySubject1PaperType") %></td>
-                            <td><%# Eval("CompulsorySubject1Date") %></td>
-                            <td><%# Eval("CompulsorySubject1Shift") %></td>
-                            <td><%# Eval("CompulsorySubject1Time") %></td>
+                            <tr>
+                                <td rowspan="3">ऐच्छिक विषय<br>
+                                    (Elective Subjects)</td>
+                                <td>ऐच्छिक विषय-1</td>
+                                <td>
+                                    <%# Eval("ElectiveSubject1Code") %></td>
+                                <td>
+                                    <%# Eval("ElectiveSubject1Name") %>  <%# Eval("ElectiveSubject1PaperType") %></td>
+                                <td><%# Eval("ElectiveSubject1Date") %></td>
+                                <td><%# Eval("ElectiveSubject1Shift") %></td>
+                                <td><%# Eval("ElectiveSubject1Time") %></td>
 
-                        </tr>
-                        <tr>
-                            <td>भाषा विषय-2</td>
-                            <td>
-                                <%# Eval("CompulsorySubject2Code") %></td>
-                            <td>
-                                <%# Eval("CompulsorySubject2Name") %>    <%# Eval("CompulsorySubject2PaperType") %></td>
-                            <td><%# Eval("CompulsorySubject2Date") %></td>
-                            <td><%# Eval("CompulsorySubject2Shift") %></td>
-                            <td><%# Eval("CompulsorySubject2Time") %></td>
+                            </tr>
+                            <tr>
+                                <td>ऐच्छिक विषय-2</td>
+                                <td>
+                                    <%# Eval("ElectiveSubject2Code") %></td>
+                                <td>
+                                    <%# Eval("ElectiveSubject2Name") %>  <%# Eval("ElectiveSubject2PaperType") %></td>
+                                <td><%# Eval("ElectiveSubject2Date") %></td>
+                                <td><%# Eval("ElectiveSubject2Shift") %></td>
+                                <td><%# Eval("ElectiveSubject2Time") %></td>
 
-                        </tr>
+                            </tr>
+                            <tr>
+                                <td>ऐच्छिक विषय-3</td>
+                                <td><%# Eval("ElectiveSubject3Code") %></td>
+                                <td><%# Eval("ElectiveSubject3Name") %>  <%# Eval("ElectiveSubject3PaperType") %></td>
+                                <td><%# Eval("ElectiveSubject3Date") %></td>
+                                <td><%# Eval("ElectiveSubject3Shift") %></td>
+                                <td><%# Eval("ElectiveSubject3Time") %></td>
 
-                        <tr>
-                            <td rowspan="3">ऐच्छिक विषय<br>
-                                (Elective Subjects)</td>
-                            <td>ऐच्छिक विषय-1</td>
-                            <td>
-                                <%# Eval("ElectiveSubject1Code") %></td>
-                            <td>
-                                <%# Eval("ElectiveSubject1Name") %>  <%# Eval("ElectiveSubject1PaperType") %></td>
-                            <td><%# Eval("ElectiveSubject1Date") %></td>
-                            <td><%# Eval("ElectiveSubject1Shift") %></td>
-                            <td><%# Eval("ElectiveSubject1Time") %></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">अतिरिक्त विषय (Additional Subject)</td>
+                                <%--<td></td>--%>
+                                <td><%# Eval("AdditionalSubjectCode") %></td>
+                                <td><%# Eval("AdditionalSubjectName") %> <%# Eval("AdditionalSubjectPaperType") %></td>
+                                <td><%# Eval("AdditionalSubjectDate") %></td>
+                                <td><%# Eval("AdditionalSubjectShift") %></td>
+                                <td><%# Eval("AdditionalSubjectTime") %></td>
+                            </tr>
+                            <tr runat="server" id="trVocational">
+                                <%--<asp:PlaceHolder ID="phVocationalHeader" runat="server" Visible='<%# Eval("HasVocationalSubjects") %>'>--%>
+                                <td colspan="2">व्यावसायिक ट्रेड<br>
+                                    (Vocational Trade)</td>
+                                <%--<td></td>--%>
+                                <td><%# Eval("VocationalSubjectCode") %></td>
+                                <td><%# Eval("VocationalSubjectName") %>   <%# Eval("VocationalSubjectPaperType") %></td>
+                                <td><%# Eval("VocationalSubjectDate") %></td>
+                                <td><%# Eval("VocationalSubjectShift") %></td>
+                                <td><%# Eval("VocationalSubjectTime") %></td>
 
-                        </tr>
-                        <tr>
-                            <td>ऐच्छिक विषय-2</td>
-                            <td>
-                                <%# Eval("ElectiveSubject2Code") %></td>
-                            <td>
-                                <%# Eval("ElectiveSubject2Name") %>  <%# Eval("ElectiveSubject2PaperType") %></td>
-                            <td><%# Eval("ElectiveSubject2Date") %></td>
-                            <td><%# Eval("ElectiveSubject2Shift") %></td>
-                            <td><%# Eval("ElectiveSubject2Time") %></td>
-
-                        </tr>
-                        <tr>
-                            <td>ऐच्छिक विषय-3</td>
-                            <td><%# Eval("ElectiveSubject3Code") %></td>
-                            <td><%# Eval("ElectiveSubject3Name") %>  <%# Eval("ElectiveSubject3PaperType") %></td>
-                            <td><%# Eval("ElectiveSubject3Date") %></td>
-                            <td><%# Eval("ElectiveSubject3Shift") %></td>
-                            <td><%# Eval("ElectiveSubject3Time") %></td>
-
-                        </tr>
-                        <tr>
-                            <td colspan="2">अतिरिक्त विषय (Additional Subject)</td>
-                            <%--<td></td>--%>
-                            <td><%# Eval("AdditionalSubjectCode") %></td>
-                            <td><%# Eval("AdditionalSubjectName") %> <%# Eval("AdditionalSubjectPaperType") %></td>
-                            <td><%# Eval("AdditionalSubjectDate") %></td>
-                            <td><%# Eval("AdditionalSubjectShift") %></td>
-                            <td><%# Eval("AdditionalSubjectTime") %></td>
-                        </tr>
-                        <tr runat="server" id="trVocational">
-                            <%--<asp:PlaceHolder ID="phVocationalHeader" runat="server" Visible='<%# Eval("HasVocationalSubjects") %>'>--%>
-                            <td colspan="2">व्यावसायिक ट्रेड<br>
-                                (Vocational Trade)</td>
-                            <%--<td></td>--%>
-                            <td><%# Eval("VocationalSubjectCode") %></td>
-                            <td><%# Eval("VocationalSubjectName") %>   <%# Eval("VocationalSubjectPaperType") %></td>
-                            <td><%# Eval("VocationalSubjectDate") %></td>
-                            <td><%# Eval("VocationalSubjectShift") %></td>
-                            <td><%# Eval("VocationalSubjectTime") %></td>
-
-                            <%--</asp:PlaceHolder>--%>
-                        </tr>
-                    </tbody>
-                </table>
+                                <%--</asp:PlaceHolder>--%>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <!-- ✅ SUBJECT TABLE END -->
 
@@ -470,6 +459,7 @@
                     </div>
                     <hr style="border: 1px solid black; margin: 10px 0;">
                     <div id="infoDiv"><b></b></div>
+                </div>
             </ItemTemplate>
         </asp:Repeater>
 
