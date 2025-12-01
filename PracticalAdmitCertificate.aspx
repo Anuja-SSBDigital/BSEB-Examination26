@@ -444,7 +444,7 @@
                                 </td>
                             </tr>
                             <tr runat="server" id="trElective2">
-                                <td><%# Eval("ElectiveSubject2Code") %></td>
+                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject2Name") %> <%# Eval("ElectiveSubject1PaperType") %></td>
                             </tr>
                             <tr runat="server" id="trElective3">
