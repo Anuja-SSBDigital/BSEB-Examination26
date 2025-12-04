@@ -119,7 +119,8 @@ public partial class Theoryadmitcard : System.Web.UI.Page
             }
 
 
-            DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
+            //DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
+            DataTable result = dl.GetStudentTheoryDummyadmitData(CollegeId, facultyId, ExamId);
             if (result != null && result.Rows.Count > 0)
             {
                 rptStudents.DataSource = result;
