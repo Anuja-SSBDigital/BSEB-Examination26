@@ -141,8 +141,8 @@
                                 <th>Student Name</th>
                                 <th>Father Name</th>
                                 <th>Mother Name</th>
-								 <th>Edit</th>                             
-                                <th>Correction</th>
+								<%-- <th>Edit</th>             --%>                
+                                <%--<th>Correction</th>--%>
                                  <th>Remarks</th>
                                 <th>View</th>
                                 <th>Status</th>
@@ -160,9 +160,9 @@
                                         <td><%# Eval("StudentName") %></td>
                                         <td><%# Eval("FatherName") %></td>
                                         <td><%# Eval("MotherName") %></td>
-										<td><asp:Button ID="btnRegister" runat="server" CssClass="btn btn-sm btn-info" Text="Edit" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnEdit_Click" /></td>
+										<%--<td><asp:Button ID="btnRegister" runat="server" CssClass="btn btn-sm btn-info" Text="Edit" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnEdit_Click" /></td>--%>
                                        
-                                        <td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>
+                                        <%--<td><asp:Button ID="Button1" runat="server" CssClass="btn btn-sm btn-info" Text="Correction" CommandArgument='<%# Eval("StudentId") %>' OnClick="btnCorreaction_Click" /></td>--%>
                                          <asp:HiddenField ID="hfExamFeeSubmit" runat="server" Value='<%# Eval("IsExamFeeSubmit") %>' />
  <asp:HiddenField ID="hfExamFormSubmit" runat="server" Value='<%# Eval("IsExamFormSubmit") %>' />
  <asp:HiddenField ID="hfExamTypeid" runat="server" Value='<%# Eval("ExamTypeid") %>' />
