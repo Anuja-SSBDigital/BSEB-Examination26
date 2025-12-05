@@ -140,8 +140,13 @@
                                     <li runat="server" id="li_paymentsummary">
                                         <a href="PaymentSummary.aspx" class="nav-link">Payment Summary</a>
                                     </li>
-									<li runat="server" id="li_Downloadadmitcard">
+									<%--<li runat="server" id="li_Downloadadmitcard">
                                         <a href="Downloadadmitcard.aspx" class="nav-link">Second Dummy Admit Card</a>
+                                    </li>--%>
+                                      <li runat="server" id="li_SecondDummy">
+                                        <a href="javascript:void(0);" class="nav-link" data-toggle="modal" data-target="#secondDummyModal">
+                                            <i class="fa fa-fw fa-cogs"></i> Second Dummy Admit Card
+                                        </a>
                                     </li>
 									<li runat="server" id="li_CORRECTIONDUMMYREPORT" Visible="false">
                                         <a href="DummyCorrectionDetails.aspx" class="nav-link">Exam Report</a>
@@ -281,6 +286,25 @@
                 </footer>
             </div>
         </div>
+          <div class="modal fade" id="secondDummyModal" tabindex="-1" role="dialog" aria-labelledby="secondDummyModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="secondDummyModalLabel">Feature Closed</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        This feature is currently closed. Please contact support for more information.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </form>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(window).on('load', function () {
@@ -359,7 +383,7 @@
         <script src="assets/bundles/sweetalert/sweetalert.min.js"></script>
         <!-- Page Specific JS File -->
         <script src="assets/js/page/sweetalert.js"></script>
-    </form>
+
     <script src="assets/bundles/datatables/datatables.min.js"></script>
     <script src="assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script src="assets/bundles/jquery-ui/jquery-ui.min.js"></script>
