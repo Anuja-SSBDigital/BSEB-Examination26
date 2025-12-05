@@ -141,7 +141,7 @@
                                         <a href="PaymentSummary.aspx" class="nav-link">Payment Summary</a>
                                     </li>
 									<li runat="server" id="li_Downloadadmitcard">
-                                        <a href="Downloadadmitcard.aspx" class="nav-link">Download Dummy Admit Card</a>
+                                        <a href="Downloadadmitcard.aspx" class="nav-link">Second Dummy Admit Card</a>
                                     </li>
 									<li runat="server" id="li_CORRECTIONDUMMYREPORT" Visible="false">
                                         <a href="DummyCorrectionDetails.aspx" class="nav-link">Exam Report</a>
