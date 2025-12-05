@@ -152,7 +152,7 @@
                                     </li>--%>
                                     <li runat="server" id="li_SecondDummy">
                                         <a href="javascript:void(0);" class="nav-link" data-toggle="modal" data-target="#secondDummyModal">
-                                            <i class="fa fa-fw fa-cogs"></i>Second Dummy Admit Card
+                                            Second Dummy Admit Card
                                         </a>
                                     </li>
                                     <li runat="server" id="li_CORRECTIONDUMMYREPORT" visible="false">
