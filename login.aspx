@@ -226,12 +226,27 @@
                                 <i class="fas fa-file-download"></i>Click here to download all Ex-student Exam Forms
                             </a>
 							
-							<a href="http://intermediate.biharboardonline.com/Exam26/StudentExamDummyCard.aspx"  style="color: #3059c4; display: block; font-size: 25px;"
+							 <%--<a href="http://intermediate.biharboardonline.com/Exam26/StudentExamDummyCard.aspx"  style="color: #3059c4; display: block; font-size: 25px;"
    class="mt-4">
    Click here for Intermediate Dummy Admit Card(Student Login)
+</a>--%>
+<a href="#" 
+   onclick="showClosedAlert(); return false;" 
+   style="color: #3059c4; display: block; font-size: 25px;">
+   Click here for Intermediate Dummy Admit Card (Student Login)
 </a>
 
                             <script>
+							
+							function showClosedAlert() {
+    Swal.fire({
+        title: 'Date Closed',
+        text: 'Dummy Admit Card download window has been closed.',
+        icon: 'info',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3059c4'
+    });
+}
                                 function downloadAllFiles() {
                                     const files = [
                                         "assets/Notifications/Vocational-Ex-Students.pdf",
@@ -321,6 +336,7 @@
 
 
         <!-- Scripts -->
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="assets/bundles/sweetalert/sweetalert.min.js"></script>
         <script src="assets/js/page/sweetalert.js"></script>
         <script>
