@@ -388,8 +388,8 @@
                                     </tr>
                                     <tr>
                                         <td>रौल कोड:</td>
-                                        <td><%# Eval("CollegeCode") %></td>
-                                        <%--<td><%# Eval("RollCode") %></td>--%>
+                                        <%--<td><%# Eval("CollegeCode") %></td>--%>
+                                        <td><%# Eval("RollCode") %></td>
                                         <td>रौल क्रमांक:</td>
                                         <td><%# Eval("RollNumber") %></td>
                                         <td>लिंग:</td>
