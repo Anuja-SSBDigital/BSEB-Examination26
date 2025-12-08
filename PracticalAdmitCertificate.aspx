@@ -490,7 +490,7 @@
                         <!-- Signature block -->
                         <hr style="border: 1px solid black; margin: 10px 0;" />
                         <!-- Heading -->
-                        <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निर्देश</u></h6>
+                        <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निदेश</u></h6>
 
                         <!-- Instructions -->
 
