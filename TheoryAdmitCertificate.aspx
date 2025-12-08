@@ -352,7 +352,7 @@
                             <tr>
                                 <td rowspan="3">ऐच्छिक विषय<br>
                                     (Elective Subjects)</td>
-                                <td>ऐच्छिक विषय-1</td>
+                                 <td id="tdElective1" runat="server"></td>
                                 <td>
                                     <%# Eval("ElectiveSubject1Code") %></td>
                                 <td>
@@ -363,7 +363,7 @@
 
                             </tr>
                             <tr>
-                                <td>ऐच्छिक विषय-2</td>
+                                 <td id="tdElective2" runat="server"></td>
                                 <td>
                                     <%# Eval("ElectiveSubject2Code") %></td>
                                 <td>
@@ -374,7 +374,7 @@
 
                             </tr>
                             <tr>
-                                <td>ऐच्छिक विषय-3</td>
+                                <td id="tdElective3" runat="server"></td>
                                 <td><%# Eval("ElectiveSubject3Code") %></td>
                                 <td><%# Eval("ElectiveSubject3Name") %>  <%# Eval("ElectiveSubject3PaperType") %></td>
                                 <td><%# Eval("ElectiveSubject3Date") %></td>
@@ -439,7 +439,7 @@
                         <%--<hr style="border-top:var(--bs-border-width) solid black;opacity: 1;border: 2px;" />--%>
                         <hr style="border: 1px solid black !important; opacity: 1.25 !important;" />
                         <!-- Heading -->
-                        <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निर्देश</u></h6>
+                        <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निदेश</u></h6>
 
                         <!-- Instructions -->
                         <ol style="font-size: small;">
