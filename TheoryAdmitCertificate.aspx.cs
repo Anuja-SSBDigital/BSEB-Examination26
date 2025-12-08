@@ -171,6 +171,10 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
             bool hasVocational = drv["HasVocationalSubjects"] != DBNull.Value && Convert.ToBoolean(drv["HasVocationalSubjects"]);
 
+
+            HtmlTableCell tdElective1 = e.Item.FindControl("tdElective1") as HtmlTableCell;
+            HtmlTableCell tdElective2 = e.Item.FindControl("tdElective2") as HtmlTableCell;
+            HtmlTableCell tdElective3 = e.Item.FindControl("tdElective3") as HtmlTableCell;
             // Map to Hindi
             string hindiFaculty = string.Empty;
 
@@ -193,8 +197,17 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 phFaculty.Visible = false;
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL (VOCATIONAL COURSE) EXAMINATION, 2026";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा, 2026";
-                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निश्चित परीक्षा कार्यक्रम सहित)";
-                    lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निर्धारित परीक्षा कार्यक्रम सहित)";
+
+                if (tdElective1 != null)
+                    tdElective1.InnerHtml = "ऐच्छिक विषय-1 <br /> (फाउंडेशन कोर्स )";
+
+                if (tdElective2 != null)
+                    tdElective2.InnerHtml = "ऐच्छिक विषय-2 <br /> (व्यावसायिक शिक्षा ट्रेड पत्र-I )";
+
+                if (tdElective3 != null)
+                    tdElective3.InnerHtml = "ऐच्छिक विषय-3 <br /> (व्यावसायिक शिक्षा ट्रेड पत्र-II )";
+                lblExamSchoolHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
                 trVocational.Visible = hasVocational;
             }
             else
@@ -203,7 +216,15 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblFacultyHindi.Text = "<label><strong>" + hindiFaculty + "</strong></label>";
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL EXAMINATION, 2026";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2026";
-                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक परीक्षा के विषय (निश्चित परीक्षा कार्यक्रम सहित)";
+                if (tdElective1 != null)
+                    tdElective1.InnerHtml = "ऐच्छिक विषय-1";
+
+                if (tdElective2 != null)
+                    tdElective2.InnerHtml = "ऐच्छिक विषय-2";
+
+                if (tdElective3 != null)
+                    tdElective3.InnerHtml = "ऐच्छिक विषय-3";
+                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक परीक्षा के विषय (निर्धारित परीक्षा कार्यक्रम सहित)";
                 lblExamSchoolHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
                 trVocational.Visible = hasVocational;
             }
