@@ -166,6 +166,8 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             Label lblExamSubjectHindi = (Label)e.Item.FindControl("lblExamSubjectHindi");
             Label lblExamSchoolHindi = (Label)e.Item.FindControl("lblExamSchoolHindi");
             HtmlTableRow trVocational = (HtmlTableRow)e.Item.FindControl("trVocational");
+
+            Label lblCollegeName = e.Item.FindControl("lblCollegeName") as Label;
             // Get FacultyName
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
@@ -198,6 +200,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL (VOCATIONAL COURSE) EXAMINATION, 2026";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा, 2026";
                 lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निर्धारित परीक्षा कार्यक्रम सहित)";
+                lblCollegeName.Text = "+2 स्कूल का नाम:";
 
                 if (tdElective1 != null)
                     tdElective1.InnerHtml = "ऐच्छिक विषय-1 <br /> (फाउंडेशन कोर्स )";
@@ -216,6 +219,7 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                 lblFacultyHindi.Text = "<label><strong>" + hindiFaculty + "</strong></label>";
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL EXAMINATION, 2026";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2026";
+                lblCollegeName.Text = "कॉलेज/+2 स्कूल का नाम:";
                 if (tdElective1 != null)
                     tdElective1.InnerHtml = "ऐच्छिक विषय-1";
 
