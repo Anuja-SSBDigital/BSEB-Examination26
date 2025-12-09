@@ -173,9 +173,11 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             HtmlTableRow trAdditional = (HtmlTableRow)e.Item.FindControl("trAdditional");
             HtmlTableRow trVocational = (HtmlTableRow)e.Item.FindControl("trVocational");
 
+            Label lblCollegeName = e.Item.FindControl("lblCollegeName") as Label;
             // Faculty Logic
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
+            bool hasVocational = drv["HasVocationalSubjects"] != DBNull.Value && Convert.ToBoolean(drv["HasVocationalSubjects"]);
 
             string hindiFaculty = "";
             switch (facultyName)
@@ -191,6 +193,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL  EXAMINATION, 2026 (VOCATIONAL)";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक  परीक्षा, 2026 (व्यवसायिक)";
                 lblExamSubjectHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+
+                lblCollegeName.Text = "+2 स्कूल का नाम:";
                 // Show only elective
                 trElective1.Visible = true;
                 trElective2.Visible = true;
@@ -206,13 +210,15 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL EXAMINATION, 2026";
                 lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक परीक्षा, 2026";
                 lblExamSubjectHindi.Text = "महाविद्यालय / +2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
+                lblCollegeName.Text = "कॉलेज/+2 स्कूल का नाम:";
                 // Show all
                 trElective1.Visible = true;
                 trElective2.Visible = true;
                 trElective3.Visible = true;
 
                 trAdditional.Visible = true;
-                trVocational.Visible = true;
+                trVocational.Visible = hasVocational;
+                //trVocational.Visible = true;
             }
 
             //  Hide all Elective rows if no elective subjects
