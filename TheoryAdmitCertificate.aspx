@@ -236,8 +236,8 @@
                                     </tr>
 
                                     <tr>
-                                        <td>कॉलेज/+2 स्कूल का नाम</td>
-
+                                        <%--<td>कॉलेज/+2 स्कूल का नाम</td>--%>
+                                        <td><strong><asp:Label ID="lblCollegeName" runat="server" /></strong></td>
                                         <td colspan="3"
                                             style="word-break: break-word; white-space: normal;"><%#
                         Eval("CollegeName") %></td>
