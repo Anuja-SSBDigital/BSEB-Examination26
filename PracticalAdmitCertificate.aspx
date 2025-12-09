@@ -433,7 +433,7 @@
                             <tr runat="server" id="trElective1">
                                 <td rowspan="3" style="border: none">वैकल्पिक विषय</td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
-                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Name") %></td>
+                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Name") %> <%# Eval("ElectiveSubject1PaperType") %></td>
                                 <%--<td rowspan="3" style="border-bottom: hidden; vertical-align: middle;">--%>
                                 <td rowspan="3" style="vertical-align: middle; font-weight: 600; font-size: larger;">
                                     <div style="text-align: center;">
@@ -445,11 +445,11 @@
                             </tr>
                             <tr runat="server" id="trElective2">
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject2Code") %></td>
-                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject2Name") %> <%# Eval("ElectiveSubject1PaperType") %></td>
+                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject2Name") %> <%# Eval("ElectiveSubject2PaperType") %></td>
                             </tr>
                             <tr runat="server" id="trElective3">
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject3Code") %></td>
-                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject3Name") %> <%# Eval("ElectiveSubject2PaperType") %></td>
+                                <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject3Name") %> <%# Eval("ElectiveSubject3PaperType") %></td>
                             </tr>
                             <tr runat="server" id="trAdditional">
                                 <td>अतिरिक्त विषय</td>
