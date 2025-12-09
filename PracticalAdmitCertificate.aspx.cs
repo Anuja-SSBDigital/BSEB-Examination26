@@ -215,6 +215,41 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
                 trVocational.Visible = true;
             }
 
+            //  Hide all Elective rows if no elective subjects
+
+            // === Elective subject visibility logic ===
+            // === Elective subject visibility logic (updated) ===
+            string e1 = drv["ElectiveSubject1Code"].ToString().Trim();
+            string e2 = drv["ElectiveSubject2Code"].ToString().Trim();
+            string e3 = drv["ElectiveSubject3Code"].ToString().Trim();
+
+            // Hide individual elective rows based on availability
+            trElective1.Visible = !string.IsNullOrEmpty(e1);
+            trElective2.Visible = !string.IsNullOrEmpty(e2);
+            trElective3.Visible = !string.IsNullOrEmpty(e3);
+
+            // If ALL are empty → hide the whole elective block
+            if (string.IsNullOrEmpty(e1) && string.IsNullOrEmpty(e2) && string.IsNullOrEmpty(e3))
+            {
+                trElective1.Visible = false;
+                trElective2.Visible = false;
+                trElective3.Visible = false;
+            }
+            else
+            {
+                // If Elective1 exists → keep rowspan = count of visible elective rows
+                int visibleElectiveCount = 0;
+                if (trElective1.Visible) visibleElectiveCount++;
+                if (trElective2.Visible) visibleElectiveCount++;
+                if (trElective3.Visible) visibleElectiveCount++;
+
+                // Adjust rowspan dynamically
+                if (visibleElectiveCount > 0)
+                    trElective1.Cells[0].RowSpan = visibleElectiveCount;
+            }
+
+        
+
             // Exam dates
             lblExamStartDate.Text = "10/01/2026";
             lblExamToDate.Text = "20/01/2026";
