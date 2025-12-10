@@ -189,7 +189,7 @@
                                     <strong>
                                         <asp:Label ID="lblExamTitleHindi" runat="server" CssClass="hindi-title" /></strong>
                                     <br />
-                                    <strong>
+                                    <strong style="font-size: 15px;">
                                         <asp:Label ID="lblExamTitle" runat="server" CssClass="english-title" /><br />
                                     </strong>
                                     <strong>सैद्धान्तिक परीक्षा का प्रवेश-पत्र</strong><br />
@@ -237,7 +237,8 @@
 
                                     <tr>
                                         <%--<td>कॉलेज/+2 स्कूल का नाम</td>--%>
-                                        <td><strong><asp:Label ID="lblCollegeName" runat="server" /></strong></td>
+                                        <td><strong>
+                                            <asp:Label ID="lblCollegeName" runat="server" /></strong></td>
                                         <td colspan="3"
                                             style="word-break: break-word; white-space: normal;"><%#
                         Eval("CollegeName") %></td>
@@ -352,7 +353,7 @@
                             <tr>
                                 <td rowspan="3">ऐच्छिक विषय<br>
                                     (Elective Subjects)</td>
-                                 <td id="tdElective1" runat="server"></td>
+                                <td id="tdElective1" runat="server"></td>
                                 <td>
                                     <%# Eval("ElectiveSubject1Code") %></td>
                                 <td>
@@ -363,7 +364,7 @@
 
                             </tr>
                             <tr>
-                                 <td id="tdElective2" runat="server"></td>
+                                <td id="tdElective2" runat="server"></td>
                                 <td>
                                     <%# Eval("ElectiveSubject2Code") %></td>
                                 <td>
