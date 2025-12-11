@@ -116,7 +116,11 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
                                         }
                                     }
 
-
+                                    bool downloadUpdateSuccess = btnDownloadUpdate_Click(studentIdStr);
+                                    if (!downloadUpdateSuccess)
+                                    {
+                                        log.Warn("Failed to update download status for studentId=" + studentIdStr);
+                                    }
                                     CategorizeAndPopulateSubjects(dtSubjectsForCurrentStudent, combinedRow, Convert.ToInt32(facultyId), collegeId);
 
                                     finalStudentData.Rows.Add(combinedRow);
@@ -520,7 +524,32 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
         }
     }
 
+    public bool btnDownloadUpdate_Click(string studentIds)
+    {
+        try
+        {
+            DBHelper dl = new DBHelper();
+            bool allSuccessful = true;
+            string fromPage = "PracticalDummy";
 
+            string[] ids = studentIds.Split(',');
+
+            bool isStudent = (fromPage == "PracticalDummy");
+
+            foreach (string id in ids)
+            {
+                bool result = dl.UpdatePracticalAndTheoryDummyDownloadStatus(id.Trim(), fromPage);
+                if (!result)
+                    allSuccessful = false;
+            }
+
+            return allSuccessful;
+        }
+        catch
+        {
+            return false;
+        }
+    }
     private void EnsureLog4NetConfigured()
     {
         if (!isLog4NetConfigured)
