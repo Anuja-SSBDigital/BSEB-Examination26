@@ -138,7 +138,7 @@
         }
 
         .container {
-            padding: 50px;
+            padding: 30px;
             margin-top: 20px;
         }
 
@@ -269,11 +269,11 @@
                 <div class="container" id="admitCard">
                     <!-- Header Section -->
                     <div class="header">
-                        <div class="row">
+                        <div class=" h5 row">
                             <div class="col-md-3">
                                 <img src="assets/img/bsebimage.jpg" alt="Bihar Board Logo" class="logo">
                             </div>
-                            <div class="col-md-6" style="font-size: large !important;">
+                            <div class="col-md-6">
                                 <div class="title">
                                     <strong>बिहार विद्यालय परीक्षा समिति</strong><br>
                                     <strong>BIHAR SCHOOL EXAMINATION BOARD </strong>
@@ -339,7 +339,7 @@
                         <tr>
                             <!-- Left Side: Student Details -->
                             <td style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
-                                <table style="width: 100%; font-size: 17px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
+                                <table style="width: 100%; font-size: 16px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
                                     <asp:HiddenField ID="hfFacultyId" runat="server" Value='<%# Eval("FacultyId") %>' />
                                     <colgroup>
                                         <col style="width: 25%;">
@@ -494,7 +494,7 @@
 
                         <!-- Instructions -->
 
-                        <ol style="font-size: initial;">
+                        <ol style="font-size: 14px;">
                             <%-- <li>प्रायोगिक परीक्षा दिनांक 10/01/2025 से 20/01/2025 तक संचालित होगी। केन्द्राधीक्षक दिनांक 10/01/2025 से 20/01/2025 तक की अवधि में परीक्षार्थियों की संख्या के अनुसार तिथि एवं पाली का निर्धारण करके प्रायोगिक परीक्षा केन्द्र पर उपस्थित सभी परीक्षार्थियों के प्रायोगिक विषयों की परीक्षा आयोजित करेंगे।</li>
                             <li>परीक्षार्थी अपने इस प्रवेश-पत्र में उल्लिखित प्रायोगिक परीक्षा केन्द्र पर दिनांक 10-01-2025 को पूर्वाह्न 09:00 बजे अनिवार्य रूप से जाकर परीक्षा केन्द्र के परिसर की सूचना पट्ट से यह जानकारी प्राप्त कर लें कि उनके द्वारा चयनित विषय की प्रायोगिक परीक्षा किस तिथि एवं किस पाली में संचालित होगी, जिसमें उन्हें सम्मिलित होना अनिवार्य है।</li>
                             <li>परीक्षार्थी के प्रत्येक प्रायोगिक विषय की परीक्षा के लिए 08 पृष्ठों की केवल एक ही उत्तरपुस्तिका मिलेगी। अतिरिक्त उत्तरपुस्तिका नहीं दी जाएगी। परीक्षार्थी उत्तरपुस्तिका लेते ही यह सुनिश्चित कर लें कि इसमें 8 पृष्ठ हैं एवं सही क्रम में हैं।</li>
@@ -541,7 +541,7 @@
 
 
                     </div>
-                    <hr style="border: 1px solid black; margin: 10px 0;">
+                    <hr style="border: 1px solid black; margin: 5px 0;">
                     <div id="infoDiv"><b></b></div>
 
 
@@ -592,9 +592,9 @@
 
                         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
                         const pageText = `${formattedDate}    Page ${i + 1} of ${elements.length}`;
-                        pdf.setFontSize(10);
+                        pdf.setFontSize(8);
                         pdf.setTextColor(0, 0, 0);
-                        pdf.text(pageText, 10, 290);
+                        pdf.text(pageText, pdfWidth / 2, 294, { align: 'center' });
                     }
 
                     pdf.save('PracticalAdmitCard.pdf');
