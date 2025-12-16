@@ -17,7 +17,7 @@
         }
 
         .container {
-            padding: 40px;
+            padding: 30px;
             margin-top: 20px;
         }
 
@@ -180,7 +180,7 @@
                             <div class="col-md-3">
                                 <img src="assets/img/bsebimage.jpg" alt="Bihar Board Logo" class="logo" />
                             </div>
-                            <div class="col-md-6 text-center" style="font-size: large !important;">
+                            <div class="col-md-6 text-center" style="font-size: large;">
                                 <div class="title">
                                     <strong>बिहार विद्यालय परीक्षा समिति</strong><br />
                                     <strong>BIHAR SCHOOL EXAMINATION BOARD</strong>
@@ -217,7 +217,7 @@
                     <table style="width: 100%; border-collapse: collapse; font-family: system-ui">
                         <tr>
                             <td style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
-                                <table style="width: 100%; font-size: 17px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
+                                <table style="width: 100%; font-size: 16px; line-height: 2; border-collapse: collapse; font-weight: 600; font-family: system-ui;">
 
                                     <asp:HiddenField ID="hfFacultyId" runat="server"
                                         Value='<%# Eval("FacultyId") %>' />
@@ -303,7 +303,7 @@
                         </tr>
                     </table>
 
-                    <table class="table table-details text-center align-middle" style="font-size: 17px; border: 2px solid #000;">
+                    <table class="table table-details text-center align-middle" style="font-size: 16px; border: 2px solid #000;">
                         <thead>
                             <tr>
                                 <%--<th colspan="7">सैद्धान्तिक वार्षिक परीक्षा के विषय (निरधारित परीक्षा कार्यक्रम सहित)</th>--%>
@@ -443,7 +443,7 @@
                         <h6 class="text-center mb-3"><u>परीक्षार्थी के लिए आवश्यक निदेश</u></h6>
 
                         <!-- Instructions -->
-                        <ol style="font-size: initial;">
+                        <ol style="font-size: 14px;">
                             <%--<li>यह मूल प्रवेश पत्र केवल जाँच परीक्षा (Sent-up Examination) में उत्प्रेषित (Sent-up) छात्र/छात्रा के लिए ही मान्य है। जाँच परीक्षा में अनुत्तीर्ण अथवा अनुपस्थित छात्र/छात्रा के लिए यह मूल प्रवेश पत्र मान्य नहीं है।</li>
                             <li>प्रथम पाली के परीक्षार्थी को परीक्षा प्रारंभ होने के समय पूर्वाह्न 09:30 बजे से 30 मिनट पूर्व अर्थात् पूर्वाह्न 09:00 बजे तक तथा द्वितीय पाली के परीक्षार्थी को परीक्षा प्रारंभ होने के समय अपराह्न 02:00 बजे से 30 मिनट पूर्व अर्थात् अपराह्न 01:30 बजे तक परीक्षा भवन में प्रवेश की अनुमति दी जाएगी। विलम्ब से आने वाले परीक्षार्थी को परीक्षा भवन में प्रवेश की अनुमति नहीं मिलेगी।</li>
                             <li>परीक्षा भवन में जूता-मोजा पहन कर आना सर्वथा वर्जित है अन्यथा परीक्षा भवन में प्रवेश की अनुमति नहीं मिलेगी। परीक्षा केन्द्र में कैलकुलेटर, मोबाइल फोन, ब्लूटूथ, ईयरफोन, इलेक्ट्रॉनिक घड़ी, स्मार्ट घड़ी अथवा मैगनेटिक घड़ी या अन्य इलेक्ट्रॉनिक गैजेट्स आदि लाना/प्रयोग करना वर्जित है। परीक्षार्थी परीक्षा भवन में प्रवेश पत्र एवं पेन के अलावा कुछ भी नहीं ले जायेंगे और निर्दिष्ट स्थान/सीट पर ही बैठेंगे।</li>
@@ -519,9 +519,9 @@
 
                         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
                         const pageText = `${formattedDate}    Page ${i + 1} of ${elements.length}`;
-                        pdf.setFontSize(10);
+                        pdf.setFontSize(8);
                         pdf.setTextColor(0, 0, 0);
-                        pdf.text(pageText, 10, 290);
+                        pdf.text(pageText, pdfWidth / 2, 294, { align: 'center' });
                     }
 
                     pdf.save('TheoryAdmitCard.pdf');
