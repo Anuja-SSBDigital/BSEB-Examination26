@@ -269,7 +269,7 @@
                 <div class="container" id="admitCard">
                     <!-- Header Section -->
                     <div class="header">
-                        <div class=" h5 row">
+                        <div class="row">
                             <div class="col-md-3">
                                 <img src="assets/img/bsebimage.jpg" alt="Bihar Board Logo" class="logo">
                             </div>
