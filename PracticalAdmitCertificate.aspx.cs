@@ -178,6 +178,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             HtmlTableRow trVocational = (HtmlTableRow)e.Item.FindControl("trVocational");
 
             Label lblCollegeName = e.Item.FindControl("lblCollegeName") as Label;
+            HtmlGenericControl liExamNote = (HtmlGenericControl)e.Item.FindControl("liExamNote");
+
             // Faculty Logic
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
@@ -206,6 +208,7 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
 
                 trAdditional.Visible = false;
                 trVocational.Visible = false;
+                liExamNote.InnerText ="जाँच परीक्षा में गैर-उत्प्रेषित या जाँच परीक्षा में अनुपस्थित छात्र/छात्रा इन्टरमीडिएट वार्षिक प्रायोगिक परीक्षा, 2026 (व्यवसायिक) में कदापि सम्मिलित नहीं हो सकते हैं।";
             }
             else
             {
@@ -222,6 +225,8 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
 
                 trAdditional.Visible = true;
                 trVocational.Visible = hasVocational;
+                liExamNote.InnerText = "जाँच परीक्षा में गैर-उत्प्रेषित या जाँच परीक्षा में अनुपस्थित छात्र/छात्रा इन्टरमीडिएट वार्षिक प्रायोगिक परीक्षा, 2026 में कदापि सम्मिलित नहीं हो सकते हैं।";
+
                 //trVocational.Visible = true;
             }
 
