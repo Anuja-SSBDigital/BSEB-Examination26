@@ -197,7 +197,7 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             {
                 phFaculty.Visible = false;
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL  EXAMINATION, 2026 (VOCATIONAL)";
-                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक  परीक्षा, 2026 (व्यवसायिक)";
+                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक  परीक्षा, 2026 (व्यावसायिक)";
                 lblExamSubjectHindi.Text = "+2 विद्यालय प्रधान का हस्ताक्षर एवं मुहर";
 
                 lblCollegeName.Text = "+2 स्कूल का नाम:";
@@ -208,7 +208,7 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
 
                 trAdditional.Visible = false;
                 trVocational.Visible = false;
-                liExamNote.InnerText ="जाँच परीक्षा में गैर-उत्प्रेषित या जाँच परीक्षा में अनुपस्थित छात्र/छात्रा इन्टरमीडिएट वार्षिक प्रायोगिक परीक्षा, 2026 (व्यवसायिक) में कदापि सम्मिलित नहीं हो सकते हैं।";
+                liExamNote.InnerText = "जाँच परीक्षा में गैर-उत्प्रेषित या जाँच परीक्षा में अनुपस्थित छात्र/छात्रा इन्टरमीडिएट वार्षिक प्रायोगिक परीक्षा, 2026 (व्यावसायिक) में कदापि सम्मिलित नहीं हो सकते हैं।";
             }
             else
             {
