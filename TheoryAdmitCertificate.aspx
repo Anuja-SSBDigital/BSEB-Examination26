@@ -303,7 +303,7 @@
                         </tr>
                     </table>
 
-                    <table class="table table-details text-center align-middle" style="font-size: 16px; border: 2px solid #000;">
+                    <table class="table table-details text-center align-middle" style="font-size: 13px; border: 2px solid #000;">
                         <thead>
                             <tr>
                                 <%--<th colspan="7">सैद्धान्तिक वार्षिक परीक्षा के विषय (निरधारित परीक्षा कार्यक्रम सहित)</th>--%>
