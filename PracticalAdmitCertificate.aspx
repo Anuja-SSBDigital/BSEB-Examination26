@@ -458,7 +458,7 @@
                                 <%-- <td style="text-align: center;"><%# Eval("AdditionalSubjectDate") %></td>--%>
                             </tr>
                             <tr runat="server" id="trVocational">
-                                <td>व्यवसायिक विषय</td>
+                                <td>व्यावसायिक विषय</td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("VocationalSubjectCode") %></td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("VocationalSubjectName") %>  <%# Eval("VocationalSubjectPaperType") %></td>
 
