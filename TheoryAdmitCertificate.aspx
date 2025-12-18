@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theory Admit Certificate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <%-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">--%>
     <style>
         body {
             font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif;
@@ -180,12 +180,12 @@
                             <div class="col-md-3">
                                 <img src="assets/img/bsebimage.jpg" alt="Bihar Board Logo" class="logo" />
                             </div>
-                            <div class="col-md-6 text-center" style="font-size: large;">
+                            <div class="col-md-6 text-center">
                                 <div class="title">
                                     <strong>बिहार विद्यालय परीक्षा समिति</strong><br />
                                     <strong>BIHAR SCHOOL EXAMINATION BOARD</strong>
                                 </div>
-                                <div class="sub-title mt-2">
+                                <div class="sub-title">
                                     <strong>
                                         <asp:Label ID="lblExamTitleHindi" runat="server" CssClass="hindi-title" /></strong>
                                     <br />
