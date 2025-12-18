@@ -202,8 +202,8 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             {
                 phFaculty.Visible = false;
                 lblExamTitle.Text = "INTERMEDIATE ANNUAL (VOCATIONAL COURSE) EXAMINATION, 2026";
-                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा, 2026";
-                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यवसायिक पाठ्यक्रम) परीक्षा के विषय (निर्धारित परीक्षा कार्यक्रम सहित)";
+                lblExamTitleHindi.Text = "इंटरमीडिएट वार्षिक (व्यावसायिक पाठ्यक्रम) परीक्षा, 2026";
+                lblExamSubjectHindi.Text = "सैद्धान्तिक वार्षिक (व्यावसायिक पाठ्यक्रम) परीक्षा के विषय (निर्धारित परीक्षा कार्यक्रम सहित)";
                 lblCollegeName.Text = "+2 स्कूल का नाम:";
 
                 if (tdElective1 != null)
