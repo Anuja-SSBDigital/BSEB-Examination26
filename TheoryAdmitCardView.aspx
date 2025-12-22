@@ -169,7 +169,7 @@
 <body>
     <form runat="server" id="form1">
         <div class="text-center mt-4 mb-5">
-            <a href="Theoryadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
+            <%--<a href="Theoryadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>--%>
             <button type="button" onclick="generatePDF()" class="btn btn-primary no-print">Download PDF</button>
         </div>
         <asp:Repeater ID="rptStudents" runat="server" OnItemDataBound="rptStudents_ItemDataBound">
