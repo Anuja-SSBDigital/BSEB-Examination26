@@ -25,16 +25,13 @@ public partial class TheoryAdmitCardView : System.Web.UI.Page
             log.Info("Page_Load started");
             try
             {
-                string encodedStudentData = Request.QueryString["studentData"];
+                //string encodedStudentData = Request.QueryString["studentData"];
+                string encodedStudentData = Request.QueryString["encodedStudentData"];
                 string Studentname = Request.QueryString["Studentname"];
-                string studentid = Request.QueryString["studentid"];
                 string Collegecode = Request.QueryString["Collegecode"];
                 string FacultyId = Request.QueryString["FacultyId"];
                 string DOB = Request.QueryString["Dob"];
                 string fromPage = Request.QueryString["from"];
-
-                string encryptedStudentId = Request.QueryString["studentId"];
-                string StudentId = CryptoHelper.Decrypt(encryptedStudentId);
                 //string examtypid = Request.QueryString["examTypeId"];
 
                 log.Debug(string.Format("Query Params: studentData={0}, Studentname={1}, Collegecode={2}, FacultyId={3}, DOB={4}, from={5}",
@@ -54,7 +51,10 @@ public partial class TheoryAdmitCardView : System.Web.UI.Page
                         string[] parts = studentEntry.Split('|');
                         if (parts.Length == 4)
                         {
-                            string studentIdStr = parts[0];
+                            string encryptedStudentId = parts[0];
+                            string StudentId = CryptoHelper.Decrypt(encryptedStudentId);
+                            //string studentIdStr = parts[0];
+                            string studentIdStr = StudentId;
                             string collegeId = parts[1];
                             string facultyId = parts[2];
                             string examtypid = parts[3];
