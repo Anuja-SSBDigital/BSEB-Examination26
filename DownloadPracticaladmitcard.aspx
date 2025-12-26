@@ -380,11 +380,14 @@ function paginateFilteredTable() {
                                       <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
                                       Select All
                                   </th>
+                                  <th>Registration No</th>
+                                      <th>Roll No</th>
                                      <th>Student Name</th>
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
                                             <%--<th>Faculty</th>--%>
-                                            <th>DOB</th>
+                                            <th>Gender</th>
+                                        
                               </tr>
                           </thead>
                           <tbody id="tableBody">
@@ -398,6 +401,8 @@ function paginateFilteredTable() {
                                               <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
                                               <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                           </td>
+                                           <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
+                                             <td class="repeater-col"><%# Eval("RollNumber") %></td>
                                          <td class="repeater-col"><%# Eval("StudentName") %></td>
                                                     <td class="repeater-col"><%# Eval("FatherName") %></td>
                                                     <td class="repeater-col"><%# Eval("MotherName") %></td>
@@ -408,7 +413,8 @@ function paginateFilteredTable() {
                                                     </td>--%>
                                                     <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                     <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                    <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>
+                                                    <td class="repeater-col"><%# Eval("GenderName") %></td>
+                                                 
                                       </tr>
                                   </ItemTemplate>
                               </asp:Repeater>
