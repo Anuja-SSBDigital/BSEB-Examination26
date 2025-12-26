@@ -68,7 +68,9 @@ public partial class DownloadPracticaladmitcard : System.Web.UI.Page
                 ddlFaculty.Items.Insert(0, new ListItem("Select Faculty", "0"));
             }
             DataTable dtExamcat = dl.getExamCatfordropdown();
-            var filtered = dtExamcat.AsEnumerable().Where(row => row.Field<int>("Pk_ExamTypeId") != 5);
+            var filtered = dtExamcat
+         .AsEnumerable()
+         .Where(row => row.Field<int>("Pk_ExamTypeId") != 5 && row.Field<int>("Pk_ExamTypeId") != 2);
 
             if (filtered.Any())
             {
