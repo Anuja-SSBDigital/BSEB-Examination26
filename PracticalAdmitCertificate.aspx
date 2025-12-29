@@ -4,8 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practical Admit Certificate</title>
+<%--<meta name="viewport" content="width=device-width, initial-scale=1.0">--%> <meta name="viewport" content="width=1200">    <title>Practical Admit Certificate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <%--<style>
         body {
@@ -560,26 +559,39 @@
                 window.generatePDF = async function () {
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const elements = document.querySelectorAll('.container');
+                    const containers = document.querySelectorAll('.container');
 
+                    // Timestamp for footer
                     const now = new Date();
-                    const options = {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: true
-                    };
-                    const formattedDate = now.toLocaleString('en-US', options);
+                    const formattedDate = now.toLocaleString('en-US', {
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                        hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+                    });
 
-                    for (let i = 0; i < elements.length; i++) {
-                        const element = elements[i];
-                        const canvas = await html2canvas(element, {
-                            scale: 2,
-                            useCORS: true
+                    for (let i = 0; i < containers.length; i++) {
+                        const original = containers[i];
+
+                        // 1️⃣ Clone the container
+                        const clone = original.cloneNode(true);
+
+                        // 2️⃣ Force desktop styles on the clone
+                        clone.style.width = '1200px';
+                        clone.style.minWidth = '1200px';
+                        clone.style.maxWidth = '1200px';
+                        clone.style.margin = '0 auto';
+                        clone.style.transform = 'scale(1)';
+                        clone.style.fontSize = '16px'; // adjust if needed
+
+                        // 3️⃣ Append clone off-screen
+                        clone.style.position = 'absolute';
+                        clone.style.top = '-9999px';
+                        document.body.appendChild(clone);
+
+                        // 4️⃣ Capture PDF
+                        const canvas = await html2canvas(clone, {
+                            scale: 2.5,  // higher scale for sharp PDF
+                            useCORS: true,
+                            logging: false
                         });
 
                         const imgData = canvas.toDataURL('image/jpeg', 1.0);
@@ -587,22 +599,26 @@
                         const pdfWidth = pdf.internal.pageSize.getWidth();
                         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-                        if (i > 0) {
-                            pdf.addPage();
-                        }
+                        if (i > 0) pdf.addPage();
 
                         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                        const pageText = `${formattedDate}    Page ${i + 1} of ${elements.length}`;
+
+                        const pageText = `${formattedDate}    Page ${i + 1} of ${containers.length}`;
                         pdf.setFontSize(8);
                         pdf.setTextColor(0, 0, 0);
                         pdf.text(pageText, pdfWidth / 2, 294, { align: 'center' });
+
+                        // 5️⃣ Remove clone
+                        document.body.removeChild(clone);
                     }
 
                     pdf.save('PracticalAdmitCard.pdf');
-                }
+                };
+
             }
         </script>
     </form>
 
 </body>
 </html>
+/html>
