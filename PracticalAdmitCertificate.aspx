@@ -404,10 +404,10 @@
                             <!-- Right Side: Photo and Signature -->
                             <td style="width: 15%; text-align: center; vertical-align: top;">
                                 <div style="border: 1px solid black; padding: 5px; display: inline-block;">
-                                    <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="width: 100%; max-width: 160px; height: auto;" />
+                                    <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="/* width: 100%; *//* max-width: 160px; *//* height: auto; */width: 160px;      /* Adjustable common display size */height: 160px;     /* Keeps it square */object-fit: cover; /* Crops to fill without distortion */border: 2px solid #ccc; /* Optional border for photo look */border-radius: 4px; /* Slight rounding, optional */"/>
                                 </div>
                                 <div style="margin-top: 10px;">
-                                    <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%; max-width: 180px; height: auto;" />
+                                    <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%;max-width: 180px;height: auto;width: 180px;      /* Adjustable common display size */height: 40px;     /* Keeps it square *//* object-fit: cover; */ /* Crops to fill without distortion *//* border: 2px solid #ccc; */ /* Optional border for photo look *//* border-radius: 4px; */ /* Slight rounding, optional */" />
                                 </div>
                             </td>
                         </tr>
@@ -621,4 +621,4 @@
 
 </body>
 </html>
-/html>
+

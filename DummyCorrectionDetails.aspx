@@ -16,6 +16,7 @@
                                 <asp:DropDownList ID="ddlDummyCorrectionDetailstype" runat="server" AutoPostBack="false" CssClass="form-control select2">
                                     <asp:ListItem Value="CORRECTION">Correction Details</asp:ListItem>
                                     <asp:ListItem Value="DOWNLOAD">Dummy Download Details</asp:ListItem>
+                                    <asp:ListItem Value="PRACTICALADMITCARD">Practical Admit Card</asp:ListItem>
                                 </asp:DropDownList>
                             </div>
                         </div>
@@ -90,6 +91,31 @@
                             </tbody>
         </table>
                         </FooterTemplate>
+                    </asp:Repeater>
+                    <asp:Repeater ID="rptPracticalAdmitCard" runat="server" Visible="false">
+                        <HeaderTemplate>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>PracticalAdmit Card Download</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <tr>
+                               <td style="text-align:center; font-weight:bold;">
+    <%# Eval("PracticalAdmitCardDownload") %>
+</td>
+
+                               
+                            </tr>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            </tbody>
+                            </table>
+                            </FooterTemplate>
                     </asp:Repeater>
 
                 </div>
