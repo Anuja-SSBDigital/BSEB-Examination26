@@ -225,6 +225,13 @@
                                 class="mt-4">
                                 <i class="fas fa-file-download"></i>Click here to download all Ex-student Exam Forms
                             </a>
+							  <a href="assets/Notifications/Vigyapti Letter No BSEB_SS_KEN_179_2024-981 Date 26-12-2025_page-0001.pdf"
+                                download="Vigyapti Letter No BSEB_SS_KEN_179_2024-981 Date 26-12-2025_page-0001.pdf"
+                                
+                                style="color: #3059c4; display: block; font-size: 25px;"
+                                class="mt-4">
+                                <i class="fas fa-file-download"></i>Click here to download Vigyapti for Practical Admit card 
+                            </a>
 							
 							 <%--<a href="http://intermediate.biharboardonline.com/Exam26/StudentExamDummyCard.aspx"  style="color: #3059c4; display: block; font-size: 25px;"
    class="mt-4">
@@ -235,6 +242,7 @@
    style="color: #3059c4; display: block; font-size: 25px;">
    Click here for Intermediate Dummy Admit Card (Student Login)
 </a>
+
 
                             <script>
 							
