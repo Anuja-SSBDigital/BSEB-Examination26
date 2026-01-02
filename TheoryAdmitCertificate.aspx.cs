@@ -175,12 +175,14 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
             // Get FacultyName
             DataRowView drv = (DataRowView)e.Item.DataItem;
             string facultyName = drv["FacultyName"].ToString().Trim().ToUpper();
+            string ExamTypeName = drv["ExamTypeName"].ToString().Trim().ToUpper();
             bool hasVocational = drv["HasVocationalSubjects"] != DBNull.Value && Convert.ToBoolean(drv["HasVocationalSubjects"]);
 
 
             HtmlTableCell tdElective1 = e.Item.FindControl("tdElective1") as HtmlTableCell;
             HtmlTableCell tdElective2 = e.Item.FindControl("tdElective2") as HtmlTableCell;
             HtmlTableCell tdElective3 = e.Item.FindControl("tdElective3") as HtmlTableCell;
+            HtmlTableCell tdAdditionalHeader = e.Item.FindControl("tdAdditionalHeader") as HtmlTableCell;
             // Map to Hindi
             string hindiFaculty = string.Empty;
 
@@ -196,7 +198,15 @@ public partial class TheoryAdmitCertificate : System.Web.UI.Page
                     hindiFaculty = "संकाय: <strong>वाणिज्य</strong>";
                     break;
             }
-
+            if (ExamTypeName == "QUALIFYING")
+            {
+                //
+                tdAdditionalHeader.InnerHtml = "Qualifying Subject ";
+            }
+            else
+            {
+                tdAdditionalHeader.InnerHtml = "अतिरिक्त विषय(Additional Subject)";
+            }
             // Show/hide section
             if (facultyName == "VOCATIONAL")
             {
