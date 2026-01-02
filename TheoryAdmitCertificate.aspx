@@ -384,7 +384,7 @@
 
                             </tr>
                             <tr>
-                                <td colspan="2">अतिरिक्त विषय (Additional Subject)</td>
+                                <td colspan="2" id="tdAdditionalHeader" runat="server"></td>
                                 <%--<td></td>--%>
                                 <td><%# Eval("AdditionalSubjectCode") %></td>
                                 <td><%# Eval("AdditionalSubjectName") %> <%# Eval("AdditionalSubjectPaperType") %></td>
