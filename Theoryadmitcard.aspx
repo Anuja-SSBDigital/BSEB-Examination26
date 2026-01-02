@@ -198,12 +198,14 @@ function filterAndPaginate() {
     var rows = document.querySelectorAll("#dataTable tbody tr");
 
     rows.forEach(function (row) {
-        var studentName = row.cells[1].textContent.toLowerCase();
-        var fatherName = row.cells[2].textContent.toLowerCase();
-        var motherName = row.cells[3].textContent.toLowerCase();
-        var dob = row.cells[4].textContent.toLowerCase();
+        var RegistrationNo = row.cells[1].textContent.toLowerCase();
+        var studentName = row.cells[2].textContent.toLowerCase();
+        var fatherName = row.cells[3].textContent.toLowerCase();
+        var motherName = row.cells[4].textContent.toLowerCase();
+        var dob = row.cells[5].textContent.toLowerCase();
 
-        var match = studentName.includes(searchText) ||
+        var match = RegistrationNo.includes(searchText) ||
+            studentName.includes(searchText) ||
             fatherName.includes(searchText) ||
             motherName.includes(searchText) ||
             dob.includes(searchText);
@@ -380,6 +382,7 @@ function paginateFilteredTable() {
                                       <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
                                       Select All
                                   </th>
+                                   <th>Registration No</th>
                                      <th>Student Name</th>
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
@@ -398,6 +401,7 @@ function paginateFilteredTable() {
                                               <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
                                               <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                           </td>
+                                            <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
                                          <td class="repeater-col"><%# Eval("StudentName") %></td>
                                                     <td class="repeater-col"><%# Eval("FatherName") %></td>
                                                     <td class="repeater-col"><%# Eval("MotherName") %></td>
