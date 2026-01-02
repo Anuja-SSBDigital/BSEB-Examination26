@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theory Admit Certificate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-   <%-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <%-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">--%>
     <style>
@@ -167,6 +167,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="text-light mt-3" style="font-size: 1.2rem;">Generating PDF, please wait...</div>
+    </div>
     <form runat="server" id="form1">
         <div class="text-center mt-4 mb-5">
             <a href="Theoryadmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
@@ -481,7 +488,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        <script>
+        <%--<script>
             window.onload = function () {
                 window.generatePDF = async function () {
                     const { jsPDF } = window.jspdf;
@@ -527,32 +534,88 @@
                     pdf.save('TheoryAdmitCard.pdf');
                 }
             }
-            //async function generatePDF() {
+          
+        </script>--%>
 
-            //    const { jsPDF } = window.jspdf;
-            //    const pdf = new jsPDF('p', 'mm', 'a4');
-            //    const elements = document.querySelectorAll('.container');
+        <script>
+            window.onload = function () {
+                window.generatePDF = async function () {
+                    // Show loader
+                    document.getElementById('loadingOverlay').style.display = 'flex';
 
-            //    for (let i = 0; i < elements.length; i++) {
-            //        const element = elements[i];
-            //        const canvas = await html2canvas(element, {
-            //            scale: 2,
-            //            useCORS: true
-            //        });
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const containers = document.querySelectorAll('.container');
 
-            //        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-            //        const imgProps = pdf.getImageProperties(imgData);
-            //        const pdfWidth = pdf.internal.pageSize.getWidth();
-            //        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    // Timestamp for footer
+                    const now = new Date();
+                    const options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true
+                    };
+                    const formattedDate = now.toLocaleString('en-US', options);
 
-            //        if (i > 0) {
-            //            pdf.addPage();
-            //        }
-            //        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-            //    }
+                    try {
+                        for (let i = 0; i < containers.length; i++) {
+                            const original = containers[i];
 
-            //    pdf.save('TheoryAdmitCard.pdf');
-            //}
+                            // Clone and force consistent width for accurate rendering
+                            const clone = original.cloneNode(true);
+                            clone.style.width = '1200px';
+                            clone.style.minWidth = '1200px';
+                            clone.style.maxWidth = '1200px';
+                            clone.style.margin = '0 auto';
+                            clone.style.padding = '20px';
+                            clone.style.boxSizing = 'border-box';
+                            clone.style.fontSize = '16px';
+
+                            // Position off-screen for capture
+                            clone.style.position = 'absolute';
+                            clone.style.top = '-9999px';
+                            clone.style.left = '-9999px';
+                            document.body.appendChild(clone);
+
+                            // Capture canvas
+                            const canvas = await html2canvas(clone, {
+                                scale: 2.5,           // Higher quality
+                                useCORS: true,
+                                logging: false
+                            });
+
+                            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                            const imgProps = pdf.getImageProperties(imgData);
+                            const pdfWidth = pdf.internal.pageSize.getWidth();
+                            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                            if (i > 0) pdf.addPage();
+                            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+                            // Footer timestamp & page number
+                            const pageText = `${formattedDate} Page ${i + 1} of ${containers.length}`;
+                            pdf.setFontSize(8);
+                            pdf.setTextColor(0, 0, 0);
+                            pdf.text(pageText, pdfWidth / 2, 294, { align: 'center' });
+
+                            // Clean up clone
+                            document.body.removeChild(clone);
+                        }
+
+                        pdf.save('TheoryAdmitCard.pdf');
+                    } catch (error) {
+                        console.error('PDF generation failed:', error);
+                        alert('Error generating PDF. Please try again.');
+                    } finally {
+                        // Always hide loader
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                    }
+                };
+            };
         </script>
     </form>
 </body>
