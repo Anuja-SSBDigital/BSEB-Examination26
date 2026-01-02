@@ -4,7 +4,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<%--<meta name="viewport" content="width=device-width, initial-scale=1.0">--%> <meta name="viewport" content="width=1200">    <title>Practical Admit Certificate</title>
+    <%--<meta name="viewport" content="width=device-width, initial-scale=1.0">--%>
+    <meta name="viewport" content="width=1200">
+    <title>Practical Admit Certificate</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <%--<style>
         body {
@@ -258,6 +260,13 @@
 
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="text-light mt-3" style="font-size: 1.2rem;">Generating PDF, please wait...</div>
+    </div>
     <form runat="server" id="form1">
         <div class="text-center mt-4 mb-5">
             <a href="DownloadPracticaladmitcard.aspx" class="btn btn-primary no-print" style="text-decoration: none !important;">Back</a>
@@ -354,7 +363,8 @@
 
                                     <tr>
                                         <%--<td>+2 स्कूल का नाम</td>--%>
-                                         <td><strong><asp:Label ID="lblCollegeName" runat="server" /></strong></td>
+                                        <td><strong>
+                                            <asp:Label ID="lblCollegeName" runat="server" /></strong></td>
                                         <td colspan="3" style="word-break: break-word; white-space: normal;"><%# Eval("CollegeName") %></td>
                                     </tr>
                                     <tr>
@@ -404,10 +414,10 @@
                             <!-- Right Side: Photo and Signature -->
                             <td style="width: 15%; text-align: center; vertical-align: top;">
                                 <div style="border: 1px solid black; padding: 5px; display: inline-block;">
-                                    <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="/* width: 100%; *//* max-width: 160px; *//* height: auto; */width: 160px;      /* Adjustable common display size */height: 160px;     /* Keeps it square */object-fit: cover; /* Crops to fill without distortion */border: 2px solid #ccc; /* Optional border for photo look */border-radius: 4px; /* Slight rounding, optional */"/>
+                                    <img src='<%# ResolveUrl(Eval("StudentPhotoPath").ToString()) %>' alt="Photo" style="/* width: 100%; *//* max-width: 160px; *//* height: auto; */width: 160px; /* adjustable common display size */height: 160px; /* keeps it square */object-fit: cover; /* crops to fill without distortion */border: 2px solid #ccc; /* optional border for photo look */border-radius: 4px; /* slight rounding, optional */" />
                                 </div>
                                 <div style="margin-top: 10px;">
-                                    <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%;max-width: 180px;height: auto;width: 180px;      /* Adjustable common display size */height: 40px;     /* Keeps it square *//* object-fit: cover; */ /* Crops to fill without distortion *//* border: 2px solid #ccc; */ /* Optional border for photo look *//* border-radius: 4px; */ /* Slight rounding, optional */" />
+                                    <img src='<%# ResolveUrl(Eval("StudentSignaturePath").ToString()) %>' alt="Signature" style="width: 100%; max-width: 180px; height: auto; width: 180px; /* adjustable common display size */height: 40px; /* keeps it square *//* object-fit: cover; */ /* crops to fill without distortion *//* border: 2px solid #ccc; */ /* optional border for photo look *//* border-radius: 4px; */ /* slight rounding, optional */" />
                                 </div>
                             </td>
                         </tr>
@@ -493,7 +503,7 @@
 
                         <!-- Instructions -->
 
-                      <ol style='<%# Eval("FacultyName").ToString() == "SCIENCE" ? "font-size: 14px;" : "font-size: 16px;" %>'>
+                        <ol style='<%# Eval("FacultyName").ToString() == "SCIENCE" ? "font-size: 14px;": "font-size: 16px;" %>'>
                             <%-- <li>प्रायोगिक परीक्षा दिनांक 10/01/2025 से 20/01/2025 तक संचालित होगी। केन्द्राधीक्षक दिनांक 10/01/2025 से 20/01/2025 तक की अवधि में परीक्षार्थियों की संख्या के अनुसार तिथि एवं पाली का निर्धारण करके प्रायोगिक परीक्षा केन्द्र पर उपस्थित सभी परीक्षार्थियों के प्रायोगिक विषयों की परीक्षा आयोजित करेंगे।</li>
                             <li>परीक्षार्थी अपने इस प्रवेश-पत्र में उल्लिखित प्रायोगिक परीक्षा केन्द्र पर दिनांक 10-01-2025 को पूर्वाह्न 09:00 बजे अनिवार्य रूप से जाकर परीक्षा केन्द्र के परिसर की सूचना पट्ट से यह जानकारी प्राप्त कर लें कि उनके द्वारा चयनित विषय की प्रायोगिक परीक्षा किस तिथि एवं किस पाली में संचालित होगी, जिसमें उन्हें सम्मिलित होना अनिवार्य है।</li>
                             <li>परीक्षार्थी के प्रत्येक प्रायोगिक विषय की परीक्षा के लिए 08 पृष्ठों की केवल एक ही उत्तरपुस्तिका मिलेगी। अतिरिक्त उत्तरपुस्तिका नहीं दी जाएगी। परीक्षार्थी उत्तरपुस्तिका लेते ही यह सुनिश्चित कर लें कि इसमें 8 पृष्ठ हैं एवं सही क्रम में हैं।</li>
@@ -554,9 +564,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        <script>
+        <%-- <script>
             window.onload = function () {
                 window.generatePDF = async function () {
+                    document.getElementById('loadingOverlay').style.display = 'flex';
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
                     const containers = document.querySelectorAll('.container');
@@ -615,6 +626,79 @@
                     pdf.save('PracticalAdmitCard.pdf');
                 };
 
+            }
+        </script>--%>
+
+        <script>
+            window.onload = function () {
+                window.generatePDF = async function () {
+                    // Show loader
+                    document.getElementById('loadingOverlay').style.display = 'flex';
+
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const containers = document.querySelectorAll('.container');
+
+                    // Timestamp for footer
+                    const now = new Date();
+                    const formattedDate = now.toLocaleString('en-US', {
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                        hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+                    });
+
+                    try {
+                        for (let i = 0; i < containers.length; i++) {
+                            const original = containers[i];
+
+                            // Clone the container
+                            const clone = original.cloneNode(true);
+
+                            // Force desktop styles on the clone
+                            clone.style.width = '1200px';
+                            clone.style.minWidth = '1200px';
+                            clone.style.maxWidth = '1200px';
+                            clone.style.margin = '0 auto';
+                            clone.style.transform = 'scale(1)';
+                            clone.style.fontSize = '16px';
+
+                            // Append clone off-screen
+                            clone.style.position = 'absolute';
+                            clone.style.top = '-9999px';
+                            document.body.appendChild(clone);
+
+                            // Capture with html2canvas
+                            const canvas = await html2canvas(clone, {
+                                scale: 2.5,
+                                useCORS: true,
+                                logging: false
+                            });
+
+                            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                            const imgProps = pdf.getImageProperties(imgData);
+                            const pdfWidth = pdf.internal.pageSize.getWidth();
+                            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                            if (i > 0) pdf.addPage();
+                            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+                            const pageText = `${formattedDate} Page ${i + 1} of ${containers.length}`;
+                            pdf.setFontSize(8);
+                            pdf.setTextColor(0, 0, 0);
+                            pdf.text(pageText, pdfWidth / 2, 294, { align: 'center' });
+
+                            // Remove clone
+                            document.body.removeChild(clone);
+                        }
+
+                        pdf.save('PracticalAdmitCard.pdf');
+                    } catch (error) {
+                        console.error('PDF generation failed:', error);
+                        alert('Error generating PDF. Please try again.');
+                    } finally {
+                        // Always hide loader when done (success or error)
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                    }
+                };
             }
         </script>
     </form>
