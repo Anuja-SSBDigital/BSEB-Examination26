@@ -343,7 +343,7 @@
                 </div>
             </div>
         </div>--%>
-                    <table style="width: 100%; border-collapse: collapse; font-family: system-ui">
+                    <table style="width: 100%; border-collapse: collapse; font-family: system-ui;text-transform: uppercase;">
                         <tr>
                             <!-- Left Side: Student Details -->
                             <td style="width: 85%; vertical-align: top; padding-right: 10px; font-family: sans-serif; line-height: 1.8;">
