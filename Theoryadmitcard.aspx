@@ -202,13 +202,13 @@ function filterAndPaginate() {
         var studentName = row.cells[2].textContent.toLowerCase();
         var fatherName = row.cells[3].textContent.toLowerCase();
         var motherName = row.cells[4].textContent.toLowerCase();
-        var dob = row.cells[5].textContent.toLowerCase();
+        var gender = row.cells[5].textContent.toLowerCase();
 
         var match = RegistrationNo.includes(searchText) ||
             studentName.includes(searchText) ||
             fatherName.includes(searchText) ||
             motherName.includes(searchText) ||
-            dob.includes(searchText);
+            gender.includes(searchText);
 
         row.dataset.visible = match ? "true" : "false";
     });
@@ -370,7 +370,7 @@ function paginateFilteredTable() {
                         <hr />
                              <!-- 🔍 Search Box -->
       <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" Visible="false" >
-          <input type="text" id="searchInput" class="form-control" placeholder="Search by Student, Father, Mother Name or DOB" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
+          <input type="text" id="searchInput" class="form-control" placeholder="Search by RegistrationNo,Student,Father,Mother,Gender" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
       </div>
 <div class="table-responsive">
                   <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
@@ -383,11 +383,12 @@ function paginateFilteredTable() {
                                       Select All
                                   </th>
                                    <th>Registration No</th>
+                                   <th>Roll No</th>
                                      <th>Student Name</th>
                                             <th>Father Name</th>
                                             <th>Mother Name</th>
                                             <%--<th>Faculty</th>--%>
-                                            <th>DOB</th>
+                                            <th>Gender</th>
                               </tr>
                           </thead>
                           <tbody id="tableBody">
@@ -402,6 +403,7 @@ function paginateFilteredTable() {
                                               <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                           </td>
                                             <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
+                                                <td class="repeater-col"><%# Eval("RollNumber") %></td>
                                          <td class="repeater-col"><%# Eval("StudentName") %></td>
                                                     <td class="repeater-col"><%# Eval("FatherName") %></td>
                                                     <td class="repeater-col"><%# Eval("MotherName") %></td>
@@ -412,7 +414,8 @@ function paginateFilteredTable() {
                                                     </td>--%>
                                                     <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                     <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                    <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>
+                                            <td class="repeater-col"><%# Eval("GenderName") %></td>
+                                                   <%-- <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>--%>
                                       </tr>
                                   </ItemTemplate>
                               </asp:Repeater>
