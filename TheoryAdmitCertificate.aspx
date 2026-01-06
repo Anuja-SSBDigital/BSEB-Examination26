@@ -13,11 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Sans+Devanagari:wght@100..900&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">--%>
     <style>
         body {
-            font-family: 'Noto Sans Devanagari', 'Mangal', 'Arial', sans-serif;
+            font-family: none;
         }
 
         .container {
-            padding: 20px;
+            padding: 30px;
             margin-top: 20px;
         }
 
