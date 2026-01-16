@@ -33,6 +33,10 @@ public partial class DummyCorrectionDetails : System.Web.UI.Page
             rptCorrection.DataBind();
             rptDownload.Visible = false;
             rptCorrection.Visible = true;
+            rptPracticalAdmitCard.Visible = false;
+            rptTheoryAdmitCard.Visible = false;
+
+
 
         }
         else if (ddlDummyCorrectionDetailstype.SelectedValue == "DOWNLOAD")
@@ -41,11 +45,28 @@ public partial class DummyCorrectionDetails : System.Web.UI.Page
             rptDownload.DataBind();
             rptCorrection.Visible = false;
             rptDownload.Visible = true;
+            rptPracticalAdmitCard.Visible = false;
+            rptTheoryAdmitCard.Visible = false;
+
 
         }
-        else
+        else if (ddlDummyCorrectionDetailstype.SelectedValue == "PRACTICALADMITCARD")
         {
-
+            rptPracticalAdmitCard.DataSource = ds;
+            rptPracticalAdmitCard.DataBind();
+            rptCorrection.Visible = false;
+            rptDownload.Visible = false;
+            rptPracticalAdmitCard.Visible = true;
+            rptTheoryAdmitCard.Visible = false;
+        }
+        else if (ddlDummyCorrectionDetailstype.SelectedValue == "THEORYADMITCARD")
+        {
+            rptTheoryAdmitCard.DataSource = ds;
+            rptTheoryAdmitCard.DataBind();
+            rptCorrection.Visible = false;
+            rptDownload.Visible = false;
+            rptPracticalAdmitCard.Visible = false;
+            rptTheoryAdmitCard.Visible = true;
         }
     }
 }
