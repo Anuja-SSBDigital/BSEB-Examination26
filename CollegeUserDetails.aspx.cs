@@ -106,13 +106,15 @@ public partial class CollegeUserDetails : System.Web.UI.Page
         try
         {
             string userName = txtChangeUserName.Text.Trim();
-           
+
+            //string newPassword = "JAMGVTJNKT";
             string newPassword = txtNewPassword.Text.Trim();
+            string PlainPassword = txtNewPassword.Text.Trim();
 
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(newPassword))
             {
                 string hashedPassword = HashPasswordSHA256(newPassword);
-                bool result = dl.UpdateUserPassword(userName, hashedPassword);
+                bool result = dl.UpdateUserPassword(userName, hashedPassword, PlainPassword);
                 if (result)
                 {
                     pnlChangePassword.Visible = false;
