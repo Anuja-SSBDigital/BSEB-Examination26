@@ -126,7 +126,8 @@
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <asp:Button ID="btnSubmitNewPassword" runat="server" Text="Submit Password" CssClass="btn btn-success" OnClientClick="return validatePassword();" OnClick="btnSubmitNewPassword_Click" />
+                            <asp:Button ID="btnSubmitNewPassword" runat="server" Text="Submit Password" CssClass="btn btn-success"  OnClick="btnSubmitNewPassword_Click" />
+                            <%--<asp:Button ID="btnSubmitNewPassword" runat="server" Text="Submit Password" CssClass="btn btn-success" OnClientClick="return validatePassword();" OnClick="btnSubmitNewPassword_Click" />--%>
                         </div>
                     </asp:Panel>
                 </div>
@@ -211,7 +212,7 @@
         return true;
     }
 
-    function validatePassword() {
+  <%--  function validatePassword() {
         var passwordInput = document.getElementById('<%= txtNewPassword.ClientID %>');
           var passwordError = document.getElementById("txtNewPasswordErr");
           var password = passwordInput.value.trim();
@@ -236,7 +237,7 @@
           }
 
           return true;
-      }
+      }--%>
 
       function enforceMaxLength(el, maxLength) {
           if (el.value.length > maxLength) {
