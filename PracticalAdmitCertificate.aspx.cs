@@ -177,6 +177,7 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
             HtmlTableRow trAdditional = (HtmlTableRow)e.Item.FindControl("trAdditional");
             HtmlTableRow trVocational = (HtmlTableRow)e.Item.FindControl("trVocational");
 
+
             Label lblCollegeName = e.Item.FindControl("lblCollegeName") as Label;
             HtmlGenericControl liExamNote = (HtmlGenericControl)e.Item.FindControl("liExamNote");
 
@@ -263,8 +264,38 @@ public partial class PracticalAdmitCertificate : System.Web.UI.Page
                     trElective1.Cells[0].RowSpan = visibleElectiveCount;
             }
 
-        
+            HtmlTableCell tdExamDate = (HtmlTableCell)e.Item.FindControl("tdExamDate");
+            //int totalVisibleRows = 0;
+            // Remove date cell from its original parent
+            tdExamDate.Parent.Controls.Remove(tdExamDate);
 
+
+            // Find first visible row
+            HtmlTableRow targetRow = null;
+
+
+            if (trElective1.Visible) targetRow = trElective1;
+            else if (trElective2.Visible) targetRow = trElective2;
+            else if (trElective3.Visible) targetRow = trElective3;
+            else if (trAdditional.Visible) targetRow = trAdditional;
+            else if (trVocational.Visible) targetRow = trVocational;
+
+
+            // Count visible rows
+            int totalVisibleRows = 0;
+            if (trElective1.Visible) totalVisibleRows++;
+            if (trElective2.Visible) totalVisibleRows++;
+            if (trElective3.Visible) totalVisibleRows++;
+            if (trAdditional.Visible) totalVisibleRows++;
+            if (trVocational.Visible) totalVisibleRows++;
+
+
+            // Attach cell & apply rowspan
+            if (targetRow != null && totalVisibleRows > 0)
+            {
+                tdExamDate.RowSpan = totalVisibleRows;
+                targetRow.Cells.Add(tdExamDate);
+            }
             // Exam dates
             lblExamStartDate.Text = "10/01/2026";
             lblExamToDate.Text = "20/01/2026";

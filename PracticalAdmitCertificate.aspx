@@ -444,7 +444,8 @@
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Code") %></td>
                                 <td style="font-weight: 600; font-size: larger;"><%# Eval("ElectiveSubject1Name") %> <%# Eval("ElectiveSubject1PaperType") %></td>
                                 <%--<td rowspan="3" style="border-bottom: hidden; vertical-align: middle;">--%>
-                                <td rowspan="5" style="vertical-align: middle; font-weight: 600; font-size: larger;">
+                                <%--<td rowspan="5" style="vertical-align: middle; font-weight: 600; font-size: larger;">--%>
+                              <td runat="server" id="tdExamDate" style="vertical-align: middle; font-weight: 600; font-size: larger;">
                                     <div style="text-align: center;">
                                         <asp:Label ID="lblExamStartDate" runat="server" CssClass="hindi-title" /><br />
                                         <span>To</span><br />
