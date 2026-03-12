@@ -92,23 +92,8 @@
 
                                     <div class="row" runat="server" id="div_search">
 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="rollNumber" class="form-label">Roll code:</label>
 
-                                                <asp:TextBox ID="txtrollcode" runat="server" class="form-control" TextMode="Number" />
-                                                <span id="txtrollcodeErr" style="display: none; color: red;">Please Enter Roll Code</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="rollNumber" class="form-label">Roll Number:</label>
-
-                                                <asp:TextBox ID="txtrollNumber" runat="server" class="form-control" TextMode="Number" />
-                                                <span id="txtrollNumberErr" style="display: none; color: red;">Please Enter Roll Number</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Faculty<span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
@@ -116,26 +101,40 @@
                                                 <span id="facultyError" class="text-danger" style="display: none;">Please select a Faculty.</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="rollNumber" class="form-label">Type</label>
+                                                <asp:DropDownList runat="server" ID="ddl_type" class="form-control">
+                                                    <asp:ListItem Value="ALL">Select Type</asp:ListItem>
+                                                    <asp:ListItem Value="Practical">Practical</asp:ListItem>
+                                                    <asp:ListItem Value="Theory">Theory</asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="rollNumber" class="form-label">Roll code:</label>
+
+                                                <asp:TextBox ID="txtrollcode" runat="server" class="form-control" TextMode="Number" />
+                                                <span id="txtrollcodeErr" style="display: none; color: red;">Please Enter Roll Code</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="rollNumber" class="form-label">Roll Number:</label>
+
+                                                <asp:TextBox ID="txtrollNumber" runat="server" class="form-control" TextMode="Number" />
+                                                <span id="txtrollNumberErr" style="display: none; color: red;">Please Enter Roll Number</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="rollNumber" class="form-label">District Code</label>
 
                                                 <asp:TextBox ID="txtdiscode" runat="server" class="form-control" />
                                                 <span id="txtrolldisErr" style="display: none; color: red;">Please Enter code</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" runat="server" id="div1">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="rollNumber" class="form-label">Type</label>
-                                                <asp:DropDownList runat="server" ID="ddl_type" class="form-control">
-                                                    <asp:ListItem value="ALL">Select Type</asp:ListItem>
-                                                    <asp:ListItem value="Practical">Practical</asp:ListItem>
-                                                    <asp:ListItem value="Theory">Theory</asp:ListItem>
-                                                </asp:DropDownList>
-                                    
                                             </div>
                                         </div>
                                     </div>
