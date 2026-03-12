@@ -143,80 +143,83 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="mt-3" runat="server" id="Agency_detailes" >
+                            <div class="card card-primary">
+                                <div class="card-body">
+                                    <div class="mt-3" runat="server" id="Agency_detailes">
 
-                                <div class="text-right mt-3">
-                                    <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click"  />
-                                </div>
-                                <hr />
-                                <!-- 🔍 Search Box -->
-                                <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" >
-                                    <input type="text" id="searchInput" class="form-control" placeholder="Search by RegistrationNo,Student,Father,Mother,Gender" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
-                                </div>
-                                <div class="table-responsive">
-                                    <asp:Panel ID="pnlStudentTable" runat="server" >
-                                        <table class="table table-hover table-bordered dataTable" id="dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="repeater-checkbox">
-                                                        <asp:HiddenField ID="hfSelectedIds" runat="server" />
-                                                        <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
-                                                        Select All
-                                                    </th>
-                                                    <th>Registration No</th>
-                                                    <th>Roll No</th>
-                                                    <th>Student Name</th>
-                                                    <th>Father Name</th>
-                                                    <th>Mother Name</th>
-                                                    <%--<th>Faculty</th>--%>
-                                                    <th>Gender</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tableBody">
-                                                <asp:Repeater runat="server" ID="rptStudents"  >
-                                                    <ItemTemplate>
-                                                        <tr data-visible="true">
-                                                            <td class="repeater-checkbox">
-                                                                <asp:CheckBox ID="chkRowSelect" runat="server" AutoPostBack="false" OnClientClick="updateSelectAllState();" />
-                                                                <asp:HiddenField ID="hfStudentID" runat="server" Value='<%# Eval("StudentID") %>' />
-                                                                <asp:HiddenField ID="hfCollege" runat="server" Value='<%# Eval("CollegeId") %>' />
-                                                                <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
-                                                                <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                            </td>
-                                                            <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
-                                                            <td class="repeater-col"><%# Eval("RollNumber") %></td>
-                                                            <td class="repeater-col"><%# Eval("StudentName") %></td>
-                                                            <td class="repeater-col"><%# Eval("FatherName") %></td>
-                                                            <td class="repeater-col"><%# Eval("MotherName") %></td>
-                                                            <%--<td class="repeater-col">
+                                        <div class="text-right mt-3">
+                                            <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click" />
+                                        </div>
+                                        <hr />
+                                        <!-- 🔍 Search Box -->
+                                        <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server">
+                                            <input type="text" id="searchInput" class="form-control" placeholder="Search by RegistrationNo,Student,Father,Mother,Gender" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
+                                        </div>
+                                        <div class="table-responsive">
+                                            <asp:Panel ID="pnlStudentTable" runat="server">
+                                                <table class="table table-hover table-bordered dataTable" id="dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="repeater-checkbox">
+                                                                <asp:HiddenField ID="hfSelectedIds" runat="server" />
+                                                                <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
+                                                                Select All
+                                                            </th>
+                                                            <th>Registration No</th>
+                                                            <th>Roll No</th>
+                                                            <th>Student Name</th>
+                                                            <th>Father Name</th>
+                                                            <th>Mother Name</th>
+                                                            <%--<th>Faculty</th>--%>
+                                                            <th>Gender</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tableBody">
+                                                        <asp:Repeater runat="server" ID="rptStudents">
+                                                            <ItemTemplate>
+                                                                <tr data-visible="true">
+                                                                    <td class="repeater-checkbox">
+                                                                        <asp:CheckBox ID="chkRowSelect" runat="server" AutoPostBack="false" OnClientClick="updateSelectAllState();" />
+                                                                        <asp:HiddenField ID="hfStudentID" runat="server" Value='<%# Eval("StudentID") %>' />
+                                                                        <asp:HiddenField ID="hfCollege" runat="server" Value='<%# Eval("CollegeId") %>' />
+                                                                        <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
+                                                                        <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
+                                                                    </td>
+                                                                    <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
+                                                                    <td class="repeater-col"><%# Eval("RollNumber") %></td>
+                                                                    <td class="repeater-col"><%# Eval("StudentName") %></td>
+                                                                    <td class="repeater-col"><%# Eval("FatherName") %></td>
+                                                                    <td class="repeater-col"><%# Eval("MotherName") %></td>
+                                                                    <%--<td class="repeater-col">
                                      <%# Eval("Faculty") %>
                                      <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
                                        <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                  </td>--%>
-                                                            <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
-                                                            <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                            <td class="repeater-col"><%# Eval("GenderName") %></td>
-                                                            <%-- <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>--%>
-                                                        </tr>
-                                                    </ItemTemplate>
-                                                </asp:Repeater>
-                                            </tbody>
-                                        </table>
-                                        <asp:Label ID="lblEntriesCount" runat="server" CssClass="mt-2 d-block text-left"></asp:Label>
+                                                                    <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
+                                                                    <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
+                                                                    <td class="repeater-col"><%# Eval("GenderName") %></td>
+                                                                    <%-- <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>--%>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:Repeater>
+                                                    </tbody>
+                                                </table>
+                                                <asp:Label ID="lblEntriesCount" runat="server" CssClass="mt-2 d-block text-left"></asp:Label>
 
-                                    </asp:Panel>
+                                            </asp:Panel>
 
-                                    <asp:Panel ID="pnlNoRecords" runat="server" Visible="false" CssClass="alert alert-danger text-center mt-3">
-                                        No student records found matching your criteria.
-                                    </asp:Panel>
+                                            <asp:Panel ID="pnlNoRecords" runat="server" Visible="false" CssClass="alert alert-danger text-center mt-3">
+                                                No student records found matching your criteria.
+                                            </asp:Panel>
+                                        </div>
+
+                                        <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="false">
+                                            <div id="pagination"></div>
+                                        </asp:Panel>
+                                    </div>
                                 </div>
-
-                                <asp:Panel ID="pnlPager" runat="server" CssClass="pagination" Visible="false">
-                                    <div id="pagination"></div>
-                                </asp:Panel>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
