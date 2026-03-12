@@ -87,22 +87,10 @@
                             <div class="card card-primary">
                                 <div class="card-header">
                                     <h4>Search File Upload Details</h4>
-
-
-
                                 </div>
                                 <div class="card-body">
 
                                     <div class="row" runat="server" id="div_search">
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Faculty<span class="text-danger">*</span></label>
-                                                <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
-                                                </asp:DropDownList>
-                                                <span id="facultyError" class="text-danger" style="display: none;">Please select a Faculty.</span>
-                                            </div>
-                                        </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
@@ -118,6 +106,14 @@
 
                                                 <asp:TextBox ID="txtrollNumber" runat="server" class="form-control" TextMode="Number" />
                                                 <span id="txtrollNumberErr" style="display: none; color: red;">Please Enter Roll Number</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Faculty<span class="text-danger">*</span></label>
+                                                <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
+                                                </asp:DropDownList>
+                                                <span id="facultyError" class="text-danger" style="display: none;">Please select a Faculty.</span>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -147,18 +143,18 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="mt-3" runat="server" id="Agency_detailes" visible="false">
+                            <div class="mt-3" runat="server" id="Agency_detailes" >
 
                                 <div class="text-right mt-3">
-                                    <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click" Visible="false" />
+                                    <asp:Button ID="btnDownloadPDF" runat="server" Text="Download PDF" CssClass="btn btn-success" OnClick="btnDownloadPDF_Click"  />
                                 </div>
                                 <hr />
                                 <!-- 🔍 Search Box -->
-                                <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" visible="false">
+                                <div class="form-group mt-3 text-right" id="searchInputDIV" runat="server" >
                                     <input type="text" id="searchInput" class="form-control" placeholder="Search by RegistrationNo,Student,Father,Mother,Gender" style="width: 300px; display: inline-block;" onkeyup="filterAndPaginate();" />
                                 </div>
                                 <div class="table-responsive">
-                                    <asp:Panel ID="pnlStudentTable" runat="server" Visible="false">
+                                    <asp:Panel ID="pnlStudentTable" runat="server" >
                                         <table class="table table-hover table-bordered dataTable" id="dataTable">
                                             <thead>
                                                 <tr>
@@ -177,7 +173,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
-                                                <asp:Repeater runat="server" ID="rptStudents" EnableViewState="false" ClientIDMode="Static">
+                                                <asp:Repeater runat="server" ID="rptStudents"  >
                                                     <ItemTemplate>
                                                         <tr data-visible="true">
                                                             <td class="repeater-checkbox">

@@ -12,7 +12,11 @@ public partial class StudentDataFilter : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        BindFacultydropdown();
+        
+        if(!IsPostBack)
+        {
+            BindFacultydropdown();
+        }
 
     }
 
@@ -69,36 +73,33 @@ public partial class StudentDataFilter : System.Web.UI.Page
     {
         try
         {
-            string facultyId = ddlFaculty.SelectedValue;
+            int facultyId = Convert.ToInt32(ddlFaculty.SelectedValue);
             string Rollcode = txtrollcode.Text;
             string Rollnumber = txtrollNumber.Text;
-            int DisCode = Convert.ToInt32(txtdiscode.Text);
-
-
-
+            string DisCode = txtdiscode.Text;
 
 
             //DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
-            DataTable result = dl.GetStudentTheoryDummyadmitDataoutside(facultyId, Rollcode, Rollnumber, DisCode);
+            DataTable result = dl.GetStudentDatafortopperadmitcard(DisCode, facultyId, Rollcode, Rollnumber);
             if (result != null && result.Rows.Count > 0)
             {
                 rptStudents.DataSource = result;
                 rptStudents.DataBind();
-                pnlNoRecords.Visible = false;
-                pnlStudentTable.Visible = true;
-                btnDownloadPDF.Visible = true;
-                pnlPager.Visible = true;
-                searchInputDIV.Visible = true;
+                //pnlNoRecords.Visible = false;
+                //pnlStudentTable.Visible = true;
+                //btnDownloadPDF.Visible = true;
+                //pnlPager.Visible = true;
+                //searchInputDIV.Visible = true;
             }
             else
             {
                 rptStudents.DataSource = null;
                 rptStudents.DataBind();
-                pnlStudentTable.Visible = false;
-                pnlNoRecords.Visible = true;
-                btnDownloadPDF.Visible = false;
-                pnlPager.Visible = false;
-                searchInputDIV.Visible = false;
+                //pnlStudentTable.Visible = false;
+                //pnlNoRecords.Visible = true;
+                //btnDownloadPDF.Visible = false;
+                //pnlPager.Visible = false;
+                //searchInputDIV.Visible = false;
             }
 
             chkSelectAll.Checked = false;
@@ -123,7 +124,7 @@ public partial class StudentDataFilter : System.Web.UI.Page
     protected void btnDownloadPDF_Click(object sender, EventArgs e)
     {
         // Re-bind the Repeater to restore its items.
-        btnGetStudentDummyExamData(null, null);
+      
 
         string selectedIds = hfSelectedIds.Value;
         if (string.IsNullOrEmpty(selectedIds))
