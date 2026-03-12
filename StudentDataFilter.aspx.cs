@@ -80,7 +80,7 @@ public partial class StudentDataFilter : System.Web.UI.Page
 
 
             //DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
-            DataTable result = dl.GetStudentDatafortopperadmitcard(DisCode, facultyId, Rollcode, Rollnumber);
+            DataTable result = dl.GetStudentDatafortopperadmitcard(DisCode, facultyId, Rollcode, Rollnumber, ddl_type.SelectedValue);
             if (result != null && result.Rows.Count > 0)
             {
                 rptStudents.DataSource = result;
@@ -123,66 +123,134 @@ public partial class StudentDataFilter : System.Web.UI.Page
 
     protected void btnDownloadPDF_Click(object sender, EventArgs e)
     {
-        // Re-bind the Repeater to restore its items.
-      
 
-        string selectedIds = hfSelectedIds.Value;
-        if (string.IsNullOrEmpty(selectedIds))
+        if (ddl_type.SelectedValue == "Theory")
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
-            return;
-        }
 
-        string[] ids = selectedIds.Split(',');
-        List<string> selectedStudentData = new List<string>();
+            // Re-bind the Repeater to restore its items.
+            btnGetStudentDummyExamData(null, null);
 
-        foreach (RepeaterItem item in rptStudents.Items)
-        {
-            if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
+            string selectedIds = hfSelectedIds.Value;
+            if (string.IsNullOrEmpty(selectedIds))
             {
-                HiddenField hfStudentID = (HiddenField)item.FindControl("hfStudentID");
-                HiddenField hfCollege = (HiddenField)item.FindControl("hfCollege");
-                HiddenField hfFaculty = (HiddenField)item.FindControl("hfFaculty");
-                HiddenField hfExamTypeId = (HiddenField)item.FindControl("hfexamtypid");
-                string examTypeId = hfExamTypeId.Value.Trim();
-                if (hfStudentID != null && hfCollege != null && hfFaculty != null && hfExamTypeId != null)
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
+                return;
+            }
+
+            string[] ids = selectedIds.Split(',');
+            List<string> selectedStudentData = new List<string>();
+
+            foreach (RepeaterItem item in rptStudents.Items)
+            {
+                if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
                 {
-                    string studentid = hfStudentID.Value;
-                    string rawCollegeId = hfCollege.Value;
-                    string faculty = hfFaculty.Value;
-
-                    if (!string.IsNullOrEmpty(studentid) && ids.Contains(studentid))
+                    HiddenField hfStudentID = (HiddenField)item.FindControl("hfStudentID");
+                    HiddenField hfCollege = (HiddenField)item.FindControl("hfCollege");
+                    HiddenField hfFaculty = (HiddenField)item.FindControl("hfFaculty");
+                    HiddenField hfExamTypeId = (HiddenField)item.FindControl("hfexamtypid");
+                    string examTypeId = hfExamTypeId.Value.Trim();
+                    if (hfStudentID != null && hfCollege != null && hfFaculty != null && hfExamTypeId != null)
                     {
-                        string CollegeId = rawCollegeId;
+                        string studentid = hfStudentID.Value;
+                        string rawCollegeId = hfCollege.Value;
+                        string faculty = hfFaculty.Value;
 
-                        if (!string.IsNullOrEmpty(rawCollegeId) && rawCollegeId.Contains("|"))
+                        if (!string.IsNullOrEmpty(studentid) && ids.Contains(studentid))
                         {
-                            var parts = rawCollegeId.Split('|');
-                            if (parts.Length > 1)
-                                CollegeId = parts[1].Trim();
-                        }
+                            string CollegeId = rawCollegeId;
 
-                        if (!string.IsNullOrEmpty(CollegeId) && !string.IsNullOrEmpty(faculty))
-                        {
-                            string combinedData = string.Format("{0}|{1}|{2}|{3}", studentid, CollegeId, faculty, examTypeId);
-                            selectedStudentData.Add(combinedData);
+                            if (!string.IsNullOrEmpty(rawCollegeId) && rawCollegeId.Contains("|"))
+                            {
+                                var parts = rawCollegeId.Split('|');
+                                if (parts.Length > 1)
+                                    CollegeId = parts[1].Trim();
+                            }
+
+                            if (!string.IsNullOrEmpty(CollegeId) && !string.IsNullOrEmpty(faculty))
+                            {
+                                string combinedData = string.Format("{0}|{1}|{2}|{3}", studentid, CollegeId, faculty, examTypeId);
+                                selectedStudentData.Add(combinedData);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Redirect after loop
-        if (selectedStudentData.Count > 0)
-        {
-            string encodedStudentData = Server.UrlEncode(string.Join(",|", selectedStudentData));
-            Response.Redirect("TheoryAdmitCertificate.aspx?studentData=" + encodedStudentData);
+            // Redirect after loop
+            if (selectedStudentData.Count > 0)
+            {
+                string encodedStudentData = Server.UrlEncode(string.Join(",|", selectedStudentData));
+                Response.Redirect("TheoryAdmitCertificate.aspx?studentData=" + encodedStudentData);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
+            }
         }
         else
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
+            btnGetStudentDummyExamData(null, null);
+
+            string selectedIds = hfSelectedIds.Value;
+            if (string.IsNullOrEmpty(selectedIds))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
+                return;
+            }
+
+            string[] ids = selectedIds.Split(',');
+            List<string> selectedStudentData = new List<string>();
+
+            foreach (RepeaterItem item in rptStudents.Items)
+            {
+                if (item.ItemType == ListItemType.Item || item.ItemType == ListItemType.AlternatingItem)
+                {
+                    HiddenField hfStudentID = (HiddenField)item.FindControl("hfStudentID");
+                    HiddenField hfCollege = (HiddenField)item.FindControl("hfCollege");
+                    HiddenField hfFaculty = (HiddenField)item.FindControl("hfFaculty");
+                    HiddenField hfExamTypeId = (HiddenField)item.FindControl("hfexamtypid");
+                    string examTypeId = hfExamTypeId.Value.Trim();
+                    if (hfStudentID != null && hfCollege != null && hfFaculty != null && hfExamTypeId != null)
+                    {
+                        string studentid = hfStudentID.Value;
+                        string rawCollegeId = hfCollege.Value;
+                        string faculty = hfFaculty.Value;
+
+                        if (!string.IsNullOrEmpty(studentid) && ids.Contains(studentid))
+                        {
+                            string CollegeId = rawCollegeId;
+
+                            if (!string.IsNullOrEmpty(rawCollegeId) && rawCollegeId.Contains("|"))
+                            {
+                                var parts = rawCollegeId.Split('|');
+                                if (parts.Length > 1)
+                                    CollegeId = parts[1].Trim();
+                            }
+
+                            if (!string.IsNullOrEmpty(CollegeId) && !string.IsNullOrEmpty(faculty))
+                            {
+                                string combinedData = string.Format("{0}|{1}|{2}|{3}", studentid, CollegeId, faculty, examTypeId);
+                                selectedStudentData.Add(combinedData);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Redirect after loop
+            if (selectedStudentData.Count > 0)
+            {
+                string encodedStudentData = Server.UrlEncode(string.Join(",|", selectedStudentData));
+                Response.Redirect("PracticalAdmitCertificate.aspx?studentData=" + encodedStudentData);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "swal({ title: 'Failed', text: 'Please select at least one student to download PDF', icon: 'error', button: 'Retry' });", true);
+            }
         }
     }
 

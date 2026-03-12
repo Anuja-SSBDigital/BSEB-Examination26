@@ -118,10 +118,24 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="rollNumber" class="form-label">Distric Code</label>
+                                                <label for="rollNumber" class="form-label">District Code</label>
 
-                                                <asp:TextBox ID="txtdiscode" runat="server" class="form-control" TextMode="Number" />
+                                                <asp:TextBox ID="txtdiscode" runat="server" class="form-control" />
                                                 <span id="txtrolldisErr" style="display: none; color: red;">Please Enter code</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" runat="server" id="div1">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="rollNumber" class="form-label">Type</label>
+                                                <asp:DropDownList runat="server" ID="ddl_type" class="form-control">
+                                                    <asp:ListItem value="ALL">Select Type</asp:ListItem>
+                                                    <asp:ListItem value="Practical">Practical</asp:ListItem>
+                                                    <asp:ListItem value="Theory">Theory</asp:ListItem>
+                                                </asp:DropDownList>
+                                    
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +189,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableBody">
-                                                        <asp:Repeater runat="server" ID="rptStudents">
+                                                        <asp:Repeater runat="server" ID="rptStudents" EnableViewState="false" ClientIDMode="Static">
                                                             <ItemTemplate>
                                                                 <tr data-visible="true">
                                                                     <td class="repeater-checkbox">
@@ -191,10 +205,10 @@
                                                                     <td class="repeater-col"><%# Eval("FatherName") %></td>
                                                                     <td class="repeater-col"><%# Eval("MotherName") %></td>
                                                                     <%--<td class="repeater-col">
-                                     <%# Eval("Faculty") %>
-                                     <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
-                                       <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                 </td>--%>
+                                                        <%# Eval("Faculty") %>
+                                                        <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
+                                                          <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
+                                                    </td>--%>
                                                                     <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                                     <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                                                     <td class="repeater-col"><%# Eval("GenderName") %></td>
