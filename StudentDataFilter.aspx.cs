@@ -80,7 +80,9 @@ public partial class StudentDataFilter : System.Web.UI.Page
 
 
             //DataTable result = dl.GetStudentDummyadmitData(CollegeId, facultyId, ExamId);
-            DataTable result = dl.GetStudentDatafortopperadmitcard(DisCode, facultyId, Rollcode, Rollnumber, ddl_type.SelectedValue);
+            //DataTable result = dl.GetStudentDatafortopperadmitcard(DisCode, facultyId, Rollcode, Rollnumber, ddl_type.SelectedValue);
+            DataTable result = dl.GetTopperStudentDetails(ddl_type.SelectedValue);
+
             if (result != null && result.Rows.Count > 0)
             {
                 rptStudents.DataSource = result;
@@ -88,7 +90,7 @@ public partial class StudentDataFilter : System.Web.UI.Page
                 //pnlNoRecords.Visible = false;
                 //pnlStudentTable.Visible = true;
                 //btnDownloadPDF.Visible = true;
-                //pnlPager.Visible = true;
+                pnlPager.Visible = true;
                 //searchInputDIV.Visible = true;
             }
             else
@@ -98,7 +100,7 @@ public partial class StudentDataFilter : System.Web.UI.Page
                 //pnlStudentTable.Visible = false;
                 //pnlNoRecords.Visible = true;
                 //btnDownloadPDF.Visible = false;
-                //pnlPager.Visible = false;
+                pnlPager.Visible = false;
                 //searchInputDIV.Visible = false;
             }
 

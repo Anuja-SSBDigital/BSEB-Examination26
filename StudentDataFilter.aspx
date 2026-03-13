@@ -47,29 +47,26 @@
             margin-bottom: 4px;
         }
 
-        .pagination {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-            .pagination a, .pagination span {
-                display: inline-block;
-                padding: 8px 16px;
-                text-decoration: none;
-                color: black;
-                border: 1px solid #ddd;
-                margin: 0 4px;
-            }
-
-                .pagination a.active {
-                    background-color: #4CAF50;
-                    color: white;
-                    border: 1px solid #4CAF50;
-                }
-
-                .pagination a:hover:not(.active) {
-                    background-color: #ddd;
-                }
+  .pagination {
+      text-align: center;
+      margin-top: 15px;
+  }
+  .pagination a, .pagination span {
+      display: inline-block;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: black;
+      border: 1px solid #ddd;
+      margin: 0 4px;
+  }
+  .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+      border: 1px solid #4CAF50;
+  }
+  .pagination a:hover:not(.active) {
+      background-color: #ddd;
+  }
     </style>
 
 
@@ -86,14 +83,14 @@
                         <div class="col-md-12">
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h4>Search File Upload Details</h4>
+                                    <h4>Search Admit Card Details</h4>
                                 </div>
                                 <div class="card-body">
 
                                     <div class="row" runat="server" id="div_search">
 
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" runat="server" Visible="false">
                                             <div class="form-group">
                                                 <label>Faculty<span class="text-danger">*</span></label>
                                                 <asp:DropDownList ID="ddlFaculty" runat="server" CssClass="form-control select2">
@@ -112,7 +109,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" runat="server" Visible="false">
                                             <div class="form-group">
                                                 <label for="rollNumber" class="form-label">Roll code:</label>
 
@@ -120,7 +117,7 @@
                                                 <span id="txtrollcodeErr" style="display: none; color: red;">Please Enter Roll Code</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" runat="server" Visible="false">
                                             <div class="form-group">
                                                 <label for="rollNumber" class="form-label">Roll Number:</label>
 
@@ -129,7 +126,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-4" runat="server" Visible="false">
                                             <div class="form-group">
                                                 <label for="rollNumber" class="form-label">District Code</label>
 
@@ -178,13 +175,14 @@
                                                                 <asp:CheckBox ID="chkSelectAll" runat="server" AutoPostBack="false" />
                                                                 Select All
                                                             </th>
-                                                            <th>Registration No</th>
+                                                            <%--<th>Registration No</th>--%>
                                                             <th>Roll No</th>
                                                             <th>Student Name</th>
                                                             <th>Father Name</th>
                                                             <th>Mother Name</th>
+                                                            <th>District</th>
                                                             <%--<th>Faculty</th>--%>
-                                                            <th>Gender</th>
+                                                            <%--<th>Gender</th>--%>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableBody">
@@ -198,11 +196,12 @@
                                                                         <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                                         <asp:HiddenField ID="hfexamtypid" runat="server" Value='<%# Eval("ExamTypeId") %>' />
                                                                     </td>
-                                                                    <td class="repeater-col"><%# Eval("RegistrationNo") %></td>
+                                                                    <%--<td class="repeater-col"><%# Eval("RegistrationNo") %></td>--%>
                                                                     <td class="repeater-col"><%# Eval("RollNumber") %></td>
                                                                     <td class="repeater-col"><%# Eval("StudentName") %></td>
                                                                     <td class="repeater-col"><%# Eval("FatherName") %></td>
                                                                     <td class="repeater-col"><%# Eval("MotherName") %></td>
+                                                                    <td class="repeater-col"><%# Eval("DistrictName") %></td>
                                                                     <%--<td class="repeater-col">
                                                         <%# Eval("Faculty") %>
                                                         <asp:HiddenField ID="hfFaculty" runat="server" Value='<%# Eval("FacultyId") %>' />
@@ -210,7 +209,7 @@
                                                     </td>--%>
                                                                     <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("FacultyId") %>' />
                                                                     <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("ExamTypeId") %>' />
-                                                                    <td class="repeater-col"><%# Eval("GenderName") %></td>
+                                                                    <%--<td class="repeater-col"><%# Eval("GenderName") %></td>--%>
                                                                     <%-- <td class="repeater-col"><%# Eval("Dob", "{0:yyyy-MM-dd}") %></td>--%>
                                                                 </tr>
                                                             </ItemTemplate>
@@ -240,10 +239,11 @@
             </section>
         </div>
     </form>
+
     <script>
 
         var currentPage = 1;
-        var rowsPerPage = 25;
+        var rowsPerPage = 100;
 
         document.addEventListener("DOMContentLoaded", function () {
             setupSelectAll();
@@ -467,4 +467,5 @@
     <script src="../assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
     <script src="../assets/bundles/jquery-ui/jquery-ui.min.js"></script>
     <script src="../assets/js/page/datatables.js"></script>
+    </body>
 </html>
