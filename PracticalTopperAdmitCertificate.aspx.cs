@@ -237,7 +237,7 @@ public partial class PracticalTopperAdmitCertificate : System.Web.UI.Page
                         Convert.ToInt32(collegeId),
                         Convert.ToInt32(facultyId),
                         Convert.ToInt32(examtypid),
-                        false); // ← change to TRUE for PracticalAdmitCertificate
+                        true); // ← change to TRUE for PracticalAdmitCertificate
 
                     if (dtPersonalDetails == null || dtPersonalDetails.Rows.Count == 0)
                     {
